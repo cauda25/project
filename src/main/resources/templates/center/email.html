@@ -60,27 +60,44 @@
           ></button>
         </div>
       </div>
-
-      <!-- 글 작성/수정 폼 -->
-      <div id="form-container" style="display: none">
-        <form action="/center/email/save" method="post" id="inquiryForm">
-          <input type="hidden" name="id" id="inquiry-id" />
-          <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-          <div>
-            <label for="name">이름:</label>
-            <input type="text" name="name" id="name" required />
-          </div>
-          <div>
-            <label for="email">이메일:</label>
-            <input type="email" name="email" id="email" required />
-          </div>
-          <div>
-            <label for="content">문의 내용:</label>
-            <textarea name="content" id="content" required></textarea>
-          </div>
-          <button type="submit">저장</button>
-          <button type="reset">취소</button>
-        </form>
+<!-- 글 작성/수정 폼 -->
+<div id="form-container" style="display: none">
+  <form action="/center/email/save" method="post" id="inquiryForm">
+    <input type="hidden" name="id" id="inquiry-id" value="some_value_here"/>
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+    
+    <!-- 이름 입력 -->
+    <div>
+      <label for="name">이름:</label>
+      <input type="text" name="name" id="name" required />
+    </div>
+    
+    <!-- 이메일 입력 -->
+    <div>
+      <label for="email">이메일:</label>
+      <input type="email" name="email" id="email" required />
+    </div>
+    
+    <!-- 문의 내용 입력 -->
+    <div>
+      <label for="content">문의 내용:</label>
+      <textarea name="content" id="content" required></textarea>
+    </div>
+    
+    <!-- counselingType 입력 -->
+    <div>
+      <label for="counselingType">상담 유형:</label>
+      <select name="counselingType" id="counselingType" required>
+        <option value="">상담 유형 선택</option>
+        <option value="general">일반 상담</option>
+      </select>
+    </div>
+    
+    <!-- 버튼들 -->
+    <button type="submit">저장</button>
+    <button type="reset">취소</button>
+  </form>
+</div>
       </div>
     </body>
     <th:block layout:fragment="js">

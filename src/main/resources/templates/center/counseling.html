@@ -3,15 +3,11 @@
   <div layout:fragment="content" class="bg-light">
     <head>
       <meta charset="UTF-8" />
-      <title>상담 내역</title>
-      <link rel="stylesheet" th:href="@{/css/counseling.css}" />
-      <th:block layout:fragment="css"></th:block>
+      <title>상담 페이지</title>
+      <link rel="stylesheet" th:href="@{/css/consultation.css}" />
     </head>
     <body>
-      <h1>상담 페이지</h1>
-
-      <!-- 내 상담 내역 -->
-      <h2>내 상담 내역</h2>
+      <h2>상담 페이지</h2>
       <div class="board-container">
         <table>
           <thead>
@@ -24,48 +20,36 @@
               <th>삭제</th>
             </tr>
           </thead>
-
-          <!-- 상담 내역이 없을 경우 메시지 표시 -->
-          <tbody th:if="${#lists.isEmpty(counselings)}">
-            <tr>
-              <td colspan="6">상담 내역이 없습니다.</td>
-            </tr>
-          </tbody>
-
-          <!-- 상담 내역 출력 -->
-          <tbody th:unless="${#lists.isEmpty(counselings)}">
-            <tr th:each="counseling : ${counselings}">
-              <td th:text="${counseling.id}"></td>
-              <td th:text="${counseling.counselingType}"></td>
-              <td th:text="${counseling.content}"></td>
-              <td th:text="${counseling.status}"></td>
+          <tbody>
+            <tr th:each="consultation : ${consultations}">
+              <td th:text="${consultation.id}"></td>
+              <td th:text="${consultation.type}"></td>
+              <td th:text="${consultation.response}"></td>
+              <td th:text="${consultation.status}"></td>
               <td>
-                <button class="edit-btn" th:data-id="${counseling.id}">
-                  수정
-                </button>
+                <form th:action="@{/center/consultation/modify}" method="get">
+                  <input
+                    type="hidden"
+                    name="id"
+                    th:value="${consultation.id}"
+                  />
+                  <button type="submit" class="btn btn-primary">수정</button>
+                </form>
               </td>
               <td>
-                <button class="delete-btn" th:data-id="${counseling.id}">
-                  삭제
-                </button>
+                <form th:action="@{/center/consultation/delete}" method="post">
+                  <input
+                    type="hidden"
+                    name="id"
+                    th:value="${consultation.id}"
+                  />
+                  <button class="delete-btn">삭제</button>
+                </form>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-
-      <!-- 페이징 처리 -->
-      <div class="pagination" th:if="${counselings}">
-        <button
-          th:each="page : ${#numbers.sequence(1, totalPages)}"
-          th:text="${page}"
-          th:classappend="${currentPage == page} ? 'active'"
-          th:onclick="'location.href=' + @{'/center/counseling?page='} + ${page}"
-        ></button>
-      </div>
     </body>
-    <th:block layout:fragment="js">
-      <script th:src="@{/js/counseling.js}"></script>
-    </th:block>
   </div>
 </html>

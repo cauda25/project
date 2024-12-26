@@ -43,5 +43,4 @@ public class InquiryController {
         inquiryService.update(inquiry);
         return "redirect:/center/email";
     }
-
 }
