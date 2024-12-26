@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,15 +19,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.MovieDto;
+import com.example.project.dto.ReservationDto;
 import com.example.project.service.FavoriteService;
 import com.example.project.service.MemberService;
+import com.example.project.service.ReservationService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Log4j2
 @Controller
@@ -36,6 +41,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final FavoriteService favoriteService;
+    private final ReservationService reservationService;
 
     @GetMapping("/login")
     public void loginRedirect() {
@@ -167,6 +173,14 @@ public class MemberController {
         }
 
         return "redirect:/member/mypage"; // 성공 시 마이페이지로 리다이렉트
+    }
+
+    @GetMapping("/reservation")
+    public String getReservation(@AuthenticationPrincipal AuthMemberDto authMemberDto, Model model) {
+        Long memberId = authMemberDto.getMemberId(); // 인증된 사용자 ID 가져오기
+        List<ReservationDto> reservation = reservationService.getMemberReservations(memberId);
+        model.addAttribute("reservation", reservation);
+        return "member/reservation"; // 템플릿 경로 수정 (member 디렉토리로 변경)
     }
 
     // 개발자용 - Authentication 확인용
