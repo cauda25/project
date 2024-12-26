@@ -1,51 +1,111 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
-  <head>
-    <meta charset="UTF-8" />
-    <title>상담 목록</title>
-    <link rel="stylesheet" th:href="@{/css/consultation.css}" />
-  </head>
-  <body>
-    <h1>상담 목록</h1>
+  <div layout:fragment="content" class="bg-light">
+    <head>
+      <meta charset="UTF-8" />
+      <title>상담 내역</title>
+      <link rel="stylesheet" th:href="@{/css/consultation.css}" />
+      <th:block layout:fragment="css"></th:block>
+    </head>
+    <body>
+      <h2>상담 내역</h2>
+      <div class="board-container">
+        <!-- 상담 작성 버튼 -->
+        <button id="createConsultationBtn">상담 작성</button>
 
-    <!-- 상담 목록 테이블 -->
-    <table>
-      <thead>
-        <tr>
-          <th>상담 ID</th>
-          <th>질문 내용</th>
-          <th>상태</th>
-          <th>답변</th>
-          <th>답변 저장</th>
-        </tr>
-      </thead>
-      <tbody id="consultationList">
-        <!-- 상담 목록이 여기에 동적으로 추가됩니다. -->
-        <tr th:each="consultation : ${consultations}">
-          <td th:text="${consultation.consultationId}"></td>
-          <td th:text="${consultation.question}"></td>
-          <td th:text="${consultation.status}"></td>
-          <td>
-            <!-- 답변 입력 필드 -->
-            <textarea
-              th:id="'answer-' + ${consultation.consultationId}"
-              rows="4"
-              cols="50"
-            ></textarea>
-          </td>
-          <td>
-            <!-- 답변 저장 버튼 -->
-            <button
-              th:data-id="${consultation.consultationId}"
-              class="saveAnswerBtn"
-            >
-              답변 저장
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <!-- 상담 게시판 테이블 -->
+        <table>
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>사용자 ID</th>
+              <th>문의 ID</th>
+              <th>응답</th>
+              <th>상태</th>
+              <th>수정</th>
+              <th>삭제</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="consultation : ${consultations}">
+              <td th:text="${consultation.id}"></td>
+              <td th:text="${consultation.userId}"></td>
+              <td th:text="${consultation.inquiryId}"></td>
+              <td th:text="${consultation.response}"></td>
+              <td th:text="${consultation.status}"></td>
+              <td>
+                <form th:action="@{/center/consultation/modify}" method="get">
+                  <input
+                    type="hidden"
+                    name="id"
+                    th:value="${consultation.id}"
+                  />
+                  <button type="submit" class="btn btn-primary">수정</button>
+                </form>
+              </td>
+              <td>
+                <form th:action="@{/center/consultation/delete}" method="post">
+                  <input
+                    type="hidden"
+                    name="id"
+                    th:value="${consultation.id}"
+                  />
+                  <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                  <button class="delete-btn" th:data-id="${consultation.id}">
+                    삭제
+                  </button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-    <script th:src="@{/js/consultation.js}"></script>
-  </body>
+        <!-- 페이징 -->
+        <div class="pagination" th:if="${consultations}">
+          <button
+            th:each="page : ${#numbers.sequence(1, totalPages)}"
+            th:text="${page}"
+            th:classappend="${currentPage == page} ? 'active'"
+            th:onclick="'location.href=' + @{'/center/consultations?page='} + ${page}"
+          ></button>
+        </div>
+      </div>
+
+      <!-- 상담 작성/수정 폼 -->
+      <div id="form-container" style="display: none">
+        <form
+          th:action="@{/center/consultation/save}"
+          method="post"
+          id="consultationForm"
+        >
+          <input type="hidden" name="id" id="consultation-id" />
+          <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+          <div>
+            <label for="userId">사용자 ID:</label>
+            <input type="text" name="userId" id="userId" required />
+          </div>
+          <div>
+            <label for="inquiryId">문의 ID:</label>
+            <input type="text" name="inquiryId" id="inquiryId" required />
+          </div>
+          <div>
+            <label for="response">응답:</label>
+            <textarea name="response" id="response" required></textarea>
+          </div>
+          <div>
+            <label for="status">상태:</label>
+            <select name="status" id="status">
+              <option value="미답변">미답변</option>
+              <option value="답변완료">답변완료</option>
+            </select>
+          </div>
+          <button type="submit">저장</button>
+          <button type="reset">취소</button>
+        </form>
+      </div>
+    </body>
+    <th:block layout:fragment="js">
+      <script th:src="@{/js/consultation.js}"></script>
+    </th:block>
+  </div>
 </html>

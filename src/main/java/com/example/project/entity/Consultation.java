@@ -1,53 +1,34 @@
 package com.example.project.entity;
 
-import java.time.LocalDateTime;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@Entity
 @Setter
 @Getter
-@Entity
 public class Consultation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long consultationId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO_INCREMENT
+    private Long id;
 
-    private String question;
+    private Long userId; // 사용자 ID와 연결
+
+    private Long inquiryId; // 문의 ID와 연결
+
+    @Column(columnDefinition = "TEXT")
+    private String response;
 
     @Enumerated(EnumType.STRING)
-    private ConsultationStatus status; // 답변 상태 (답변완료, 미답변)
+    private InquiryStatus status = InquiryStatus.미답변;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-    // Getters and Setters
-
-    @PrePersist
-    public void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.status = ConsultationStatus.UNANSWERED; // 기본 상태는 미답변
-    }
-
-    @PreUpdate
-    public void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+    @Column(updatable = false)
+    private String createdAt;
 }
