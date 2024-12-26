@@ -12,61 +12,91 @@ import com.example.project.entity.Movie;
 
 public interface AdminMovieRepository extends JpaRepository<Movie, Long> {
 
-    @Query("SELECT m, g, mg FROM MovieGenre mg " +
-            "JOIN mg.genre g " +
-            "JOIN mg.movie m " +
-            "WHERE m.id = :id")
-    List<Object[]> getMovieDetailsWithGenres(Long id);
+        @Query("SELECT m, g, mg FROM MovieGenre mg " +
+                        "JOIN mg.genre g " +
+                        "JOIN mg.movie m " +
+                        "WHERE m.id = :id")
+        List<Object[]> getMovieDetailsWithGenres(Long id);
 
-    @Query(value = """
-            SELECT
-            m.TITLE AS movie_title,
-            LISTAGG(g.name, ', ') WITHIN GROUP (ORDER BY g.name) AS genres,
-            m.RELEASE_DATE AS release_date
-            FROM
-            Movie m
-            JOIN
-            MOVIE_GENRE mg ON m.ID = mg.MOVIE_ID
-            JOIN
-            Genre g ON g.ID = mg.GENRE_ID
-            GROUP BY
-            m.TITLE, m.RELEASE_DATE, m.ID
-            ORDER BY
-            m.RELEASE_DATE DESC
-            """, nativeQuery = true)
-    List<Object[]> getMovieDetails();
-
-    @Query(value = """
+        @Query(value = """
                         SELECT
-            	PPPP.TITLE,
-            	LISTAGG(PPPP.name, ', ') WITHIN GROUP (ORDER BY PPPP.name) AS people
-            FROM
-            	(
-            	SELECT
-            		m.id,
-            		m.title,
-            		p.popularity,
-            		p.name,
-            		ROW_NUMBER() OVER (PARTITION BY m.id ORDER BY p.popularity DESC) AS rnk
-            	FROM
-            		Movie m
-            	LEFT JOIN
-            	MOVIE_PEOPLE mp
-                     ON
-            		m.ID = mp.MOVIE_ID
-            	JOIN
-                    PEOPLE p ON
-            		p.ID = mp.PEOPLE_ID
-            	WHERE
-            		p.job = 'Acting') PPPP
-            WHERE
-            	rnk <= 3
-            GROUP BY
-                PPPP.TITLE
+                        m.id,
+                        m.TITLE AS movie_title,
+                        LISTAGG(g.name, ', ') WITHIN GROUP (ORDER BY g.name) AS genres,
+                        m.RELEASE_DATE AS release_date
+                        FROM
+                        Movie m
+                        JOIN
+                        MOVIE_GENRE mg ON m.ID = mg.MOVIE_ID
+                        JOIN
+                        Genre g ON g.ID = mg.GENRE_ID
+                        GROUP BY
+                        m.id,m.TITLE, m.RELEASE_DATE, m.ID
+                        ORDER BY
+                        m.RELEASE_DATE DESC
                         """, nativeQuery = true)
-    List<Object[]> movieActers();
+        List<Object[]> getMovieDetails();
 
-    // @Query("SELECT m,p,g FROM Movie m join m.")
-    // List<Object[]> movieAndPeopleGenres();
+        @Query(value = """
+                                    SELECT
+                                PPPP.id,
+                        	PPPP.TITLE,
+                        	LISTAGG(PPPP.name, ', ') WITHIN GROUP (ORDER BY PPPP.name) AS people
+                        FROM
+                        	(
+                        	SELECT
+                        		m.id,
+                        		m.title,
+                        		p.popularity,
+                        		p.name,
+                        		ROW_NUMBER() OVER (PARTITION BY m.id ORDER BY p.popularity DESC) AS rnk
+                        	FROM
+                        		Movie m
+                        	LEFT JOIN
+                        	MOVIE_PEOPLE mp
+                                 ON
+                        		m.ID = mp.MOVIE_ID
+                        	JOIN
+                                PEOPLE p ON
+                        		p.ID = mp.PEOPLE_ID
+                        	WHERE
+                        		p.job = 'Acting') PPPP
+                        WHERE
+                        	rnk <= 3
+                        GROUP BY
+                                PPPP.id,PPPP.TITLE
+                                    """, nativeQuery = true)
+        List<Object[]> movieActers();
+
+        @Query(value = """
+                                            SELECT
+                                PPPP.id,
+                        	PPPP.TITLE,
+                        	LISTAGG(PPPP.name, ', ') WITHIN GROUP (ORDER BY PPPP.name) AS people
+                        FROM
+                        	(
+                        	SELECT
+                        		m.id,
+                        		m.title,
+                        		p.popularity,
+                        		p.name,
+                        		ROW_NUMBER() OVER (PARTITION BY m.id ORDER BY p.popularity DESC) AS rnk
+                        	FROM
+                        		Movie m
+                        	LEFT JOIN
+                        	MOVIE_PEOPLE mp
+                                 ON
+                        		m.ID = mp.MOVIE_ID
+                        	JOIN
+                                PEOPLE p ON
+                        		p.ID = mp.PEOPLE_ID
+                        	WHERE
+                        		p.job = 'Directing') PPPP
+                        WHERE
+                        	rnk <= 1
+                        GROUP BY
+                                PPPP.id,PPPP.TITLE
+                                            """, nativeQuery = true)
+        List<Object[]> movieDirector();
 
 }

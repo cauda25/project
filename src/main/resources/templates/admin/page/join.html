@@ -84,26 +84,10 @@
                       <tr>
                         <td>
                             <div class="select-box">장르 선택</div>
-                            <div class="checkbox-list">
-                              <label><input type="checkbox" value="액션"> 액션</label>
-                              <label><input type="checkbox" value="모험"> 모험</label>
-                              <label><input type="checkbox" value="애니메이션"> 애니메이션</label>
-                              <label><input type="checkbox" value="코미디"> 코미디</label>
-                              <label><input type="checkbox" value="범죄"> 범죄</label>
-                              <label><input type="checkbox" value="다큐멘터리"> 다큐멘터리</label>
-                              <label><input type="checkbox" value="드라마"> 드라마</label>
-                              <label><input type="checkbox" value="가족"> 가족</label>
-                              <label><input type="checkbox" value="판타지"> 판타지</label>
-                              <label><input type="checkbox" value="역사"> 역사</label>
-                              <label><input type="checkbox" value="공포"> 공포</label>
-                              <label><input type="checkbox" value="음악"> 음악</label>
-                              <label><input type="checkbox" value="미스터리"> 미스터리</label>
-                              <label><input type="checkbox" value="로맨스"> 로맨스</label>
-                              <label><input type="checkbox" value="SF"> SF</label>
-                              <label><input type="checkbox" value="TV 영화"> TV 영화</label>
-                              <label><input type="checkbox" value="스릴러"> 스릴러</label>
-                              <label><input type="checkbox" value="전쟁"> 전쟁</label>
-                              <label><input type="checkbox" value="서부"> 서부</label>
+                            <div class="checkbox-list" name="name">
+                              <label th:each="genre : ${genres}">
+                                <input type="checkbox"  th:value="${genre.name}" th:text="${genre.name}">
+                              </label>
                             </div>
                         </td>
                         <td><input type="date" name="" id="" /></td>

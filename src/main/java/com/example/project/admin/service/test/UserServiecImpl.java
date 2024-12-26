@@ -1,22 +1,31 @@
 package com.example.project.admin.service.test;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.example.project.admin.Entity.MovieState;
+import com.example.project.admin.Entity.UserEntity;
+import com.example.project.admin.Entity.constant.StatusRole;
 import com.example.project.admin.dto.test.MovieDetailsDTO;
 import com.example.project.admin.dto.test.MovieStateDto;
+import com.example.project.admin.dto.test.UserDto;
 import com.example.project.admin.repository.AdminMovieRepository;
 import com.example.project.admin.repository.MovieAddRepository;
 import com.example.project.admin.repository.MovieStateRepository;
+import com.example.project.admin.repository.UserRepository;
+import com.example.project.dto.GenreDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.reserve.TheaterDto;
+import com.example.project.entity.Genre;
 import com.example.project.entity.Member;
 import com.example.project.entity.reserve.Theater;
 import com.example.project.repository.MemberRepository;
+import com.example.project.repository.movie.GenreRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +36,20 @@ import lombok.extern.log4j.Log4j2;
 @Service
 public class UserServiecImpl implements UserServie {
 
-    // private final UserRepository userRepository;
+    private final UserRepository userRepository;
     private final AdminMovieRepository adminMovieRepository;
     private final MemberRepository memberRepository;
     private final MovieAddRepository movieAddRepository;
     private final MovieStateRepository movieStateRepository;
+    private final GenreRepository genreRepository;
+
+    // 회원 정보 가져오기 test
+    @Override
+    public List<UserEntity> testList(UserDto userDto) {
+        List<UserEntity> list = userRepository.findAll();
+
+        return list;
+    }
 
     // 회원 정보 가져오기
     @Override
@@ -68,11 +86,12 @@ public class UserServiecImpl implements UserServie {
         List<MovieDetailsDTO> movieDetailsList = new ArrayList<>();
 
         for (Object[] result : results) {
-            String title = (String) result[0];
-            String genres = (String) result[1];
-            String releaseDate = (String) result[2];
+            Long mid = (Long) result[0];
+            String title = (String) result[1];
+            String genres = (String) result[2];
+            String releaseDate = (String) result[3];
 
-            movieDetailsList.add(new MovieDetailsDTO(title, releaseDate, genres));
+            movieDetailsList.add(new MovieDetailsDTO(mid, title, releaseDate, genres));
         }
 
         return movieDetailsList;
@@ -85,30 +104,32 @@ public class UserServiecImpl implements UserServie {
         List<MovieDetailsDTO> movieActorsList = new ArrayList<>();
 
         for (Object[] result : results) {
-            String title = (String) result[0];
-            String name = (String) result[1];
+            Long mid = (Long) result[0];
+            String title = (String) result[1];
+            String name = (String) result[2];
 
-            movieActorsList.add(new MovieDetailsDTO(title, name));
+            movieActorsList.add(new MovieDetailsDTO(mid, title, name));
         }
 
         return movieActorsList;
     }
-    // @Override
-    // public List<MovieAddDto> addList() {
-    // List<Object[]> addList = movieAddRepository.findByAddList();
-    // List<MovieAddDto> movieAdds = new ArrayList<>();
 
-    // for (Object[] objects : addList) {
-    // String state = (String) objects[0];
-    // String name = (String) objects[1];
-    // String add = (String) objects[2];
-    // log.info("add :", add);
-    // movieAdds.add(new MovieAddDto(name, add, state));
-    // }
-    // log.info("영화관 상세 ", movieAdds);
+    // 영화 감독리스트 출력
+    @Override
+    public List<MovieDetailsDTO> movieDirector() {
+        List<Object[]> results = adminMovieRepository.movieDirector();
+        List<MovieDetailsDTO> movieDirectorList = new ArrayList<>();
 
-    // return movieAdds;
-    // }
+        for (Object[] result : results) {
+            Long mid = (Long) result[0];
+            String title = (String) result[1];
+            String name = (String) result[2];
+
+            movieDirectorList.add(new MovieDetailsDTO(mid, title, name));
+        }
+
+        return movieDirectorList;
+    }
 
     // 영화관 지역 또는 관명으로 검색
     @Transactional
@@ -134,6 +155,15 @@ public class UserServiecImpl implements UserServie {
                 .collect(Collectors.toList());
     }
 
+    // 영화 장르 출력
+    @Override
+    public List<GenreDto> getAllGenres() {
+        return genreRepository.findAll()
+                .stream()
+                .map(genre -> new GenreDto(genre.getId(), genre.getName()))
+                .collect(Collectors.toList());
+    }
+
     // 영화관 리스트 출력
     @Transactional
     @Override
@@ -154,6 +184,33 @@ public class UserServiecImpl implements UserServie {
     @Override
     public void delete(Long theaterId) {
         movieAddRepository.deleteById(theaterId);
+    }
+
+    // 휴면 계정으로 전환
+    @Override
+    public void inactiveAccounts() {
+        LocalDateTime lastTime = LocalDateTime.now().minusMinutes(1);
+        List<UserEntity> inactiveUsers = userRepository.findInactiveUsers(lastTime, StatusRole.ACTIVE);
+
+        for (UserEntity userEntity : inactiveUsers) {
+            userEntity.setStatusRole(StatusRole.INACTIVE);
+
+            userRepository.save(userEntity);
+        }
+    }
+
+    // 휴면 계정 복구
+    @Override
+    public void reactivateAccount(Long uno) {
+        UserEntity userEntity = userRepository.findById(uno).get();
+
+        if (!userEntity.getStatusRole().equals(StatusRole.INACTIVE)) {
+            throw new IllegalStateException("비활성 상태가 아닙니다.");
+        }
+
+        userEntity.setStatusRole(StatusRole.ACTIVE);
+        userEntity.setLastLogin(LocalDateTime.now());
+        userRepository.save(userEntity);
     }
 
 }

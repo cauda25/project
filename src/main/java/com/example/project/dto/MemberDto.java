@@ -50,6 +50,8 @@ public class MemberDto {
 
     private int point;
 
+    private LocalDateTime lastLogin;
+
     @Enumerated(EnumType.STRING)
     private MemberRole role; // Enum을 String으로 변환하여 전송
 

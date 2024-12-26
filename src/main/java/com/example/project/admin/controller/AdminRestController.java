@@ -19,18 +19,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequestMapping("/admin/page")
 public class AdminRestController {
 
-    private final UserServie userServie;
-
     @GetMapping("/{theaterId}")
     public Long getMethodName(@PathVariable Long theaterId) {
         return theaterId;
     }
 
-    @DeleteMapping("/{theaterId}")
-    public Long postRemove(@PathVariable Long theaterId) {
-        log.info("영화관삭제 폼 요청 {} ", theaterId);
-        userServie.delete(theaterId);
-
-        return theaterId;
-    }
 }

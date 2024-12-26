@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.project.admin.Entity.UserEntity;
 import com.example.project.admin.dto.test.MovieDetailsDTO;
 import com.example.project.admin.dto.test.MovieStateDto;
+import com.example.project.admin.dto.test.UserDto;
 import com.example.project.admin.service.test.UserServie;
+import com.example.project.dto.GenreDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.reserve.TheaterDto;
 import com.example.project.entity.Member;
-import com.example.project.entity.test.UserEntity;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,30 +39,44 @@ public class AdminController {
 
     }
 
+    // 테스트
     @GetMapping("/user")
-    public void getUser(MemberDto memberDto, Model model) {
+    public void getUserTest(UserDto userDto, Long uno, Model model) {
         log.info("home 폼 요청");
-        List<Member> list = userServie.allList(memberDto);
+        List<UserEntity> list = userServie.testList(userDto);
+        userServie.inactiveAccounts();
+        // userServie.reactivateAccount(uno);
         model.addAttribute("list", list);
+
+    }
+
+    @PostMapping("/user")
+    public String PostUser(Long uno) {
+        log.info("reactive 폼 요청 {}", uno);
+
+        userServie.reactivateAccount(uno);
+        return "redirect:/admin/page/user";
 
     }
 
     @GetMapping("/create")
     public void getCreate(Model model) {
         log.info("create 폼 요청");
-        // 서비스 호출
         List<MovieDetailsDTO> movieDetails = userServie.getMovieDetails();
         List<MovieDetailsDTO> movieActers = userServie.movieActers();
+        List<MovieDetailsDTO> movieDirector = userServie.movieDirector();
 
-        // 모델에 데이터 추가
         model.addAttribute("movieList", movieDetails);
         model.addAttribute("movieActers", movieActers);
+        model.addAttribute("movieDirector", movieDirector);
     }
 
     @GetMapping("/join")
-    public void getJoin() {
+    public void getJoin(Model model) {
         log.info("join 폼 요청");
+        List<GenreDto> genre = userServie.getAllGenres();
 
+        model.addAttribute("genres", genre);
     }
 
     @GetMapping({ "/movie", "/movieAdd" })
@@ -90,13 +106,5 @@ public class AdminController {
         return "redirect:/admin/page/movie?";
 
     }
-
-    // @PostMapping("/remove")
-    // public String postRemove(Long tno) {
-    // log.info("영화관삭제 폼 요청 {} ", tno);
-    // userServie.delete(tno);
-
-    // return "redirect:/admin/page/movie";
-    // }
 
 }

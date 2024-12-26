@@ -12,7 +12,9 @@ import org.springframework.test.annotation.Commit;
 
 import com.example.project.admin.Entity.Admin;
 import com.example.project.admin.Entity.MovieState;
+import com.example.project.admin.Entity.UserEntity;
 import com.example.project.admin.Entity.constant.AdminRole;
+import com.example.project.admin.Entity.constant.StatusRole;
 import com.example.project.admin.repository.AdminMovieRepository;
 import com.example.project.admin.repository.AdminRepository;
 import com.example.project.admin.repository.MovieAddRepository;
@@ -22,7 +24,7 @@ import com.example.project.entity.Genre;
 import com.example.project.entity.Movie;
 import com.example.project.entity.MovieGenre;
 import com.example.project.entity.reserve.Theater;
-import com.example.project.entity.test.UserEntity;
+
 import com.example.project.repository.movie.GenreRepository;
 import com.example.project.repository.movie.MovieGenreRepository;
 import com.example.project.repository.movie.MovieRepository;
@@ -80,10 +82,17 @@ public class AdminRepositoryTest {
                     .brith(year + "/" + month + "/" + day)
                     .telNo("010-0000-0000")
                     .adminRole(AdminRole.USER)
+                    .statusRole(StatusRole.ACTIVE)
                     .build();
 
             userRepository.save(userEntity);
         });
+    }
+
+    @Test
+    public void findUser() {
+
+        System.out.println(userRepository.findById(1L));
     }
 
     @Test

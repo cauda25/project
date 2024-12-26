@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.project.admin.Entity.constant.StatusRole;
 import com.example.project.entity.constant.MemberRole;
 
 import jakarta.persistence.CascadeType;
@@ -73,4 +74,7 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private MemberRole role;
+
+    @Enumerated(EnumType.STRING)
+    private StatusRole statusRole;
 }

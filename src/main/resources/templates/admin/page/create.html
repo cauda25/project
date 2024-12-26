@@ -25,13 +25,12 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr th:each="list : ${movieActers}">
-                        <!-- <td th:text="${list.title}"></td> -->
-                        <td></td>
-                        <td></td>
-                        <td th:text="${list.name}"></td>
-                        <!-- <td th:text="${list.genres}"></td> -->
-                        <!-- <td th:text="${list.releaseDate}"></td> -->
+                      <tr th:each="list : ${movieList}">
+                        <td th:text="${list.title}"></td>
+                        <td><span th:each="direc : ${movieDirector}" th:text="${direc.name}" th:if="${direc.title} == ${list.title}"></span></td>
+                        <td><span th:each="actor : ${movieActers}" th:text="${actor.name}" th:if="${actor.title} == ${list.title}"></span></td>
+                        <td th:text="${list.genres}"></td>
+                        <td th:text="${list.releaseDate}"></td>
                       </tr>
                     </tbody>
                   </table>
