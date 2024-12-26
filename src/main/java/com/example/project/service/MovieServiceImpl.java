@@ -174,4 +174,23 @@ public class MovieServiceImpl implements MovieService {
         // .collect(Collectors.toList());
     }
 
+    @Override
+    public List<MovieDto> similarMovies(Long id) {
+        Movie movie = movieRepository.findById(id).get();
+        List<Genre> genres = new ArrayList<>();
+        Set<MovieGenre> movieGenres = movie.getMovieGenres();
+        for (MovieGenre movieGenre : movieGenres) {
+            genres.add(movieGenre.getGenre());
+        }
+        // 장르에 기반하여 추천 영화 리스트 가져오기
+        List<Movie> recommendedMovies = movieRepository.findMoviesByGenres(genres);
+
+        // Movie 객체를 MovieDto로 변환
+        List<MovieDto> movieDtos = recommendedMovies.stream()
+                .map(m -> entityToDto(m, null, null, genres))
+                .collect(Collectors.toList());
+
+        return movieDtos;
+    }
+
 }
