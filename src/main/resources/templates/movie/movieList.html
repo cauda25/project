@@ -34,6 +34,13 @@
       .sub-head h3 {
         margin-right: 10px;
       }
+      .form-select {
+        width: 100px;
+      }
+      #searchForm div {
+        width: 75%;
+        justify-self: center;
+      }
     </style>
   </th:block>
 
@@ -45,7 +52,7 @@
       <input type="hidden" name="sort" th:value="${requestDto.sort}" />
       <input type="hidden" name="movieList" th:value="popular" />
       <!-- <h1 th:text="${movies.totalPage}"></h1> -->
-      <div class="d-flex justify-content-center">
+      <div class="d-flex">
         <select name="type" id="type" class="form-select me-2">
           <option value="mp" th:selected="${requestDto.type == 'mp'}">
             전체
@@ -58,7 +65,7 @@
           </option>
         </select>
         <input
-          class="form-control me-2 w-25"
+          class="form-control me-2"
           type="search"
           placeholder="Search"
           aria-label="Search"
@@ -100,7 +107,7 @@
                   </li>
                 </ul>
               </div>
-              <h3 class="text-white header-title-text">현재 상영작</h3>
+              <h3 class="text-white header-title-text"></h3>
             </div>
             <!-- 메뉴 -->
             <ul class="nav nav-pills nav-fill mb-4 tab-list">
@@ -252,8 +259,8 @@
                     >
                   </h5>
                   <ul>
-                    <li>예매율</li>
-                    31.8%
+                    <li>평점</li>
+                    [[${dto.voteAverage}]]
                   </ul>
                   <ul>
                     <li>개봉일</li>
@@ -395,6 +402,38 @@
     </form>
   </div>
   <th:block layout:fragment="js">
+    <script>
+      var genres = "[[${genreDtos}]]";
+      if ("[[${requestDto.keyword}]]" != "") {
+        document.querySelector(".header-title-text").innerHTML =
+          "검색: [[${requestDto.keyword}]]";
+      } else if ("[[${requestDto.genre}]]" != "") {
+        genres.forEach((genre) => {
+          if (genre.id === "[[${requestDto.genre}]]") {
+            document.querySelector(".header-title-text").innerHTML = genre.name;
+          }
+        });
+        console.log("[[${requestDto.genre}]]");
+      } else {
+        switch ("[[${requestDto.movieList}]]") {
+          case "nowPlaying":
+            document.querySelector(".header-title-text").innerHTML =
+              "현재 상영중";
+            break;
+          case "upcoming":
+            document.querySelector(".header-title-text").innerHTML =
+              "상영 예정작";
+            break;
+          case "popular":
+            document.querySelector(".header-title-text").innerHTML =
+              "전체 영화 목록";
+            break;
+
+          default:
+            break;
+        }
+      }
+    </script>
     <!-- <script th:src="@{/js/movie.js}"></script> -->
     <!-- <script th:src="@{/js/movietest.js}"></script> -->
   </th:block>
