@@ -29,8 +29,8 @@ public class CounselingService {
     }
 
     // 상담 내역 저장
-    public Counseling save(Counseling counseling) {
-        return counselingRepository.save(counseling);
+    public void save(Counseling counseling) {
+        counselingRepository.save(counseling);
     }
 
     // 상담 내역 삭제
