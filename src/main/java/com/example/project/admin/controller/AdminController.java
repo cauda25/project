@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.project.admin.dto.test.MovieDetailsDTO;
 import com.example.project.admin.dto.test.MovieStateDto;
-import com.example.project.admin.service.test.UserServie;
+import com.example.project.admin.service.test.UserService;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.reserve.TheaterDto;
 import com.example.project.entity.Member;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/admin/page")
 public class AdminController {
 
-    private final UserServie userServie;
+    private final UserService userServie;
 
     @GetMapping("/index")
     public void getHome() {

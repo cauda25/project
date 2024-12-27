@@ -1,9 +1,12 @@
 package com.example.project.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.project.entity.Inquiry;
@@ -42,6 +45,13 @@ public class InquiryController {
     public String updateInquiry(Inquiry inquiry) {
         inquiryService.update(inquiry);
         return "redirect:/center/email";
+    }
+
+    // 상태 업데이트
+    @PostMapping("/{id}/status")
+    public ResponseEntity<Inquiry> updateStatus(@PathVariable Long id, @RequestBody String status) {
+        Inquiry updatedInquiry = inquiryService.updateStatus(id, status);
+        return ResponseEntity.ok(updatedInquiry);
     }
 
 }

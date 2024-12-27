@@ -1,6 +1,5 @@
 package com.example.project.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,33 +13,27 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Setter
-@Getter
-@ToString
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@ToString
+@Setter
+@Getter
 @Entity
-public class ConsultationAnswer {
+public class MoviePeople {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long answerId;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "consultation_id")
-    private Consultation consultation; // 상담 엔티티와 연결
+    @JoinColumn(name = "movie_id")
+    private Movie movie;
 
-    @Column(length = 1000)
-    private String answerContent; // 답변 내용
+    @ManyToOne
+    @JoinColumn(name = "people_id")
+    private People people;
 
-    private ConsultationStatus status;
+    private String character;
 
-    public void setStatus(ConsultationStatus status) {
-        this.status = status;
-    }
-
-    public ConsultationStatus getStatus() {
-        return status;
-    }
 }

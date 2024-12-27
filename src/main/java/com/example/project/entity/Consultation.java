@@ -1,53 +1,40 @@
 package com.example.project.entity;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+@Entity
 @Setter
 @Getter
-@Entity
 public class Consultation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long consultationId;
+    private Long id;
 
-    private String question;
+    private Long userId; // 사용자 ID와 연결
+
+    private Long inquiryId; // 문의 ID와 연결
+
+    @Column(columnDefinition = "TEXT")
+    private String response;
 
     @Enumerated(EnumType.STRING)
-    private ConsultationStatus status; // 답변 상태 (답변완료, 미답변)
+    private ConsultationStatus status = ConsultationStatus.PENDING;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-    // Getters and Setters
+    @Column(updatable = false)
+    private String createdAt;
 
     @PrePersist
-    public void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.status = ConsultationStatus.UNANSWERED; // 기본 상태는 미답변
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
-    @PreUpdate
-    public void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+    public void setStatus(ConsultationStatus status) {
+        this.status = status;
     }
 }

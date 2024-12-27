@@ -6,10 +6,13 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+<<<<<<< HEAD
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+=======
+>>>>>>> main
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,12 +23,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+<<<<<<< HEAD
 import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.ReviewDto;
 import com.example.project.entity.Member;
 import com.example.project.service.MemberService;
+=======
+import com.example.project.dto.ReviewDto;
+>>>>>>> main
 import com.example.project.service.ReviewService;
 
 import jakarta.validation.Valid;
@@ -35,6 +43,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Controller
 @RequiredArgsConstructor
+@RestController
 @RequestMapping("/review")
 public class ReviewController {
 
@@ -65,6 +74,7 @@ public class ReviewController {
     // }
 
     @PostMapping("/submit")
+<<<<<<< HEAD
     public String submitReview(@ModelAttribute ReviewDto reviewDto) {
         // @ModelAttribute를 사용해 자동으로 DTO 매핑
         Long memberId = reviewDto.getMemberId();
@@ -107,6 +117,18 @@ public class ReviewController {
         model.addAttribute("currentMovieId", movieId);
 
         return "movieDetail";
+=======
+    public ResponseEntity<ReviewDto> submitReview(@RequestBody ReviewDto reviewDto) {
+        log.info("리뷰: {}", reviewDto);
+
+        // 리뷰 작성 후 해당 영화 페이지로 리다이렉트
+        return new ResponseEntity<>(reviewDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<ReviewDto> getReview(@RequestBody ReviewDto reviewDto) {
+        return new ResponseEntity<>(reviewDto, HttpStatus.OK);
+>>>>>>> main
     }
 
 }
