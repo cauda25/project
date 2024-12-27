@@ -26,16 +26,15 @@
                 </div>
               </div>
               <div class="row trending__product-row container">
-                <!-- <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="col-lg-4 col-md-6 col-sm-6">
                   <div class="product__item">
                     <div
                       class="product__item__pic set-bg"
                       data-setbg="img/trending/trend-1.jpg"
                     >
-                    <div>
-                      <img src="" alt="" class="product__item__pic set-bg">
-
-                    </div>
+                      <div>
+                        <img src="" alt="" class="product__item__pic set-bg" />
+                      </div>
                       <div class="ep">NO.01</div>
                       <div class="comment">
                         <i class="fa fa-comments"></i> 11
@@ -52,7 +51,7 @@
                       </h5>
                     </div>
                   </div>
-                </div> -->
+                </div>
               </div>
             </div>
             <div class="popular__product">
@@ -514,5 +513,7 @@
     <!-- Product Section End -->
   </div>
 
-  <th:block layout:fragment="js"> </th:block>
+  <th:block layout:fragment="js">
+    <script th:src="@{/js/main.js}"></script>
+  </th:block>
 </html>

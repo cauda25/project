@@ -402,19 +402,23 @@
     </form>
   </div>
   <th:block layout:fragment="js">
+    <script th:inline="javascript">
+      var genres = /*[[${genreDtos}]]*/ [];
+    </script>
     <script>
-      var genres = "[[${genreDtos}]]";
       if ("[[${requestDto.keyword}]]" != "") {
+        // 검색값이 있을 경우
         document.querySelector(".header-title-text").innerHTML =
           "검색: [[${requestDto.keyword}]]";
       } else if ("[[${requestDto.genre}]]" != "") {
+        // 장르값이 있을 경우
         genres.forEach((genre) => {
-          if (genre.id === "[[${requestDto.genre}]]") {
+          if (genre.id === parseInt("[[${requestDto.genre}]]")) {
             document.querySelector(".header-title-text").innerHTML = genre.name;
           }
         });
-        console.log("[[${requestDto.genre}]]");
       } else {
+        // movieList 값에 따라
         switch ("[[${requestDto.movieList}]]") {
           case "nowPlaying":
             document.querySelector(".header-title-text").innerHTML =
@@ -428,7 +432,6 @@
             document.querySelector(".header-title-text").innerHTML =
               "전체 영화 목록";
             break;
-
           default:
             break;
         }

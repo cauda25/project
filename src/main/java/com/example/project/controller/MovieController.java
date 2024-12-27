@@ -42,21 +42,11 @@ public class MovieController {
     private final MemberFavoriteMovieService memberFavoriteMovieService;
 
     @GetMapping("/main")
-    public void getHome() {
+    public void getHome(@ModelAttribute("requestDto") PageRequestDTO requestDto,
+            Model model) {
         log.info("home 폼 요청");
-
-    }
-
-    // @GetMapping("/read")
-    // public void getRead() {
-    // log.info("home 폼 요청");
-
-    // }
-
-    @GetMapping("/reservation")
-    public void getReservation() {
-        log.info("home 폼 요청");
-
+        PageResultDTO<MovieDto, Movie> movies = movieService.getList(requestDto);
+        model.addAttribute("movies", movies);
     }
 
     @GetMapping("/movieList")
