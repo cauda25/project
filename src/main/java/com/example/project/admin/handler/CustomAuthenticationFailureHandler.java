@@ -1,0 +1,63 @@
+package com.example.project.admin.handler;
+
+import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticationException;
+
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.stereotype.Component;
+
+import com.example.project.admin.Entity.UserEntity;
+import com.example.project.admin.Entity.constant.StatusRole;
+import com.example.project.admin.repository.UserRepository;
+import com.example.project.admin.service.test.UserServie;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@Component
+public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private UserServie userServie;
+
+    @Override
+    public void onAuthenticationFailure(HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException exception) throws IOException, ServletException {
+
+        // 로그인 시도 시 입력된 값 요청 후 파라메터에서 가져오기
+        UserEntity user = userServie.findUsername(request.getParameter("username"));
+
+        String redirectUrl = "/admin/login"; // 기본 로그인 페이지
+
+        if (user != null && user.getStatusRole() == StatusRole.INACTIVE) {
+            redirectUrl = "/dormancy?uno=" + user.getUno(); // 비활성화 상태 사용자 처리
+        }
+
+        response.sendRedirect(redirectUrl);
+
+        // INACTIVE를 ACTIVE로 변경전 미로그인 상태였기 때문에 UNO 등 값을 못 가져옴
+        // 결과 리다이렉션 실패 아무것도 수행하지 못한 상태로 LOGIN 페이지로 돌아옴
+        // String username = request.getParameter("username");
+        // String redirectUrl = "/admin/login?error=true";
+
+        // // 사용자 존재 여부 확인
+        // Optional<UserEntity> userOptional = userRepository.findByUserId(username);
+        // if (userOptional.isPresent()) {
+        // UserEntity user = userOptional.get();
+
+        // // INACTIVE 상태라면 다른 경로로 리디렉션
+        // if (user.getStatusRole() == StatusRole.INACTIVE) {
+        // redirectUrl = "/dormancy";
+        // }
+        // }
+
+        // // 로그인 실패 시 리디렉션
+        // getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+    }
+}

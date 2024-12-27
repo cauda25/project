@@ -47,7 +47,7 @@
                         <td>
                           <form th:action="@{/admin/page/user}" method="post">
                             <input type="hidden" name="uno" th:value="${dto.uno}" />
-                            <button type="submit">전환</button>
+                            <button type="submit" th:if="${dto.statusRole.toString().equals('INACTIVE')}">전환</button>
                           </form>
                         </td>
                       </tr>

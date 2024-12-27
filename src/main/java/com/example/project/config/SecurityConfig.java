@@ -1,5 +1,6 @@
 package com.example.project.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -15,12 +16,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.example.project.admin.handler.CustomAuthenticationFailureHandler;
+import com.example.project.admin.handler.CustomAuthenticationSuccessHandler;
+
 // import com.example.project.admin.service.AdminDetailsServiceImpl;
 
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
 public class SecurityConfig {
+
+        @Autowired
+        private CustomAuthenticationFailureHandler failureHandler;
+        @Autowired
+        private CustomAuthenticationSuccessHandler successHandler;
+
         @Bean
         SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -61,16 +71,21 @@ public class SecurityConfig {
                 // .csrf(csrf -> csrf.disable()); // 필요에 따라 CSRF 비활성화
 
                 http.authorizeHttpRequests(authorize -> authorize
+                                .requestMatchers("/css/**", "/admin/**", "/fonts/**", "/img/**", "/js/**", "/sass/**",
+                                                "/svg/**")
+                                .permitAll()
                                 .requestMatchers("/", "/admin/css/**",
                                                 "/admin/js/**", "/admin/fonts/**")
                                 .permitAll()
-                                .requestMatchers("/admin/page/**").hasAnyRole("ADMIN", "USER")
-                                // .anyRequest().permitAll()
-                                // .requestMatchers("/admin/page/user").permitAll()
+                                .requestMatchers("/dormancy", "/admin/page/index").permitAll()
+                                .requestMatchers("/admin/page/**").hasAnyRole("ADMIN", "USER", "MEMBER")
                                 .anyRequest().authenticated());
 
                 http.formLogin(login -> login.loginPage("/admin/login")
-                                .defaultSuccessUrl("/admin/page/index", true).permitAll());
+                                .failureHandler(failureHandler)
+                                .successHandler(successHandler).permitAll());
+                // .failureUrl("/dormancy")
+                // .defaultSuccessUrl("/admin/page/index", true).permitAll());
 
                 http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
 

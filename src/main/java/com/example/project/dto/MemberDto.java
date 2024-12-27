@@ -2,6 +2,7 @@ package com.example.project.dto;
 
 import java.time.LocalDateTime;
 
+import com.example.project.admin.Entity.constant.StatusRole;
 import com.example.project.entity.BaseEntity;
 import com.example.project.entity.constant.MemberRole;
 
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MemberDto {
+    private Long mid;
 
     @NotBlank(message = "아이디를 입력해주세요.")
     private String memberId;
@@ -56,5 +58,7 @@ public class MemberDto {
     private MemberRole role; // Enum을 String으로 변환하여 전송
 
     private LocalDateTime regDate; // 등록일 (읽기 전용)
+
+    private StatusRole statusRole;
 
 }

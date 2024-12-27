@@ -23,6 +23,8 @@ public interface UserServie {
     // 회원 정보 리스트 테스트
     List<UserEntity> testList(UserDto userDto);
 
+    UserEntity findUsername(String username);
+
     // 회원 정보 리스트
     List<Member> allList(MemberDto memberDto);
 

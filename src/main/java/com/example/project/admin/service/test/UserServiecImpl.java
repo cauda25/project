@@ -5,7 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.project.admin.Entity.MovieState;
@@ -35,6 +41,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Service
 public class UserServiecImpl implements UserServie {
+
+    private final UserDetailsService userDetailsService;
 
     private final UserRepository userRepository;
     private final AdminMovieRepository adminMovieRepository;
@@ -211,6 +219,14 @@ public class UserServiecImpl implements UserServie {
         userEntity.setStatusRole(StatusRole.ACTIVE);
         userEntity.setLastLogin(LocalDateTime.now());
         userRepository.save(userEntity);
+
+    }
+
+    // 키 값을 찾아오기
+    @Override
+    public UserEntity findUsername(String username) {
+        return userRepository.findByUserId(username)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
     }
 
 }
