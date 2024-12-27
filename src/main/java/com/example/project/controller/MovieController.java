@@ -42,16 +42,13 @@ public class MovieController {
     private final MemberFavoriteMovieService memberFavoriteMovieService;
 
     @GetMapping("/main")
-    public void getHome() {
+    public void getHome(@ModelAttribute("requestDto") PageRequestDTO requestDto,
+            Model model) {
         log.info("home 폼 요청");
-
+        requestDto.setMovieList("reservable");
+        PageResultDTO<MovieDto, Movie> movies = movieService.getList(requestDto);
+        model.addAttribute("movies", movies);
     }
-
-    // @GetMapping("/read")
-    // public void getRead() {
-    // log.info("home 폼 요청");
-
-    // }
 
     @GetMapping("/movieList")
     public void getMovieList(@ModelAttribute("requestDto") PageRequestDTO requestDto,
@@ -67,6 +64,7 @@ public class MovieController {
 
                 PageResultDTO<PersonDto, Person> people = peopleService.getList(requestDto);
                 log.info("토탈 {}", people.getTotalPage());
+                log.info("인물 {}", people.getDtoList());
                 model.addAttribute("people", people);
 
             }
@@ -140,8 +138,7 @@ public class MovieController {
             for (MoviePersonDto moviePeopleDto : peopleDto.getMoviePersonDtos()) {
                 if (moviePeopleDto.getRole() != null && moviePeopleDto.getRole().equals("Director")) {
                     directorList.add(peopleDto);
-                }
-                if (moviePeopleDto.getRole() == null) {
+                } else if (moviePeopleDto.getRole() != null && moviePeopleDto.getRole().equals("Actor")) {
                     actorList.add(peopleDto);
                 }
             }
@@ -150,10 +147,11 @@ public class MovieController {
         model.addAttribute("actorList", actorList);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLogin = authentication != null && authentication.isAuthenticated()
+                && !(authentication.getPrincipal() instanceof String);
 
         // 로그인한 사용자인지 확인
-        if (authentication != null && authentication.isAuthenticated()
-                && !(authentication.getPrincipal() instanceof String)) {
+        if (isLogin) {
             // 로그인된 사용자일 때
             AuthMemberDto authMemberDto = (AuthMemberDto) authentication.getPrincipal();
             List<Movie> favoriteMovies = memberFavoriteMovieService
@@ -165,7 +163,9 @@ public class MovieController {
             // 로그인하지 않은 사용자일 때 (익명 사용자)
             model.addAttribute("favoriteMovies", new ArrayList<>());
             model.addAttribute("isExist", false);
+            model.addAttribute("isLogin", isLogin);
         }
+        log.info("로그인 {}", isLogin);
     }
 
     @GetMapping("/personDetail")

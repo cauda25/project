@@ -23,29 +23,29 @@ import lombok.extern.log4j.Log4j2;
 @Service
 public class PersonServiceImpl implements PersonService {
 
-    private final PersonRepository peopleRepository;
+    private final PersonRepository personRepository;
 
     @Override
     public PageResultDTO getList(PageRequestDTO requestDto) {
         // 페이지 나누기 개념 추가
         Pageable pageable = requestDto.getPageable(Sort.by("popularity").descending());
-        Page<Person> peoples = peopleRepository.getTotalList(requestDto.getType(),
+        Page<Person> people = personRepository.getTotalList(requestDto.getType(),
                 requestDto.getKeyword(), pageable);
         Function<Person, PersonDto> function = (en -> entityToDto(en));
 
-        return new PageResultDTO<>(peoples, function);
+        return new PageResultDTO<>(people, function);
         // return null;
     }
 
     @Override
     public PersonDto read(Long id) {
-        return entityToDto(peopleRepository.findById(id).get());
+        return entityToDto(personRepository.findById(id).get());
     }
 
     @Override
     public List<PersonDto> getDirectorListByMovieId(Long id) {
         List<PersonDto> peopleDtos = new ArrayList<>();
-        peopleRepository.getDirectorListByMovieId(id).stream().forEach(person -> {
+        personRepository.getDirectorListByMovieId(id).stream().forEach(person -> {
             peopleDtos.add(entityToDto(person));
         });
         return peopleDtos;
