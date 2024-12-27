@@ -80,5 +80,5 @@ public class Member extends BaseEntity {
     private List<MemberFavoriteMovie> memberFavoriteMovies = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    private StatusRole statusRole;
+    private StatusRole statusRole; // 필요해서 추가합니다.
 }

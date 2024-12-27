@@ -7,7 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.project.admin.service.test.UserServie;
+import com.example.project.admin.service.test.UserService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Log4j2
 public class DormancyContoller {
 
-    private final UserServie userServie;
+    private final UserService userServie;
 
     @GetMapping("/dormancy")
     public void getMethodName() {
@@ -24,11 +24,11 @@ public class DormancyContoller {
     }
 
     @PostMapping("/dormancy")
-    public String postMethodName(@RequestParam("uno") Long uno) {
-        log.info("휴면해제 폼 {}", uno);
-        userServie.reactivateAccount(uno);
+    public String postMethodName(@RequestParam("mid") Long mid) {
+        log.info("휴면해제 폼 {}", mid);
+        userServie.reactivateAccount(mid);
 
-        return "redirect:/admin/page/index";
+        return "redirect:/movie/main";
 
     }
 

@@ -23,7 +23,7 @@ import com.example.project.admin.dto.test.UserDto;
 import com.example.project.admin.repository.AdminMovieRepository;
 import com.example.project.admin.repository.MovieAddRepository;
 import com.example.project.admin.repository.MovieStateRepository;
-import com.example.project.admin.repository.UserRepository;
+// import com.example.project.admin.repository.UserRepository;
 import com.example.project.dto.GenreDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.reserve.TheaterDto;
@@ -40,11 +40,11 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 @Log4j2
 @Service
-public class UserServiecImpl implements UserServie {
+public class UserServiecImpl implements UserService {
 
     private final UserDetailsService userDetailsService;
 
-    private final UserRepository userRepository;
+    // private final UserRepository userRepository;
     private final AdminMovieRepository adminMovieRepository;
     private final MemberRepository memberRepository;
     private final MovieAddRepository movieAddRepository;
@@ -52,12 +52,11 @@ public class UserServiecImpl implements UserServie {
     private final GenreRepository genreRepository;
 
     // 회원 정보 가져오기 test
-    @Override
-    public List<UserEntity> testList(UserDto userDto) {
-        List<UserEntity> list = userRepository.findAll();
-
-        return list;
-    }
+    // @Override
+    // public List<Member> testList(UserDto userDto)
+    // List<Member> list = userRepository.findAll();
+    // return list;
+    // }
 
     // 회원 정보 가져오기
     @Override
@@ -198,34 +197,34 @@ public class UserServiecImpl implements UserServie {
     @Override
     public void inactiveAccounts() {
         LocalDateTime lastTime = LocalDateTime.now().minusMinutes(1);
-        List<UserEntity> inactiveUsers = userRepository.findInactiveUsers(lastTime, StatusRole.ACTIVE);
+        List<Member> inactiveUsers = memberRepository.findInactiveUsers(lastTime, StatusRole.ACTIVE);
 
-        for (UserEntity userEntity : inactiveUsers) {
-            userEntity.setStatusRole(StatusRole.INACTIVE);
+        for (Member member : inactiveUsers) {
+            member.setStatusRole(StatusRole.INACTIVE);
 
-            userRepository.save(userEntity);
+            memberRepository.save(member);
         }
     }
 
     // 휴면 계정 복구
     @Override
-    public void reactivateAccount(Long uno) {
-        UserEntity userEntity = userRepository.findById(uno).get();
+    public void reactivateAccount(Long mid) {
+        Member member = memberRepository.findById(mid).get();
 
-        if (!userEntity.getStatusRole().equals(StatusRole.INACTIVE)) {
+        if (!member.getStatusRole().equals(StatusRole.INACTIVE)) {
             throw new IllegalStateException("비활성 상태가 아닙니다.");
         }
 
-        userEntity.setStatusRole(StatusRole.ACTIVE);
-        userEntity.setLastLogin(LocalDateTime.now());
-        userRepository.save(userEntity);
+        member.setStatusRole(StatusRole.ACTIVE);
+        member.setLastLogin(LocalDateTime.now());
+        memberRepository.save(member);
 
     }
 
     // 키 값을 찾아오기
     @Override
-    public UserEntity findUsername(String username) {
-        return userRepository.findByUserId(username)
+    public Member findUsername(String memberId) {
+        return memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
     }
 

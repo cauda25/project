@@ -1,6 +1,7 @@
-package com.example.project.dto;
+package com.example.project.admin.dto.test;
 
 import com.example.project.admin.Entity.constant.AdminRole;
+import com.example.project.entity.constant.MemberRole;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,5 +16,5 @@ public class AdminDto {
     private Long ano;
     private String userId;
     private String password;
-    private AdminRole role;
+    private MemberRole role;
 }

@@ -19,12 +19,13 @@ import com.example.project.admin.repository.AdminMovieRepository;
 import com.example.project.admin.repository.AdminRepository;
 import com.example.project.admin.repository.MovieAddRepository;
 import com.example.project.admin.repository.MovieStateRepository;
-import com.example.project.repository.test.UserRepository;
+// import com.example.project.admin.repository.UserRepository;
 import com.example.project.entity.Genre;
 import com.example.project.entity.Movie;
 import com.example.project.entity.MovieGenre;
+import com.example.project.entity.constant.MemberRole;
 import com.example.project.entity.reserve.Theater;
-
+import com.example.project.repository.MemberRepository;
 import com.example.project.repository.movie.GenreRepository;
 import com.example.project.repository.movie.MovieGenreRepository;
 import com.example.project.repository.movie.MovieRepository;
@@ -38,8 +39,8 @@ import jakarta.transaction.Transactional;
 public class AdminRepositoryTest {
     @Autowired
     private AdminRepository adminRepository;
-    @Autowired
-    private UserRepository userRepository;
+    // @Autowired
+    // private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -58,53 +59,55 @@ public class AdminRepositoryTest {
     private MovieAddRepository movieAddRepository;
     @Autowired
     private MovieStateRepository movieStateRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Test
     public void insertAdmin() {
-        Admin admin = Admin.builder().userId("user1").password(passwordEncoder.encode("1111"))
-                .adminRole(AdminRole.ADMIN).build();
+        Admin admin = Admin.builder().userId("user2").password(passwordEncoder.encode("1111"))
+                .role(MemberRole.ADMIN).build();
         adminRepository.save(admin);
     }
 
-    @Test
-    public void userInsert() {
-        LongStream.rangeClosed(1, 50).forEach(i -> {
-            int re = ((int) (Math.random() * 2));
-            int year = ((int) (Math.random() * 50) + 1980);
-            int month = ((int) (Math.random() * 12) + 1);
-            int day = ((int) (Math.random() * 31) + 1);
-            UserEntity userEntity = UserEntity.builder()
-                    .userId("userId" + i)
-                    .password(passwordEncoder.encode("1111"))
-                    .name("name" + i)
-                    .email("usermeil" + i + "@gmail.com")
-                    .gender(re)
-                    .brith(year + "/" + month + "/" + day)
-                    .telNo("010-0000-0000")
-                    .adminRole(AdminRole.USER)
-                    .statusRole(StatusRole.ACTIVE)
-                    .build();
+    // @Test
+    // public void userInsert() {
+    // LongStream.rangeClosed(1, 50).forEach(i -> {
+    // int re = ((int) (Math.random() * 2));
+    // int year = ((int) (Math.random() * 50) + 1980);
+    // int month = ((int) (Math.random() * 12) + 1);
+    // int day = ((int) (Math.random() * 31) + 1);
+    // UserEntity userEntity = UserEntity.builder()
+    // .userId("userId" + i)
+    // .password(passwordEncoder.encode("1111"))
+    // .name("name" + i)
+    // .email("usermeil" + i + "@gmail.com")
+    // .gender(re)
+    // .brith(year + "/" + month + "/" + day)
+    // .telNo("010-0000-0000")
+    // .adminRole(AdminRole.USER)
+    // .statusRole(StatusRole.ACTIVE)
+    // .build();
 
-            userRepository.save(userEntity);
-        });
-    }
+    // userRepository.save(userEntity);
+    // });
+    // }
 
-    @Test
-    public void findUser() {
+    // @Test
+    // public void findUser() {
 
-        System.out.println(userRepository.findById(1L));
-    }
+    // System.out.println(userRepository.findById(1L));
+    // }
 
-    @Test
-    public void userList() {
-        userRepository.findAll().forEach(u -> {
-            System.out.println(u.getUserId());
-            System.out.println(u.getName());
-            System.out.println(u.getEmail());
-            System.out.println(u.getGender());
-        });
-        ;
-    }
+    // @Test
+    // public void userList() {
+    // userRepository.findAll().forEach(u -> {
+    // System.out.println(u.getUserId());
+    // System.out.println(u.getName());
+    // System.out.println(u.getEmail());
+    // System.out.println(u.getGender());
+    // });
+    // ;
+    // }
 
     // @Transactional
     // @Test

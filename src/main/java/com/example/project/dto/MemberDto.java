@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MemberDto {
-    private Long mid;
+    private Long mid; // 필요해서 추가합니다.
 
     @NotBlank(message = "아이디를 입력해주세요.")
     private String memberId;
@@ -59,6 +59,6 @@ public class MemberDto {
 
     private LocalDateTime regDate; // 등록일 (읽기 전용)
 
-    private StatusRole statusRole;
+    private StatusRole statusRole; // 필요해서 추가합니다.
 
 }

@@ -21,9 +21,9 @@ import com.example.project.entity.Movie;
 
 public interface UserService {
     // 회원 정보 리스트 테스트
-    List<UserEntity> testList(UserDto userDto);
+    // List<Member> testList(MemberDto memberDto);
 
-    UserEntity findUsername(String username);
+    Member findUsername(String memberId);
 
     // 회원 정보 리스트
     List<Member> allList(MemberDto memberDto);
@@ -57,6 +57,6 @@ public interface UserService {
     void inactiveAccounts();
 
     // 휴면 계정 복구
-    void reactivateAccount(Long uno);
+    void reactivateAccount(Long mid);
 
 }

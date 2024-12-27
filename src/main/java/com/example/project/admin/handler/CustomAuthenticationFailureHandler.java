@@ -10,8 +10,10 @@ import org.springframework.stereotype.Component;
 
 import com.example.project.admin.Entity.UserEntity;
 import com.example.project.admin.Entity.constant.StatusRole;
-import com.example.project.admin.repository.UserRepository;
-import com.example.project.admin.service.test.UserServie;
+// import com.example.project.admin.repository.UserRepository;
+import com.example.project.admin.service.test.UserService;
+import com.example.project.entity.Member;
+import com.example.project.repository.MemberRepository;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,10 +22,10 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
+    // @Autowired
+    // private UserRepository userRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserServie userServie;
+    private UserService userService;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,
@@ -31,12 +33,12 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
             AuthenticationException exception) throws IOException, ServletException {
 
         // 로그인 시도 시 입력된 값 요청 후 파라메터에서 가져오기
-        UserEntity user = userServie.findUsername(request.getParameter("username"));
+        Member user = userService.findUsername(request.getParameter("username"));
 
-        String redirectUrl = "/admin/login"; // 기본 로그인 페이지
+        String redirectUrl = "/member/login";
 
         if (user != null && user.getStatusRole() == StatusRole.INACTIVE) {
-            redirectUrl = "/dormancy?uno=" + user.getUno(); // 비활성화 상태 사용자 처리
+            redirectUrl = "/dormancy?mid=" + user.getMid(); // 비활성화 상태 사용자 처리
         }
 
         response.sendRedirect(redirectUrl);

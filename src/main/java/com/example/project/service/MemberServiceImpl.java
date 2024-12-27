@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.project.admin.Entity.constant.StatusRole;
 import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.entity.Member;
@@ -38,6 +39,7 @@ public class MemberServiceImpl implements MemberService {
                 .city(memberDto.getCity())
                 .district(memberDto.getDistrict())
                 .role(MemberRole.MEMBER)
+                .statusRole(StatusRole.ACTIVE) // 필요해서 추가합니다
                 .point(0)
                 .build();
         memberRepository.save(member);

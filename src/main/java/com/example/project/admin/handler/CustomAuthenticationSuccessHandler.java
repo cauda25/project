@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import com.example.project.admin.Entity.UserEntity;
 import com.example.project.admin.Entity.constant.StatusRole;
-import com.example.project.admin.repository.UserRepository;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +31,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         // log.info("로그인 성공 후 {}", user.getStatusRole());
 
         // ACTIVE 상태면 기본 성공 URL로 이동
-        response.sendRedirect("/admin/page/index");
+        response.sendRedirect("/movie/main");
 
     }
 }

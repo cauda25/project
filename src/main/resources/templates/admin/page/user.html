@@ -27,26 +27,27 @@
                     </thead>
                     <tbody>
                       <tr th:each="dto : ${list}">
-                        <!-- <td th:text="${dto.memberId}"></td>
+                        <td th:text="${dto.mid}"></td>
+                        <td th:text="${dto.memberId}"></td>
                         <td th:text="${dto.name}"></td>
                         <td th:text="${dto.email}"></td>
                         <td th:text="${dto.gender}"></td>
                         <td th:text="${dto.birth}"></td>
                         <td th:text="${dto.point}"></td>
-                        <td th:text="${dto.lastLogin}"></td> -->
+                        <td th:text="${#temporals.format(dto.lastLogin, 'yyyy/MM/dd hh:mm')}"></td>
 
-                        <td th:text="${dto.uno}"></td>
+                        <!-- <td th:text="${dto.uno}"></td>
                         <td th:text="${dto.userId}"></td>
                         <td th:text="${dto.name}"></td>
                         <td th:text="${dto.email}"></td>
                         <td th:text="${dto.gender}"></td>
                         <td th:text="${dto.brith}"></td>
                         <td th:text="${dto.point}"></td>
-                        <td th:text="${dto.lastLogin}"></td>
+                        <td th:text="${dto.lastLogin}"></td> -->
                         <td th:text="${dto.statusRole}"></td>
                         <td>
                           <form th:action="@{/admin/page/user}" method="post">
-                            <input type="hidden" name="uno" th:value="${dto.uno}" />
+                            <input type="hidden" name="mid" th:value="${dto.mid}" />
                             <button type="submit" th:if="${dto.statusRole.toString().equals('INACTIVE')}">전환</button>
                           </form>
                         </td>

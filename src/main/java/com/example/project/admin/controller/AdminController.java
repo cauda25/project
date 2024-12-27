@@ -40,10 +40,20 @@ public class AdminController {
     }
 
     // 테스트
+    // @GetMapping("/user")
+    // public void getUserTest(UserDto userDto, Long uno, Model model) {
+    // log.info("home 폼 요청");
+    // List<UserEntity> list = userServie.testList(userDto);
+    // userServie.inactiveAccounts();
+    // // userServie.reactivateAccount(uno);
+    // model.addAttribute("list", list);
+
+    // }
+
     @GetMapping("/user")
-    public void getUserTest(UserDto userDto, Long uno, Model model) {
+    public void getUserTest(MemberDto memberDto, Long mid, Model model) {
         log.info("home 폼 요청");
-        List<UserEntity> list = userServie.testList(userDto);
+        List<Member> list = userServie.allList(memberDto);
         userServie.inactiveAccounts();
         // userServie.reactivateAccount(uno);
         model.addAttribute("list", list);
@@ -51,10 +61,10 @@ public class AdminController {
     }
 
     @PostMapping("/user")
-    public String PostUser(Long uno) {
-        log.info("reactive 폼 요청 {}", uno);
+    public String PostUser(Long mid) {
+        log.info("reactive 폼 요청 {}", mid);
 
-        userServie.reactivateAccount(uno);
+        userServie.reactivateAccount(mid);
         return "redirect:/admin/page/user";
 
     }

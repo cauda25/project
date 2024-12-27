@@ -1,7 +1,7 @@
 package com.example.project.admin.Entity;
 
-
 import com.example.project.admin.Entity.constant.AdminRole;
+import com.example.project.entity.constant.MemberRole;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +28,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "admin")
 public class Admin {
-    
+
     @SequenceGenerator(name = "admin_id_seq_gen", sequenceName = "admin_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "admin_id_seq_gen")
     @Id
@@ -41,8 +41,6 @@ public class Admin {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private AdminRole adminRole;
-
-   
+    private MemberRole role;
 
 }
