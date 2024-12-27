@@ -53,4 +53,5 @@ public class InquiryController {
         Inquiry updatedInquiry = inquiryService.updateStatus(id, status);
         return ResponseEntity.ok(updatedInquiry);
     }
+
 }
