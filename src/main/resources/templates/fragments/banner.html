@@ -4,21 +4,29 @@
   <section class="hero" th:fragment="banner">
     <div class="container">
       <div class="hero__slider owl-carousel owl-loaded">
-        <div class="hero__items set-bg" data-setbg="/img/ironman.png">
+        <div
+          class="hero__items set-bg"
+          th:if="${iterStat.index < 4}"
+          th:each="dto, iterStat : ${movies.dtoList}"
+          th:data-setbg="'https://image.tmdb.org/t/p/w500/' + ${dto.backdropPath}"
+        >
           <div class="row">
             <div class="col-lg-6">
               <div class="hero__text color_black">
-                <div class="label">매인 베너</div>
-                <h2>중심이 되는 최신 영화</h2>
-                <p>부제 or 간단한 영화 소개</p>
+                <!-- <div class="label">메인 배너</div> -->
+                <h2>[[${dto.title}]]</h2>
+                <p>[[${dto.tagline}]]</p>
+                <a th:href="@{movieDetail(id=${dto.id})}">
+                  <span>자세히</span>
+                </a>
                 <a href="#"
-                  ><span>Watch Now</span> <i class="fa fa-angle-right"></i
+                  ><span>예매하기</span> <i class="fa fa-angle-right"></i
                 ></a>
               </div>
             </div>
           </div>
         </div>
-        <div class="hero__items set-bg" data-setbg="img/hero/hero-1.jpg">
+        <!-- <div class="hero__items set-bg" data-setbg="img/hero/hero-1.jpg">
           <div class="row">
             <div class="col-lg-6">
               <div class="hero__text">
@@ -45,7 +53,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </section>

@@ -31,7 +31,7 @@ public class Movie extends BaseEntity {
     @Id
     private Long id;
 
-    private String backdrop_path;
+    private String backdropPath;
     private Long budget;
     private String homepage;
     // private String origin_country;

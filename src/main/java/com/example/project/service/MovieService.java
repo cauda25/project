@@ -47,7 +47,7 @@ public interface MovieService {
         // MovieDto 생성
         MovieDto movieDto = MovieDto.builder()
                 .id(movie.getId())
-                .backdrop_path(movie.getBackdrop_path())
+                .backdropPath(movie.getBackdropPath())
                 .budget(movie.getBudget())
                 .homepage(movie.getHomepage())
                 .originalLanguage(movie.getOriginalLanguage())
@@ -126,7 +126,7 @@ public interface MovieService {
     public default Movie dtoToEntity(MovieDto movieDto) {
         return Movie.builder()
                 .id(movieDto.getId())
-                .backdrop_path(movieDto.getBackdrop_path())
+                .backdropPath(movieDto.getBackdropPath())
                 .budget(movieDto.getBudget())
                 .homepage(movieDto.getHomepage())
                 .originalLanguage(movieDto.getOriginalLanguage())

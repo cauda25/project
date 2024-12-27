@@ -1,31 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/list.css}" type="text/css" />
     <style>
       .spad {
         padding: 0;
-      }
-      .product {
-        padding: 0;
-      }
-      .product__item__text {
-        padding-top: 0;
-        padding-left: 10px;
-      }
-      .product__item__text ul {
-        margin: 0;
-        color: #ffffff;
-        font-weight: 500;
-      }
-      .product__item__text h5 a {
-        color: #ffffff;
-        font-weight: 700;
-        line-height: 26px;
-        display: block;
-        width: 222px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
       }
       .sub-head {
         margin-bottom: 10px;
@@ -43,7 +22,6 @@
       }
     </style>
   </th:block>
-
   <div layout:fragment="content">
     <form class="" role="search" th:action="@{movieList}" id="searchForm">
       <input type="hidden" name="page" th:value="1" />
@@ -51,7 +29,6 @@
       <input type="hidden" name="genre" th:value="${requestDto.genre}" />
       <input type="hidden" name="sort" th:value="${requestDto.sort}" />
       <input type="hidden" name="movieList" th:value="popular" />
-      <!-- <h1 th:text="${movies.totalPage}"></h1> -->
       <div class="d-flex">
         <select name="type" id="type" class="form-select me-2">
           <option value="mp" th:selected="${requestDto.type == 'mp'}">
@@ -145,7 +122,7 @@
               class="row trending__product-row"
               th:if="${requestDto.type != 'p' and requestDto.movieList != 'my'}"
             >
-              <div class="d-flex sub-head">
+              <!-- <div class="d-flex sub-head">
                 <h3 class="text-white">영화 [[${movies.totalElements}]] 건</h3>
                 <a
                   th:href="@{movieList(movieList=popular,page=1,size=${requestDto.size},type='m',keyword=${requestDto.keyword},genre='',sort=${requestDto.sort})}"
@@ -153,6 +130,23 @@
                   th:if="${requestDto.type == 'mp'}"
                   >더보기</a
                 >
+              </div> -->
+              <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-8">
+                  <div class="section-title">
+                    <h4>영화 [[${movies.totalElements}]] 건</h4>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                  <div class="btn__all">
+                    <a
+                      th:href="@{movieList(movieList=popular,page=1,size=${requestDto.size},type='m',keyword=${requestDto.keyword},genre='',sort=${requestDto.sort})}"
+                      class="primary-btn"
+                      th:if="${requestDto.type == 'mp'}"
+                      >View All <span class="arrow_right"></span
+                    ></a>
+                  </div>
+                </div>
               </div>
               <div
                 class="col-lg-3 col-md-4 col-sm-6 mb-3 product"
@@ -275,7 +269,7 @@
               class="row trending__people-row"
               th:if="${requestDto.type != 'm' and requestDto.type != ''}"
             >
-              <div class="d-flex sub-head">
+              <!-- <div class="d-flex sub-head">
                 <h3 class="text-white">인물 [[${people.totalElements}]] 건</h3>
                 <a
                   th:href="@{movieList(movieList=popular,page=1,size=${requestDto.size},type='p',keyword=${requestDto.keyword},genre='',sort=${requestDto.sort})}"
@@ -283,6 +277,23 @@
                   th:if="${requestDto.type == 'mp'}"
                   >더보기</a
                 >
+              </div> -->
+              <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-8">
+                  <div class="section-title">
+                    <h4>인물 [[${people.totalElements}]] 건</h4>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                  <div class="btn__all">
+                    <a
+                      th:href="@{movieList(movieList=popular,page=1,size=${requestDto.size},type='p',keyword=${requestDto.keyword},genre='',sort=${requestDto.sort})}"
+                      class="primary-btn"
+                      th:if="${requestDto.type == 'mp'}"
+                      >View All <span class="arrow_right"></span
+                    ></a>
+                  </div>
+                </div>
               </div>
               <div
                 class="col-lg-3 col-md-4 col-sm-6 mb-3 product"

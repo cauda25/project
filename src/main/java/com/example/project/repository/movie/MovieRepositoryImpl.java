@@ -127,7 +127,7 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
             builder.and(movie.title.like("%" + keyword + "%"));
         }
 
-        // 영화 상태 필터 추가 (상영 중 또는 예정)
+        // 영화 상태 필터 추가 (상영 중 또는 예정 또는 예약 가능한, 전부 아닐 경우 기본값)
         if ("nowPlaying".equals(movieList)) {
             builder.and(
                     movie.releaseDate.between(
@@ -135,6 +135,11 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
                             LocalDate.now().toString()));
         } else if ("upcoming".equals(movieList)) {
             builder.and(movie.releaseDate.gt(LocalDate.now().toString()));
+        } else if ("reservable".equals(movieList)) {
+            builder.and(
+                    movie.releaseDate.between(
+                            LocalDate.now().minusWeeks(3).toString(),
+                            LocalDate.now().plusWeeks(1).toString()));
         }
 
         // 조건 적용
