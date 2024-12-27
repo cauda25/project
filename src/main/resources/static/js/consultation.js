@@ -1,18 +1,43 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // 글 작성 버튼 클릭 시 폼 표시
   const createConsultationBtn = document.getElementById(
     "createConsultationBtn"
   );
   const formContainer = document.getElementById("form-container");
+  const form = document.getElementById("consultationForm");
+  const resetButton = document.querySelector("form button[type='reset']");
 
+  // 글 작성 버튼 클릭 시 폼 표시
   createConsultationBtn.addEventListener("click", function () {
+    form.reset(); // 기존 값 초기화
     formContainer.style.display = "block";
   });
 
   // 폼 리셋 버튼 클릭 시 폼 숨기기
-  const resetButton = document.querySelector("form button[type='reset']");
   resetButton.addEventListener("click", function () {
     formContainer.style.display = "none";
+  });
+
+  // 수정 버튼 클릭 시 폼에 데이터 로드
+  const editButtons = document.querySelectorAll(".edit-btn");
+  editButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const id = button.getAttribute("data-id");
+      const userId = button.getAttribute("data-user-id");
+      const inquiryId = button.getAttribute("data-inquiry-id");
+      const response = button.getAttribute("data-response");
+      const status = button.getAttribute("data-status");
+      const content = button.getAttribute("data-content");
+
+      // 폼에 데이터 채우기
+      document.getElementById("consultation-id").value = id;
+      document.getElementById("userId").value = userId;
+      document.getElementById("inquiryId").value = inquiryId;
+      document.getElementById("response").value = response;
+      document.getElementById("status").value = status;
+      document.getElementById("content").value = content;
+
+      formContainer.style.display = "block";
+    });
   });
 
   // 삭제 버튼 클릭 이벤트 처리

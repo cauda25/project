@@ -35,7 +35,7 @@ public class ConsultationAnswerService {
         consultationAnswerRepository.save(answer); // 답변 저장
 
         // 상담 상태를 '답변 완료'로 변경
-        consultation.setStatus(ConsultationStatus.ANSWERED);
+        consultation.setStatus(ConsultationStatus.ANSWERED); // Use ConsultationStatus
         consultationRepository.save(consultation);
     }
 }

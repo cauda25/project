@@ -37,7 +37,7 @@ public class Inquiry {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private InquiryStatus status = InquiryStatus.미답변;
+    private InquiryStatus status;
 
     @Column(updatable = false)
     private String createdAt;

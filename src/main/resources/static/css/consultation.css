@@ -137,3 +137,12 @@ button.delete-btn {
   background-color: #0056b3;
   font-weight: bold;
 }
+
+.status-complete {
+  color: green;
+  font-weight: bold;
+}
+.status-pending {
+  color: red;
+  font-weight: bold;
+}

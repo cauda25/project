@@ -22,6 +22,7 @@
               <th>문의 ID</th>
               <th>응답</th>
               <th>상태</th>
+              <th>내용</th>
               <th>수정</th>
               <th>삭제</th>
             </tr>
@@ -33,28 +34,24 @@
               <td th:text="${consultation.inquiryId}"></td>
               <td th:text="${consultation.response}"></td>
               <td th:text="${consultation.status}"></td>
+              <td th:text="${consultation.content}"></td>
               <td>
-                <form th:action="@{/center/consultation/modify}" method="get">
-                  <input
-                    type="hidden"
-                    name="id"
-                    th:value="${consultation.id}"
-                  />
-                  <button type="submit" class="btn btn-primary">수정</button>
-                </form>
+                <button
+                  class="edit-btn"
+                  th:data-id="${consultation.id}"
+                  th:data-user-id="${consultation.userId}"
+                  th:data-inquiry-id="${consultation.inquiryId}"
+                  th:data-response="${consultation.response}"
+                  th:data-status="${consultation.status}"
+                  th:data-content="${consultation.content}"
+                >
+                  수정
+                </button>
               </td>
               <td>
-                <form th:action="@{/center/consultation/delete}" method="post">
-                  <input
-                    type="hidden"
-                    name="id"
-                    th:value="${consultation.id}"
-                  />
-                  <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-                  <button class="delete-btn" th:data-id="${consultation.id}">
-                    삭제
-                  </button>
-                </form>
+                <button class="delete-btn" th:data-id="${consultation.id}">
+                  삭제
+                </button>
               </td>
             </tr>
           </tbody>
@@ -65,7 +62,7 @@
           <button
             th:each="page : ${#numbers.sequence(1, totalPages)}"
             th:text="${page}"
-            th:classappend="${currentPage == page} ? 'active'"
+            th:classappend="${currentPage == page} ? 'active' : ''"
             th:onclick="'location.href=' + @{'/center/consultations?page='} + ${page}"
           ></button>
         </div>
@@ -98,6 +95,10 @@
               <option value="미답변">미답변</option>
               <option value="답변완료">답변완료</option>
             </select>
+          </div>
+          <div>
+            <label for="content">내용:</label>
+            <textarea name="content" id="content" required></textarea>
           </div>
           <button type="submit">저장</button>
           <button type="reset">취소</button>

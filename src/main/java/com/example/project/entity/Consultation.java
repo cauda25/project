@@ -27,8 +27,13 @@ public class Consultation {
     private String response;
 
     @Enumerated(EnumType.STRING)
-    private InquiryStatus status = InquiryStatus.미답변;
+    private ConsultationStatus status = ConsultationStatus.PENDING;
 
     @Column(updatable = false)
     private String createdAt;
+
+    public void setStatus(ConsultationStatus status) {
+        this.status = status;
+    }
+
 }
