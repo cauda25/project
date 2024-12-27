@@ -40,8 +40,10 @@ public class Screening {
 
     private String runtime;
 
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDate openDate;
 
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDate closeDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

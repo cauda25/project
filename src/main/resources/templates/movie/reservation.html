@@ -37,8 +37,8 @@
             </td>
             <td>
               <div>
-                <ul id="movie-list" class="list-group list-group-flush">
-                </ul>
+                <div id="movie-list" class="custom-movie-list">
+                </div>
               </div>
             </td>
             <td>
@@ -47,49 +47,41 @@
                 </ul>                
               </div>
               <div>
-                <div class="select_tit">위키드</div>
-                <div class="timeSelect">
-                  <span class="theaterCate">IMAX</span>
-                  <ul class="timelist-container" style="padding: 0; margin: 0;">
-                    <li class="timelist" style="list-style: none;">
-                      <a role="button" href="#" class="button">
-                        <div>
-                          <span class="time"><strong>12:00</strong></span>
-                          <span class="seat-hall">
-                            <span class="seat"><strong>180</strong>/180</span>
-                            <span class="hall">1관</span>
-                          </span>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="timelist" style="list-style: none;">
-                      <a role="button" href="#" class="button">
-                        <div>
-                          <span class="time"><strong>12:00</strong></span>
-                          <span class="seat-hall">
-                            <span class="seat"><strong>180</strong>/180</span>
-                            <span class="hall">1관</span>
-                          </span>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </div>               
+                <div id="screenings" class="theater-scroll">                
+                </div>
               </div>
             </td>                
           </tr>
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="3">
-              <a href="#" class="select-info"> 
-                좌석선택<i class="fa-solid fa-angles-right"></i>
-              </a>
+            <td colspan="3" class="text-center">
+              <div class="selection-container">
+                <div class="selection-summary">
+                  <p>
+                    <strong>선택한 극장:</strong> <span id="selected-theater">-</span><br>
+                    <strong>선택한 영화:</strong> <span id="selected-movie">-</span><br>
+                    <strong>선택한 날짜:</strong> <span id="selected-date">-</span><br>
+                    <strong>선택한 상영관:</strong> <span id="selected-auditorium">-</span><br>
+                    <strong>선택한 시간:</strong> <span id="selected-time">-</span>
+                  </p>
+                </div>
+                <a href="#" 
+                   class="select-info" 
+                   data-theater=""
+                   data-movie=""
+                   data-date=""
+                   data-auditorium=""
+                   data-time="">
+                  좌석선택 <i class="fa-solid fa-angles-right"></i>
+                </a>
+              </div>
             </td>
           </tr>
         </tfoot>
-      </table>        
-    <th:block layout:fragment="js">
-      <script th:src="@{/js/reservation.js}"></script>
-    </th:block>   
+      </table>     
+    </div>    
+  <th:block layout:fragment="js">
+    <script th:src="@{/js/reservation.js}"></script>
+  </th:block>   
 </html>

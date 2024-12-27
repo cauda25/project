@@ -1,11 +1,13 @@
 package com.example.project.service.reservation;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 import com.example.project.dto.MovieDto;
-import com.example.project.dto.ScreeningDto;
 import com.example.project.dto.reserve.ReserveDto;
+import com.example.project.dto.reserve.ScreeningDto;
+import com.example.project.dto.reserve.SeatStatusDto;
 import com.example.project.dto.reserve.TheaterDto;
 import com.example.project.entity.Member;
 import com.example.project.entity.Movie;
@@ -34,7 +36,11 @@ public interface ReserveService {
 
     List<String> getMoviesByTheaterId(Long theaterId);
 
-    List<ScreeningDto> getScreeningsByMovieTitle(String movieTitle);
+    List<ScreeningDto> getScreeningsByMovieAndDate(String movieTitle, LocalDate date);
+
+    List<SeatStatusDto> getSeatStatuses(Long screeningId);
+
+    Map<String, Integer> getSeatCounts(Long screeningId);
 
     default Reserve dtoToEntity(ReserveDto reserveDto) {
         return Reserve.builder()

@@ -1,5 +1,6 @@
 package com.example.project.service.reservation;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,15 +9,19 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.example.project.dto.MovieDto;
-import com.example.project.dto.ScreeningDto;
 import com.example.project.dto.reserve.ReserveDto;
+import com.example.project.dto.reserve.ScreeningDto;
+import com.example.project.dto.reserve.SeatStatusDto;
 import com.example.project.dto.reserve.TheaterDto;
 import com.example.project.entity.Movie;
 import com.example.project.entity.reserve.Reserve;
 import com.example.project.entity.reserve.Screening;
+import com.example.project.entity.reserve.SeatStatus;
 import com.example.project.entity.reserve.Theater;
 import com.example.project.repository.reserve.ReserveRepository;
 import com.example.project.repository.reserve.ScreeningRepository;
+import com.example.project.repository.reserve.SeatRepository;
+import com.example.project.repository.reserve.SeatStatusRepository;
 import com.example.project.repository.reserve.TheaterRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +34,8 @@ public class ReserveServiceImpl implements ReserveService {
     private final ReserveRepository reserveRepository;
     private final TheaterRepository theaterRepository;
     private final ScreeningRepository screeningRepository;
+    private final SeatRepository seatRepository;
+    private final SeatStatusRepository seatStatusRepository;
 
     @Override
     public Long createReserve(ReserveDto reserveDto) {
@@ -91,22 +98,56 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public List<String> getMoviesByTheaterId(Long theaterId) {
-        return screeningRepository.findMoviesByTheaterId(theaterId);
+        List<Screening> screenings = screeningRepository.findScreeningsByTheaterId(theaterId);
+        return screenings.stream()
+                .map(Screening::getMovieTitle)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<ScreeningDto> getScreeningsByMovieTitle(String movieTitle) {
-        List<Screening> screenings = screeningRepository.findScreeningsByMovieTitle(movieTitle);
+    public List<ScreeningDto> getScreeningsByMovieAndDate(String movieTitle, LocalDate date) {
+        movieTitle = movieTitle.trim();
+        System.out.println("Service - movieTitle: " + movieTitle);
+        System.out.println("Service - date: " + date);
+        List<Screening> screenings = screeningRepository.findScreeningsByMovieAndDate(movieTitle, date);
         return screenings.stream()
                 .map(screening -> ScreeningDto.builder()
                         .screeningId(screening.getScreeningId())
-                        .movieTitle(screening.getMovieTitle())
                         .startTime(screening.getStartTime())
+                        .movieTitle(screening.getMovieTitle())
                         .runtime(screening.getRuntime())
                         .openDate(screening.getOpenDate())
                         .closeDate(screening.getCloseDate())
+                        .auditoriumNo(screening.getAuditorium().getAuditoriumNo())
+                        .auditoriumName(screening.getAuditorium().getAuditoriumName())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SeatStatusDto> getSeatStatuses(Long screeningId) {
+        List<SeatStatus> seatStatuses = seatStatusRepository.findByScreeningId(screeningId);
+        return seatStatuses.stream()
+                .map(seatStatus -> SeatStatusDto.builder()
+                        .seatId(seatStatus.getSeat().getSeatId())
+                        .rowNum(seatStatus.getSeat().getRowNum())
+                        .seatNum(seatStatus.getSeat().getSeatNum())
+                        .status(seatStatus.getSeatStatusEnum())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, Integer> getSeatCounts(Long screeningId) {
+        int availableSeats = seatStatusRepository.countAvailableSeats(screeningId);
+        int totalSeats = seatStatusRepository.countTotalSeats(screeningId);
+
+        Map<String, Integer> seatCounts = new HashMap<>();
+        seatCounts.put("availableSeats", availableSeats);
+        seatCounts.put("totalSeats", totalSeats);
+
+        return seatCounts;
     }
 
 }
