@@ -15,7 +15,7 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = { "moviePeople" })
+@ToString
 @Setter
 @Getter
 @Entity
@@ -24,9 +24,11 @@ public class People {
     @Id
     private Long id;
 
+    private String birthday;
     private Long gender;
-    private String job;
+    private String knownForDepartment;
     private String name;
+    private String placeOfBirth;
     private Double popularity;
     private String profilePath;
 

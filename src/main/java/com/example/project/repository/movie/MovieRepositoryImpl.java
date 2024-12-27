@@ -12,15 +12,14 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 import com.example.project.entity.Genre;
 import com.example.project.entity.Movie;
-import com.example.project.entity.MoviePeople;
-import com.example.project.entity.People;
+import com.example.project.entity.MoviePerson;
+import com.example.project.entity.Person;
 import com.example.project.entity.QGenre;
 import com.example.project.entity.QMovie;
 import com.example.project.entity.QMovieGenre;
-import com.example.project.entity.QMoviePeople;
-import com.example.project.entity.QPeople;
+import com.example.project.entity.QMoviePerson;
+import com.example.project.entity.QPerson;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.PathBuilder;
@@ -102,15 +101,15 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
     public Page<Object[]> getTotalList(String type, String keyword, String movieList, Long genreId,
             Pageable pageable) {
         QMovie movie = QMovie.movie;
-        QMoviePeople moviePeople = QMoviePeople.moviePeople;
-        QPeople people = QPeople.people;
+        QMoviePerson moviePerson = QMoviePerson.moviePerson;
+        QPerson person = QPerson.person;
         QMovieGenre movieGenre = QMovieGenre.movieGenre;
         QGenre genre = QGenre.genre;
 
         // 기본 Query 구성
         JPQLQuery<Movie> query = from(movie)
-                .leftJoin(moviePeople).on(movie.id.eq(moviePeople.movie.id))
-                .leftJoin(people).on(moviePeople.people.id.eq(people.id))
+                .leftJoin(moviePerson).on(movie.id.eq(moviePerson.movie.id))
+                .leftJoin(person).on(moviePerson.person.id.eq(person.id))
                 .leftJoin(movieGenre).on(movie.id.eq(movieGenre.movie.id))
                 .leftJoin(genre).on(movieGenre.genre.id.eq(genre.id));
 
@@ -128,7 +127,7 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
             builder.and(movie.title.like("%" + keyword + "%"));
         }
 
-        // 영화 상태 필터 추가 (상영 중 또는 예정)
+        // 영화 상태 필터 추가 (상영 중 또는 예정 또는 예약 가능한, 전부 아닐 경우 기본값)
         if ("nowPlaying".equals(movieList)) {
             builder.and(
                     movie.releaseDate.between(
@@ -136,6 +135,11 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
                             LocalDate.now().toString()));
         } else if ("upcoming".equals(movieList)) {
             builder.and(movie.releaseDate.gt(LocalDate.now().toString()));
+        } else if ("reservable".equals(movieList)) {
+            builder.and(
+                    movie.releaseDate.between(
+                            LocalDate.now().minusWeeks(3).toString(),
+                            LocalDate.now().plusWeeks(1).toString()));
         }
 
         // 조건 적용
@@ -163,13 +167,13 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
             Long movieId = movieResult.getId();
 
             // 관련 데이터 수집
-            List<MoviePeople> moviePeopleList = from(moviePeople)
-                    .where(moviePeople.movie.id.eq(movieId))
+            List<MoviePerson> moviePersonList = from(moviePerson)
+                    .where(moviePerson.movie.id.eq(movieId))
                     .fetch();
 
-            List<People> peopleList = from(people)
-                    .join(moviePeople).on(moviePeople.people.id.eq(people.id))
-                    .where(moviePeople.movie.id.eq(movieId))
+            List<Person> personList = from(person)
+                    .join(moviePerson).on(moviePerson.person.id.eq(person.id))
+                    .where(moviePerson.movie.id.eq(movieId))
                     .fetch();
 
             List<Genre> genreList = from(genre)
@@ -178,7 +182,7 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
                     .fetch();
 
             // Object[]에 담기
-            return new Object[] { movieResult, moviePeopleList, peopleList, genreList };
+            return new Object[] { movieResult, moviePersonList, personList, genreList };
         }).collect(Collectors.toList());
 
         // 결과를 Page로 반환
@@ -188,18 +192,18 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
     // @Override
     // public List<String> getDirectorList(Long id) {
     // QMovie movie = QMovie.movie;
-    // QMoviePeople moviePeople = QMoviePeople.moviePeople;
-    // QPeople people = QPeople.people;
+    // QMoviePerson moviePerson = QMoviePerson.moviePerson;
+    // QPerson person = QPerson.person;
 
     // JPQLQuery<String> query =
-    // from(movie).leftJoin(moviePeople).on(movie.id.eq(moviePeople.movie.id))
-    // .leftJoin(moviePeople).on(moviePeople.people.id.eq(people.id)).select(people.name).distinct();
+    // from(movie).leftJoin(moviePerson).on(movie.id.eq(moviePerson.movie.id))
+    // .leftJoin(moviePerson).on(moviePerson.person.id.eq(person.id)).select(person.name).distinct();
 
     // // 기본 조건: movie.id > 0
     // BooleanBuilder builder = new BooleanBuilder();
     // builder.and(movie.id.gt(0L));
 
-    // builder.and(moviePeople.movie.id.eq(id)).and(moviePeople.role.eq("Director"));
+    // builder.and(moviePerson.movie.id.eq(id)).and(moviePerson.role.eq("Director"));
 
     // query.where(builder);
 
@@ -211,19 +215,19 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
     // @Override
     // public List<String> getActorList(Long id) {
     // QMovie movie = QMovie.movie;
-    // QMoviePeople moviePeople = QMoviePeople.moviePeople;
-    // QPeople people = QPeople.people;
+    // QMoviePerson moviePerson = QMoviePerson.moviePerson;
+    // QPerson person = QPerson.person;
 
     // JPQLQuery<String> query =
-    // from(movie).leftJoin(moviePeople).on(movie.id.eq(moviePeople.movie.id))
-    // .leftJoin(moviePeople).on(moviePeople.people.id.eq(people.id)).select(people.name)
-    // .orderBy(people.popularity.desc());
+    // from(movie).leftJoin(moviePerson).on(movie.id.eq(moviePerson.movie.id))
+    // .leftJoin(moviePerson).on(moviePerson.person.id.eq(person.id)).select(person.name)
+    // .orderBy(person.popularity.desc());
 
     // // 기본 조건: movie.id > 0
     // BooleanBuilder builder = new BooleanBuilder();
     // builder.and(movie.id.gt(0L));
 
-    // builder.and(moviePeople.movie.id.eq(id)).and(moviePeople.character.isNotNull());
+    // builder.and(moviePerson.movie.id.eq(id)).and(moviePerson.character.isNotNull());
 
     // query.where(builder);
 
@@ -259,17 +263,17 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
     @Override
     public List<Movie> getMovieListByPersonId(Long id) {
         QMovie movie = QMovie.movie;
-        QMoviePeople moviePeople = QMoviePeople.moviePeople;
-        QPeople people = QPeople.people;
+        QMoviePerson moviePerson = QMoviePerson.moviePerson;
+        QPerson person = QPerson.person;
 
-        JPQLQuery<Movie> query = from(movie).leftJoin(moviePeople).on(movie.id.eq(moviePeople.movie.id))
-                .leftJoin(moviePeople).on(moviePeople.people.id.eq(people.id));
+        JPQLQuery<Movie> query = from(movie).leftJoin(moviePerson).on(movie.id.eq(moviePerson.movie.id))
+                .leftJoin(moviePerson).on(moviePerson.person.id.eq(person.id));
 
         // 기본 조건: movie.id > 0
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(movie.id.gt(0L));
 
-        builder.and(people.id.eq(id));
+        builder.and(person.id.eq(id));
 
         query.where(builder);
 
@@ -282,8 +286,8 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
     @Override
     public Object[] getMovieDetailById(Long id) {
         QMovie movie = QMovie.movie;
-        QMoviePeople moviePeople = QMoviePeople.moviePeople;
-        QPeople people = QPeople.people;
+        QMoviePerson moviePerson = QMoviePerson.moviePerson;
+        QPerson person = QPerson.person;
         QMovieGenre movieGenre = QMovieGenre.movieGenre;
         QGenre genre = QGenre.genre;
 
@@ -292,15 +296,15 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
                 .where(movie.id.eq(id))
                 .fetchOne();
 
-        // Fetch MoviePeople
-        List<MoviePeople> moviePeopleList = from(moviePeople)
-                .where(moviePeople.movie.id.eq(id))
+        // Fetch moviePerson
+        List<MoviePerson> moviePersonList = from(moviePerson)
+                .where(moviePerson.movie.id.eq(id))
                 .fetch();
 
-        // Fetch People
-        List<People> peopleList = from(people)
-                .join(moviePeople).on(moviePeople.people.id.eq(people.id))
-                .where(moviePeople.movie.id.eq(id))
+        // Fetch person
+        List<Person> personList = from(person)
+                .join(moviePerson).on(moviePerson.person.id.eq(person.id))
+                .where(moviePerson.movie.id.eq(id))
                 .fetch();
 
         // Fetch Genres
@@ -310,7 +314,7 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
                 .fetch();
 
         // Combine results into Object[]
-        return new Object[] { movieResult, moviePeopleList, peopleList, genreList };
+        return new Object[] { movieResult, moviePersonList, personList, genreList };
     }
 
 }

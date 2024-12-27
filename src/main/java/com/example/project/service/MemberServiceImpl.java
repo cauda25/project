@@ -57,6 +57,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberDto getMemberById(String memberId) {
         return memberRepository.findByMemberId(memberId)
                 .map(member -> MemberDto.builder()
+                        .mid(member.getMid())
                         .memberId(member.getMemberId())
                         .name(member.getName())
                         .email(member.getEmail())

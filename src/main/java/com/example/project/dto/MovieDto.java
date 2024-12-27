@@ -3,7 +3,7 @@ package com.example.project.dto;
 import java.util.List;
 import java.util.Set;
 
-import com.example.project.entity.MoviePeople;
+import com.example.project.entity.MoviePerson;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class MovieDto {
     private Long id;
 
-    private String backdrop_path;
+    private String backdropPath;
     private Long budget;
     private String homepage;
     // private String origin_country;
@@ -35,9 +35,9 @@ public class MovieDto {
     private Double voteAverage;
     private Long voteCount;
 
-    private List<GenreDto> genresDtos;
+    private List<GenreDto> genreDtos;
 
-    private List<PeopleDto> peopleDtos;
+    private List<PersonDto> personDtos;
 
-    private List<MoviePeopleDto> moviePeopleDtos;
+    private List<MoviePersonDto> moviePersonDtos;
 }

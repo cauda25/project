@@ -1,6 +1,5 @@
 const id = document.querySelector("[name='id']").value;
-const url =
-  "https://api.themoviedb.org/3/movie/"+ id + "?language=ko-KR";
+const url = "https://api.themoviedb.org/3/movie/" + id + "?language=ko-KR";
 const options = {
   method: "GET",
   headers: {
@@ -27,3 +26,12 @@ fetch(url, options)
     document.querySelector(".bg-body-secondary").innerHTML = str;
   })
   .catch((err) => console.error(err));
+
+function isExist() {
+  if (isExist) {
+    document.querySelector(".follow-btn").innerHTML = "찜 제거";
+  } else {
+    document.querySelector(".follow-btn").innerHTML = "찜 추가";
+  }
+}
+isExist();

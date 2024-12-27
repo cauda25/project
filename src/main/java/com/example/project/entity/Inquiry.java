@@ -2,18 +2,17 @@ package com.example.project.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -22,25 +21,29 @@ import lombok.ToString;
 @Entity
 public class Inquiry {
 
+    private String counselingType;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "이름은 필수 항목입니다.")
     @Column(nullable = false)
     private String name;
 
-    @NotBlank(message = "이메일은 필수 항목입니다.")
     @Column(nullable = false)
     private String email;
 
-    @NotBlank(message = "문의 내용은 필수 항목입니다.")
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    // Getters Setters
-    public Long getId() {
-        return id;
+    @Enumerated(EnumType.STRING)
+    private InquiryStatus status;
+
+    @Column(updatable = false)
+    private String createdAt;
+
+    public String getCounselingType() {
+        return counselingType;
     }
 
     public void setId(Long id) {

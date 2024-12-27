@@ -9,11 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.example.project.dto.PeopleDto;
+import com.example.project.dto.PersonDto;
 import com.example.project.dto.PageRequestDTO;
 import com.example.project.dto.PageResultDTO;
-import com.example.project.entity.People;
-import com.example.project.repository.movie.PeopleRepository;
+import com.example.project.entity.Person;
+import com.example.project.repository.movie.PersonRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,31 +21,31 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RequiredArgsConstructor
 @Service
-public class PeopleServiceImpl implements PeopleService {
+public class PersonServiceImpl implements PersonService {
 
-    private final PeopleRepository peopleRepository;
+    private final PersonRepository personRepository;
 
     @Override
     public PageResultDTO getList(PageRequestDTO requestDto) {
         // 페이지 나누기 개념 추가
         Pageable pageable = requestDto.getPageable(Sort.by("popularity").descending());
-        Page<People> peoples = peopleRepository.getTotalList(requestDto.getType(),
+        Page<Person> people = personRepository.getTotalList(requestDto.getType(),
                 requestDto.getKeyword(), pageable);
-        Function<People, PeopleDto> function = (en -> entityToDto(en));
+        Function<Person, PersonDto> function = (en -> entityToDto(en));
 
-        return new PageResultDTO<>(peoples, function);
+        return new PageResultDTO<>(people, function);
         // return null;
     }
 
     @Override
-    public PeopleDto read(Long id) {
-        return entityToDto(peopleRepository.findById(id).get());
+    public PersonDto read(Long id) {
+        return entityToDto(personRepository.findById(id).get());
     }
 
     @Override
-    public List<PeopleDto> getDirectorListByMovieId(Long id) {
-        List<PeopleDto> peopleDtos = new ArrayList<>();
-        peopleRepository.getDirectorListByMovieId(id).stream().forEach(person -> {
+    public List<PersonDto> getDirectorListByMovieId(Long id) {
+        List<PersonDto> peopleDtos = new ArrayList<>();
+        personRepository.getDirectorListByMovieId(id).stream().forEach(person -> {
             peopleDtos.add(entityToDto(person));
         });
         return peopleDtos;

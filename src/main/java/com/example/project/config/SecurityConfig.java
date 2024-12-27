@@ -40,17 +40,11 @@ public class SecurityConfig {
                 // .requestMatchers("/css/**", "/admin/**",
                 // "/fonts/**", "/img/**",
                 // "/js/**", "/sass/**", "/svg/**")
-                // .permitAll() // 리뷰
-                // // 작성
-                // // 요청은
-                // // 인증
-                // // 필요
+                // .permitAll() // 정적 리소스는 모두 허용
                 // .requestMatchers("/review/submit").authenticated() // 리뷰 작성 요청은 인증 필요
-                // .requestMatchers("/review/**", "/member/mypage").authenticated() // 리뷰
-                // // 관련
-                // // 기타
-                // // 요청
-                // // 인증
+                // .requestMatchers("/review/**").authenticated() // 리뷰 관련 기타 요청 인증 필요
+                // .requestMatchers("/member/mypage").authenticated() // 마이페이지 접근은 인증 필요
+                // .requestMatchers("/mypage/reservations").authenticated() // 예매 내역 접근은 인증
                 // // 필요
                 // .anyRequest().permitAll() // 그 외 요청은 모두 허용
                 // )
@@ -95,6 +89,7 @@ public class SecurityConfig {
 
                 http.csrf(csrf -> csrf.disable());
                 return http.build();
+
         }
 
         @Bean

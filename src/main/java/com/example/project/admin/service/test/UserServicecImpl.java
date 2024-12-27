@@ -40,7 +40,7 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 @Log4j2
 @Service
-public class UserServiecImpl implements UserServie {
+public class UserServicecImpl implements UserService {
 
     private final UserDetailsService userDetailsService;
 

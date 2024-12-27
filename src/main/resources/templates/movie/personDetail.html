@@ -21,10 +21,6 @@
       .anime__details__content {
         margin: 0;
       }
-
-      .spad {
-        padding: 0;
-      }
       .product {
         padding: 0;
       }
@@ -86,39 +82,15 @@
           </div>
         </div>
         <div class="row trending__product-row">
-          <div class="section-title">
-            <h5>필모그래피</h5>
-          </div>
-        <div
-          class="col-lg-3 col-md-4 col-sm-6 mb-3 product"
-          th:each="dto, iterStat : ${movieDtos}"
-        >
-          <div class="product__item mb-2">
-            <a th:href="@{movieDetail(id=${dto.id})}"
-              ><img
-                th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
-                alt=""
-                class="product__item__pic set-bg"
-            /></a>
-          </div>
-          <div class="product__item__text mx-4">
-            <h5>
-              <a
-                th:href="@{movieDetail(id=${dto.id})}"
-                th:text="${dto.title}"
-                >타이틀</a
-              >
-            </h5>
-            <ul>
-              <li>개봉일</li>
-              [[${dto.releaseDate}]]
-            </ul>
-          </div>
-        </div>
-        <div class="mt-4"></div>
       </div>
 
       </div>
     </section>
   </div>
+  <th:block layout:fragment="js">
+    <script>
+      const personId = "[[${peopleDto.id}]]";
+    </script>
+    <script th:src="@{/js/personDetail.js}"></script>
+  </th:block>
 </html>

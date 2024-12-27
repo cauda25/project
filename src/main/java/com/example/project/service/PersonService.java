@@ -1,23 +1,25 @@
 package com.example.project.service;
 
-import com.example.project.dto.PeopleDto;
+import com.example.project.dto.PersonDto;
 
 import java.util.List;
 
 import com.example.project.dto.PageRequestDTO;
 import com.example.project.dto.PageResultDTO;
-import com.example.project.entity.People;
+import com.example.project.entity.Person;
 
-public interface PeopleService {
+public interface PersonService {
+    // 페이징된 인물 리스트
+    PageResultDTO<PersonDto, Person> getList(PageRequestDTO requestDto);
 
-    PageResultDTO<PeopleDto, People> getList(PageRequestDTO requestDto);
+    // 해당 인물의 상세 정보
+    PersonDto read(Long id);
 
-    PeopleDto read(Long id);
+    // 해당 영화의 감독 리스트
+    List<PersonDto> getDirectorListByMovieId(Long id);
 
-    List<PeopleDto> getDirectorListByMovieId(Long id);
-
-    public default PeopleDto entityToDto(People people) {
-        return PeopleDto.builder()
+    public default PersonDto entityToDto(Person people) {
+        return PersonDto.builder()
                 .id(people.getId())
                 .gender(people.getGender())
                 .job(people.getJob())
@@ -27,8 +29,8 @@ public interface PeopleService {
                 .build();
     }
 
-    public default People dtoToEntity(PeopleDto peopleDto) {
-        return People.builder()
+    public default Person dtoToEntity(PersonDto peopleDto) {
+        return Person.builder()
                 .id(peopleDto.getId())
                 .gender(peopleDto.getGender())
                 .job(peopleDto.getJob())
@@ -37,5 +39,4 @@ public interface PeopleService {
                 .profilePath(peopleDto.getProfilePath())
                 .build();
     }
-
 }

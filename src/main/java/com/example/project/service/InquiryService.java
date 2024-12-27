@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.project.entity.Inquiry;
+import com.example.project.entity.InquiryStatus;
 import com.example.project.repository.InquiryRepository;
 
 @Service
@@ -32,6 +33,21 @@ public class InquiryService {
     // 모든 문의 데이터 조회
     public List<Inquiry> getAllInquiries() {
         return inquiryRepository.findAll();
+    }
+
+    public Inquiry updateStatus(Long id, String status) {
+        Inquiry inquiry = inquiryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("문의가 존재하지 않습니다."));
+
+        // String을 InquiryStatus로 변환
+        try {
+            InquiryStatus inquiryStatus = InquiryStatus.valueOf(status);
+            inquiry.setStatus(inquiryStatus);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("유효하지 않은 상태 값입니다: " + status);
+        }
+
+        return inquiryRepository.save(inquiry);
     }
 
     // 생성자 주입

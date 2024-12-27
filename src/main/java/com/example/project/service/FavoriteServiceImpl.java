@@ -54,7 +54,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     private MovieDto mapToMovieDto(Movie movie) {
         return MovieDto.builder()
                 .id(movie.getId())
-                .backdrop_path(movie.getBackdrop_path())
+                .backdropPath(movie.getBackdropPath())
                 .budget(movie.getBudget())
                 .homepage(movie.getHomepage())
                 .originalLanguage(movie.getOriginalLanguage())

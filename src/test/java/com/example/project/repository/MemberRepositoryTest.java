@@ -44,6 +44,8 @@ public class MemberRepositoryTest {
                 .gender("Male")
                 .birth("2000-03-09")
                 .role(MemberRole.MEMBER)
+                .phone("01012345678")
+                // .address("address1")
                 .build();
 
         // 저장

@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +27,9 @@ public class EmailInquiry {
     private String name;
     private String email;
     private String content;
+
+    @OneToOne(mappedBy = "emailInquiry")
+    private Counseling counseling; // 상담과 1:1 관계
 
     // 생성자 (선택 사항)
     public EmailInquiry(String name, String email, String content) {
@@ -66,4 +70,5 @@ public class EmailInquiry {
     public void setContent(String content) {
         this.content = content;
     }
+
 }

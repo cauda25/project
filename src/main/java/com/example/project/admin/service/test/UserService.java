@@ -19,7 +19,7 @@ import com.example.project.entity.Genre;
 import com.example.project.entity.Member;
 import com.example.project.entity.Movie;
 
-public interface UserServie {
+public interface UserService {
     // 회원 정보 리스트 테스트
     List<UserEntity> testList(UserDto userDto);
 

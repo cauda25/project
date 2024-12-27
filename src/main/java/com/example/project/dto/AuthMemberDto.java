@@ -29,4 +29,8 @@ public class AuthMemberDto extends User {
                 List.of(new SimpleGrantedAuthority("ROLE_" + memberDto.getRole())));
         this.memberDto = memberDto;
     }
+
+    public Long getMemberId() {
+        return memberDto.getMid();
+    }
 }

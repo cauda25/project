@@ -3,7 +3,7 @@ package com.example.project.dto;
 import java.util.List;
 import java.util.Set;
 
-import com.example.project.entity.MoviePeople;
+import com.example.project.entity.MoviePerson;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class PeopleDto {
+public class PersonDto {
     private Long id;
 
     private Long gender;
@@ -23,5 +23,5 @@ public class PeopleDto {
     private Double popularity;
     private String profilePath;
 
-    private List<MoviePeopleDto> moviePeople;
+    private List<MoviePersonDto> moviePersonDtos;
 }

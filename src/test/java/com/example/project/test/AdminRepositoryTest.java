@@ -19,7 +19,7 @@ import com.example.project.admin.repository.AdminMovieRepository;
 import com.example.project.admin.repository.AdminRepository;
 import com.example.project.admin.repository.MovieAddRepository;
 import com.example.project.admin.repository.MovieStateRepository;
-import com.example.project.admin.repository.UserRepository;
+import com.example.project.repository.test.UserRepository;
 import com.example.project.entity.Genre;
 import com.example.project.entity.Movie;
 import com.example.project.entity.MovieGenre;
@@ -153,7 +153,7 @@ public class AdminRepositoryTest {
         movieRepository.findAll().forEach(movie -> {
             System.out.println(movie);
 
-            movie.getMoviePeople().forEach(people -> System.out.println(people.getPeople().getName()));
+            movie.getMoviePeople().forEach(people -> System.out.println(people.getPerson().getName()));
 
             movie.getMovieGenres().forEach(genre -> System.out.println(genre.getGenre().getName()));
         });

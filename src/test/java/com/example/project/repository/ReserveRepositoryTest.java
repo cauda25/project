@@ -25,8 +25,6 @@ import org.springframework.web.client.RestTemplate;
 import com.example.project.entity.Genre;
 import com.example.project.entity.Movie;
 import com.example.project.entity.MovieGenre;
-import com.example.project.entity.MoviePeople;
-import com.example.project.entity.People;
 import com.example.project.entity.reserve.Auditorium;
 import com.example.project.entity.reserve.Screening;
 import com.example.project.entity.reserve.Theater;

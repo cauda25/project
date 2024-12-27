@@ -13,7 +13,7 @@ import com.example.project.admin.Entity.UserEntity;
 import com.example.project.admin.dto.test.MovieDetailsDTO;
 import com.example.project.admin.dto.test.MovieStateDto;
 import com.example.project.admin.dto.test.UserDto;
-import com.example.project.admin.service.test.UserServie;
+import com.example.project.admin.service.test.UserService;
 import com.example.project.dto.GenreDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.reserve.TheaterDto;
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/admin/page")
 public class AdminController {
 
-    private final UserServie userServie;
+    private final UserService userServie;
 
     @GetMapping("/index")
     public void getHome() {
