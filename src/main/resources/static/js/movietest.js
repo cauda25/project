@@ -117,7 +117,7 @@ fetch(`/rest/movieDetail/${movieId}`)
       document.querySelector(".director_row").innerHTML = "";
       document.querySelector(".actor_row").innerHTML = "";
 
-      str = "";
+      let str = "";
       str += `<div class="col-lg-8 col-md-8">`;
       str += `<div class="anime__details__review">`;
       str += `<div class="section-title"><h5>관람평</h5></div>`;

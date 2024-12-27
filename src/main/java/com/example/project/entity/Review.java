@@ -33,14 +33,19 @@ public class Review extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member; // 작성자
+    @JoinColumn(name = "movie_id", nullable = false)
+    private Movie movie;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "movie_id")
-    private Movie movie; // 영화 정보
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
-    @Column(nullable = false, length = 1000)
-    private String content; // 리뷰 내용
+    @Column(nullable = false)
+    private String content;
 
+    @Column(nullable = false)
+    private int rating;
+
+    @Column(nullable = false)
+    private String createdAt;
 }
