@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class MovieDto {
     private Long id;
 
-    private String backdrop_path;
+    private String backdropPath;
     private Long budget;
     private String homepage;
     // private String origin_country;

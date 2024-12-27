@@ -6,6 +6,7 @@ import com.example.project.dto.GenreDto;
 import com.example.project.entity.Genre;
 
 public interface GenreService {
+    // 장르 전체 리스트
     List<GenreDto> getGenres();
 
     public default GenreDto entityToDto(Genre genre) {
