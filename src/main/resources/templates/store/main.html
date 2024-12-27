@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{/layouts/layout}">
+  <th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/list.css}" type="text/css" />
+    <style>
+      .spad {
+        padding: 0;
+      }
+      .sub-head {
+        margin-bottom: 10px;
+        margin-left: 20px;
+      }
+      .sub-head h3 {
+        margin-right: 10px;
+      }
+      .form-select {
+        width: 100px;
+      }
+      #searchForm div {
+        width: 75%;
+        justify-self: center;
+      }
+      .nav-tabs {
+        justify-self: center;
+      }
+    </style>
+  </th:block>
+  <div layout:fragment="content">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="#">전체</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">티켓</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">팝콘/음료</a>
+      </li>
+    </ul>
+    <section class="product spad">
+      <div class="container">
+        <div class="row">
+          <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+              <div class="card">
+                <img
+                  src="https://image.tmdb.org/t/p/w500/kmP6viwzcEkZeoi1LaVcQemcvZh.jpg"
+                  class="card-img-top product__item__pic set-bg"
+                  alt="..."
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">
+                    This is a longer card with supporting text below as a
+                    natural lead-in to additional content. This content is a
+                    little bit longer.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <img
+                  src="https://image.tmdb.org/t/p/w500/kmP6viwzcEkZeoi1LaVcQemcvZh.jpg"
+                  class="card-img-top product__item__pic set-bg"
+                  alt="..."
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">
+                    This is a longer card with supporting text below as a
+                    natural lead-in to additional content. This content is a
+                    little bit longer.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <img
+                  src="https://image.tmdb.org/t/p/w500/kmP6viwzcEkZeoi1LaVcQemcvZh.jpg"
+                  class="card-img-top product__item__pic set-bg"
+                  alt="..."
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">
+                    This is a longer card with supporting text below as a
+                    natural lead-in to additional content.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <img
+                  src="https://image.tmdb.org/t/p/w500/kmP6viwzcEkZeoi1LaVcQemcvZh.jpg"
+                  class="card-img-top product__item__pic set-bg"
+                  alt="..."
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">
+                    This is a longer card with supporting text below as a
+                    natural lead-in to additional content. This content is a
+                    little bit longer.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Product Section End -->
+  </div>
+  <th:block layout:fragment="js"></th:block>
+</html>
