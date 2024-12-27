@@ -20,7 +20,13 @@
               <th>삭제</th>
             </tr>
           </thead>
-          <tbody>
+          <!-- 상담 내역이 없을 경우 메시지 표시 -->
+          <tbody th:if="${#lists.isEmpty(counselings)}">
+            <tr>
+              <td colspan="6">상담 내역이 없습니다.</td>
+            </tr>
+          </tbody>
+          <tbody th:unless="${#lists.isEmpty(counselings)}">
             <tr th:each="consultation : ${consultations}">
               <td th:text="${consultation.id}"></td>
               <td th:text="${consultation.type}"></td>

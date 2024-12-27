@@ -34,21 +34,13 @@ public class ConsultationAnswer {
     @Column(length = 1000)
     private String answerContent; // 답변 내용
 
-    // Getter, Setter
-    public void setAnswerContent(String answerContent) {
-        this.answerContent = answerContent;
+    private ConsultationStatus status;
+
+    public void setStatus(ConsultationStatus status) {
+        this.status = status;
     }
 
-    public String getAnswerContent() {
-        return answerContent;
+    public ConsultationStatus getStatus() {
+        return status;
     }
-
-    public void setConsultation(Consultation consultation) {
-        this.consultation = consultation;
-    }
-
-    public Consultation getConsultation() {
-        return consultation;
-    }
-
 }

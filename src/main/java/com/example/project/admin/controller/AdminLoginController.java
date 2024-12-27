@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.project.admin.service.UserAdminService;
-import com.example.project.admin.service.test.UserServie;
+import com.example.project.admin.service.test.UserService;
 import com.example.project.entity.test.UserEntity;
 
 import lombok.RequiredArgsConstructor;

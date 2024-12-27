@@ -8,8 +8,15 @@
   <body>
     <h2>문의 수정</h2>
     <form action="/center/email/update" method="post">
+      <!-- 문의 ID -->
       <input type="hidden" name="id" th:value="${inquiry.id}" />
-      <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+
+      <!-- CSRF 토큰 -->
+      <th:block th:if="${_csrf != null}">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+      </th:block>
+
+      <!-- 이름 -->
       <div>
         <label for="name">이름:</label>
         <input
@@ -20,6 +27,8 @@
           required
         />
       </div>
+
+      <!-- 이메일 -->
       <div>
         <label for="email">이메일:</label>
         <input
@@ -30,6 +39,8 @@
           required
         />
       </div>
+
+      <!-- 문의 내용 -->
       <div>
         <label for="content">문의 내용:</label>
         <textarea
@@ -39,6 +50,8 @@
           th:text="${inquiry.content}"
         ></textarea>
       </div>
+
+      <!-- 저장 버튼 -->
       <button type="submit">저장</button>
       <a href="/center/email">취소</a>
     </form>

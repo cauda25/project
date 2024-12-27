@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 
 import com.example.project.admin.Entity.MovieState;
 import com.example.project.admin.dto.test.MovieStateDto;
-import com.example.project.admin.service.test.UserServie;
+import com.example.project.admin.service.test.UserService;
 import com.example.project.service.MovieService;
 
 @SpringBootTest
 public class AdminServiceTest {
     @Autowired
-    private UserServie service;
+    private UserService service;
 
     @Test
     public void stateTest() {
