@@ -17,7 +17,7 @@ import com.example.project.admin.repository.AdminMovieRepository;
 import com.example.project.admin.repository.AdminRepository;
 import com.example.project.admin.repository.MovieAddRepository;
 import com.example.project.admin.repository.MovieStateRepository;
-import com.example.project.admin.repository.UserRepository;
+import com.example.project.repository.test.UserRepository;
 import com.example.project.entity.Genre;
 import com.example.project.entity.Movie;
 import com.example.project.entity.MovieGenre;

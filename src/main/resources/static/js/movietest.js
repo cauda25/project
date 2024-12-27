@@ -109,36 +109,38 @@ function handleDirectorActorClick(data) {
 
 function handleReviewClick() {
   clearSections();
-  let str = "";
-  str += `<div class="col-lg-8 col-md-8">`;
-  str += `<div class="anime__details__review">`;
-  str += `<div class="section-title"><h5>관람평</h5></div>`;
-  // array.forEach((element) => {
-  //   str += `<div class="anime__review__item">`;
-  //   str += `<div class="anime__review__item__pic">`;
-  //   str += `<img src="img/anime/review-1.jpg" alt="" /></div>`;
-  //   str += `<div class="anime__review__item__text">`;
-  //   str += `<h6>작성자</h6><p>댓글 내용</p>`;
-  //   str += `</div></div>`;
-  // });
-  str += `<div class="anime__details__form">`;
-  str += `<div class="section-title">`;
-  str += `<h5>관람평 작성하기</h5></div>`;
-  str += `<form action="" method="post" id="reviewForm" >`;
-  str += `<textarea class="m-0" placeholder="Your Comment" id="comment"></textarea>`;
-  // 평점 선택 섹션
-  str += `<div class="star-rating">`;
-  str += `<input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars" class="fa-solid fa-star"></label>`;
-  str += `<input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars" class="fa-solid fa-star"></label>`;
-  str += `<input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars" class="fa-solid fa-star"></label>`;
-  str += `<input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars" class="fa-solid fa-star"></label>`;
-  str += `<input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star" class="fa-solid fa-star"></label>`;
-  str += `</div>`;
-  str += `<button type="submit">`;
-  str += `<i class="fa fa-location-arrow review-btn"></i> 관람평 등록</button>`;
-  str += `</form></div></div></div>`;
 
-  document.querySelector(".review_row").innerHTML = str;
+  document.getElementById("reviewreview").removeAttribute("hidden");
+  // let str = "";
+  // str += `<div class="col-lg-8 col-md-8">`;
+  // str += `<div class="anime__details__review">`;
+  // str += `<div class="section-title"><h5>관람평</h5></div>`;
+  // // array.forEach((element) => {
+  // //   str += `<div class="anime__review__item">`;
+  // //   str += `<div class="anime__review__item__pic">`;
+  // //   str += `<img src="img/anime/review-1.jpg" alt="" /></div>`;
+  // //   str += `<div class="anime__review__item__text">`;
+  // //   str += `<h6>작성자</h6><p>댓글 내용</p>`;
+  // //   str += `</div></div>`;
+  // // });
+  // str += `<div class="anime__details__form">`;
+  // str += `<div class="section-title">`;
+  // str += `<h5>관람평 작성하기</h5></div>`;
+  // str += `<form action="" method="post" id="reviewForm" >`;
+  // str += `<textarea class="m-0" placeholder="Your Comment" id="comment"></textarea>`;
+  // // 평점 선택 섹션
+  // str += `<div class="star-rating">`;
+  // str += `<input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars" class="fa-solid fa-star"></label>`;
+  // str += `<input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars" class="fa-solid fa-star"></label>`;
+  // str += `<input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars" class="fa-solid fa-star"></label>`;
+  // str += `<input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars" class="fa-solid fa-star"></label>`;
+  // str += `<input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star" class="fa-solid fa-star"></label>`;
+  // str += `</div>`;
+  // str += `<button type="submit">`;
+  // str += `<i class="fa fa-location-arrow review-btn"></i> 관람평 등록</button>`;
+  // str += `</form></div></div></div>`;
+
+  // document.querySelector(".review_row").innerHTML = str;
 }
 
 function handleRecommendClick() {
@@ -360,48 +362,48 @@ fetch(`/rest/movieDetail/${movieId}`)
     });
   });
 
-// 평점/리뷰 버튼 클릭 시
-document.querySelector("#btnradio3").addEventListener("click", () => {
-  console.log("버튼3 클릭");
-  document.querySelector(".overview").innerHTML = "";
-  document.querySelector(".director_row").innerHTML = "";
-  document.querySelector(".actor_row").innerHTML = "";
-  document.querySelector(".movie_similar_row").innerHTML = "";
-  document.querySelector(".movie_director_row").innerHTML = "";
+// // 평점/리뷰 버튼 클릭 시
+// document.querySelector("#btnradio3").addEventListener("click", () => {
+//   console.log("버튼3 클릭");
+//   document.querySelector(".overview").innerHTML = "";
+//   document.querySelector(".director_row").innerHTML = "";
+//   document.querySelector(".actor_row").innerHTML = "";
+//   document.querySelector(".movie_similar_row").innerHTML = "";
+//   document.querySelector(".movie_director_row").innerHTML = "";
 
-  // document.getElementById("reviewreview").removeAttribute("hidden");
+//   document.getElementById("reviewreview").removeAttribute("hidden");
 
-  str = "";
-  str += `<div class="col-lg-8 col-md-8">`;
-  str += `<div class="anime__details__review">`;
-  str += `<div class="section-title"><h5>관람평</h5></div>`;
-  // array.forEach((element) => {
-  //   str += `<div class="anime__review__item">`;
-  //   str += `<div class="anime__review__item__pic">`;
-  //   str += `<img src="img/anime/review-1.jpg" alt="" /></div>`;
-  //   str += `<div class="anime__review__item__text">`;
-  //   str += `<h6>작성자</h6><p>댓글 내용</p>`;
-  //   str += `</div></div>`;
-  // });
-  str += `<div class="anime__details__form">`;
-  str += `<div class="section-title">`;
-  str += `<h5>관람평 작성하기</h5></div>`;
-  str += `<form action="" method="post" id="reviewForm" >`;
-  str += `<textarea class="m-0" placeholder="Your Comment" id="comment"></textarea>`;
-  // 평점 선택 섹션
-  str += `<div class="star-rating">`;
-  str += `<input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars" class="fa-solid fa-star"></label>`;
-  str += `<input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars" class="fa-solid fa-star"></label>`;
-  str += `<input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars" class="fa-solid fa-star"></label>`;
-  str += `<input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars" class="fa-solid fa-star"></label>`;
-  str += `<input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star" class="fa-solid fa-star"></label>`;
-  str += `</div>`;
-  str += `<button type="submit">`;
-  str += `<i class="fa fa-location-arrow review-btn"></i> 관람평 등록</button>`;
-  str += `</form></div></div></div>`;
+//   // str = "";
+//   // str += `<div class="col-lg-8 col-md-8">`;
+//   // str += `<div class="anime__details__review">`;
+//   // str += `<div class="section-title"><h5>관람평</h5></div>`;
+//   // // array.forEach((element) => {
+//   // //   str += `<div class="anime__review__item">`;
+//   // //   str += `<div class="anime__review__item__pic">`;
+//   // //   str += `<img src="img/anime/review-1.jpg" alt="" /></div>`;
+//   // //   str += `<div class="anime__review__item__text">`;
+//   // //   str += `<h6>작성자</h6><p>댓글 내용</p>`;
+//   // //   str += `</div></div>`;
+//   // // });
+//   // str += `<div class="anime__details__form">`;
+//   // str += `<div class="section-title">`;
+//   // str += `<h5>관람평 작성하기</h5></div>`;
+//   // str += `<form action="" method="post" id="reviewForm" >`;
+//   // str += `<textarea class="m-0" placeholder="Your Comment" id="comment"></textarea>`;
+//   // // 평점 선택 섹션
+//   // str += `<div class="star-rating">`;
+//   // str += `<input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars" class="fa-solid fa-star"></label>`;
+//   // str += `<input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars" class="fa-solid fa-star"></label>`;
+//   // str += `<input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars" class="fa-solid fa-star"></label>`;
+//   // str += `<input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars" class="fa-solid fa-star"></label>`;
+//   // str += `<input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star" class="fa-solid fa-star"></label>`;
+//   // str += `</div>`;
+//   // str += `<button type="submit">`;
+//   // str += `<i class="fa fa-location-arrow review-btn"></i> 관람평 등록</button>`;
+//   // str += `</form></div></div></div>`;
 
-  document.querySelector(".review_row").innerHTML = str;
-});
+//   // document.querySelector(".review_row").innerHTML = str;
+// });
 
 document.querySelector("#btnradio4").addEventListener("click", (e) => {
   fetch(`/rest/movieDetail/genres/${movieId}`)
@@ -514,30 +516,37 @@ document.querySelectorAll(".star-rating input").forEach((star) => {
   });
 });
 
-// const reviewForm = document.querySelector("#reviewForm");
+// 리뷰
+const reviewForm = document.querySelector("#reviewForm");
 
-// reviewForm.addEventListener("submit", function (e) {
-//   e.preventDefault(); // 폼의 기본 제출을 막음
+reviewForm.addEventListener("submit", function (e) {
+  e.preventDefault(); // 폼의 기본 제출을 막음
 
-//   // 입력된 데이터 가져오기
-//   const content = document.getElementById("comment").value;
+  // 입력된 데이터 가져오기
+  const content = document.getElementById("comment").value;
 
-//   // AJAX 요청을 사용하여 서버에 데이터를 보냄
-//   fetch("/submit", {
-//     method: "POST", // POST 요청
-//     headers: {
-//       "Content-Type": "application/json", // 데이터를 JSON 형식으로 보냄
-//     },
-//     body: JSON.stringify({ content: content, movieId: "[[${movieDto.id}]]" }), // 전송할 데이터
-//   })
-//     .then((response) => response.json()) // 서버 응답 처리
-//     .then((data) => {
-//       // 응답이 성공적이면 사용자에게 메시지 출력
-//       alert("관람평이 등록되었습니다!");
-//       console.log(data); // 서버에서 보낸 응답 데이터 확인
-//     })
-//     .catch((error) => {
-//       // 오류가 발생한 경우
-//       console.error("서버 요청 중 오류 발생:", error);
-//     });
-// });
+  console.log(content);
+  console.log(movieId);
+
+  // AJAX 요청을 사용하여 서버에 데이터를 보냄
+  fetch("/review/submit", {
+    method: "POST", // POST 요청
+    headers: {
+      "Content-Type": "application/json", // 데이터를 JSON 형식으로 보냄
+    },
+    body: JSON.stringify({ content: content, movieId: movieId }), // 전송할 데이터
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      alert("관람평이 등록되었습니다!");
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error("서버 요청 중 오류 발생:", error);
+    });
+});
