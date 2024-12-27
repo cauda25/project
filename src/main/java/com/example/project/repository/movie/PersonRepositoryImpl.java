@@ -39,34 +39,34 @@ public class PersonRepositoryImpl extends QuerydslRepositorySupport implements P
         builder.and(person.id.gt(0L));
 
         // if (type.contains("p") && keyword != null && !keyword.isEmpty()) {
-        builder.and(person.name.like("%" + keyword + "%")); // 제목에 keyword가 포함된 인물 검색
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            builder.and(person.name.like("%" + keyword + "%")); // 제목에 keyword가 포함된 인물 검색
+        }
         // }
 
         query.where(builder); // 조건을 모두 적용
 
-        // Sort
+        // 정렬 적용
         Sort sort = pageable.getSort();
         sort.stream().forEach(order -> {
-            // com.querydsl.core.types.Order
             Order direction = order.isAscending() ? Order.ASC : Order.DESC;
             String prop = order.getProperty();
-            // PathBuilder : Sort 객체 속성 - bno or title 이런 것들 지정
-            PathBuilder<Movie> orderByExpression = new PathBuilder<>(Movie.class, "movie");
-            // Sort 객체 사용 불가로 OrderSpecifier() 사용
-            // com.querydsl.core.types.OrderSpecifier.OrderSpecifier(Order order, Expression
-            // target)
+            PathBuilder<Person> orderByExpression = new PathBuilder<>(Person.class, "person");
             query.orderBy(new OrderSpecifier(direction, orderByExpression.get(prop)));
         });
 
-        // 페이지네이션
+        // 페이지네이션 설정
         query.offset(pageable.getOffset());
         query.limit(pageable.getPageSize());
 
         // 결과 및 전체 개수 조회
-        List<Person> result = query.fetch(); // Movie 객체만 가져옵니다
+        List<Person> result = query.fetch(); // Person 객체만 가져옵니다
         long count = query.fetchCount(); // 전체 데이터 개수
 
-        // 결과를 Movie로 반환
+        System.out.println("결과: " + result);
+        System.out.println("결과: " + count);
+
+        // 결과를 Person으로 반환
         return new PageImpl<>(result, pageable, count);
     }
 

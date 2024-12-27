@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.project.admin.service.test.UserServie;
+import com.example.project.admin.service.test.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequestMapping("/admin/page")
 public class AdminRestController {
 
-    private final UserServie userServie;
+    private final UserService userServie;
 
     @GetMapping("/{theaterId}")
     public Long getMethodName(@PathVariable Long theaterId) {

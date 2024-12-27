@@ -2,6 +2,8 @@ package com.example.project.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,21 +36,15 @@ public class ConsultationAnswer {
     @Column(length = 1000)
     private String answerContent; // 답변 내용
 
-    // Getter, Setter
+    @Enumerated(EnumType.STRING)
+    private ConsultationStatus status; // 답변 상태
+
     public void setAnswerContent(String answerContent) {
         this.answerContent = answerContent;
     }
 
-    public String getAnswerContent() {
-        return answerContent;
-    }
-
     public void setConsultation(Consultation consultation) {
         this.consultation = consultation;
-    }
-
-    public Consultation getConsultation() {
-        return consultation;
     }
 
 }

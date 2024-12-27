@@ -15,7 +15,7 @@ import com.example.project.entity.Member;
 import com.example.project.entity.Movie;
 import com.example.project.entity.test.UserEntity;
 
-public interface UserServie {
+public interface UserService {
     // 회원 정보 리스트
     List<Member> allList(MemberDto memberDto);
 

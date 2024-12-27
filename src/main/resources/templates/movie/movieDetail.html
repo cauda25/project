@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/list.css}" type="text/css" />
     <style>
       .anime__details__widget ul li span {
         width: auto;
@@ -21,9 +22,35 @@
       .anime__details__content {
         margin: 0;
       }
+      .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: left;
+      }
+
+      .star-rating input {
+        display: none;
+      }
+
+      .star-rating label {
+        font-size: 2rem;
+        color: #ccc;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+
+      .star-rating input:checked ~ label {
+        color: #ffc700;
+      }
+
+      .star-rating label:hover,
+      .star-rating label:hover ~ label {
+        color: #ffda00;
+      }
     </style>
   </th:block>
   <div layout:fragment="content">
+    <div>[[${#authentication.name}]]</div>
     <section class="anime-details spad">
       <div class="container">
         <!-- 영화 정보 -->
@@ -199,8 +226,11 @@
           <div class="row trending__product-row director_row"></div>
           <div class="row trending__product-row actor_row"></div>
           <div class="row review_row"></div>
+          <div class="row trending__product-row movie_similar_row"></div>
+          <div class="row trending__product-row movie_director_row"></div>
         </div>
-        <!-- <div class="row">
+
+        <div class="row" id="reviewreview" hidden>
           <div class="col-lg-8 col-md-8">
             <div class="anime__details__review">
               <div class="section-title">
@@ -220,8 +250,60 @@
                 <div class="section-title">
                   <h5>관람평 작성하기</h5>
                 </div>
-                <form action="#">
-                  <textarea placeholder="Your Comment"></textarea>
+                <form action="#" method="post" id="reviewForm">
+                  <textarea placeholder="Your Comment" id="comment"></textarea>
+                  <div class="star-rating">
+                    <input
+                      type="radio"
+                      id="star5"
+                      name="rating"
+                      value="5"
+                    /><label
+                      for="star5"
+                      title="5 stars"
+                      class="fa-solid fa-star"
+                    ></label>
+                    <input
+                      type="radio"
+                      id="star4"
+                      name="rating"
+                      value="4"
+                    /><label
+                      for="star4"
+                      title="4 stars"
+                      class="fa-solid fa-star"
+                    ></label>
+                    <input
+                      type="radio"
+                      id="star3"
+                      name="rating"
+                      value="3"
+                    /><label
+                      for="star3"
+                      title="3 stars"
+                      class="fa-solid fa-star"
+                    ></label>
+                    <input
+                      type="radio"
+                      id="star2"
+                      name="rating"
+                      value="2"
+                    /><label
+                      for="star2"
+                      title="2 stars"
+                      class="fa-solid fa-star"
+                    ></label>
+                    <input
+                      type="radio"
+                      id="star1"
+                      name="rating"
+                      value="1"
+                    /><label
+                      for="star1"
+                      title="1 star"
+                      class="fa-solid fa-star"
+                    ></label>
+                  </div>
                   <button type="submit">
                     <i class="fa fa-location-arrow"></i> 관람평 등록
                   </button>
@@ -229,15 +311,20 @@
               </div>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </section>
   </div>
   <th:block layout:fragment="js">
     <script>
       const movieId = "[[${movieDto.id}]]";
+      const isLogin = "[[${isLogin}]]";
       let isExist = "[[${isExist}]]";
+      const directorId = "[[${directorList[0].id}]]";
+      const directorName = "[[${directorList[0].Name}]]";
+      console.log("[[${memberId}]]");
       console.log(typeof Boolean(isExist), isExist);
+      console.log(isLogin);
     </script>
     <script th:src="@{/js/movietest.js}"></script>
   </th:block>

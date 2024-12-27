@@ -33,7 +33,7 @@ document.querySelectorAll(".delete-btn").forEach((button) => {
   button.addEventListener("click", function () {
     const id = this.getAttribute("data-id");
     if (confirm("정말 삭제하시겠습니까?")) {
-      fetch(`center/email/delete/${inquiryId}`, { method: "DELETE" }).then(() =>
+      fetch(`/inquiries/${id}`, { method: "DELETE" }).then(() =>
         location.reload()
       );
     }

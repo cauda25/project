@@ -9,6 +9,8 @@ import com.example.project.entity.ConsultationStatus;
 import com.example.project.repository.ConsultationAnswerRepository;
 import com.example.project.repository.ConsultationRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ConsultationAnswerService {
 
@@ -23,6 +25,7 @@ public class ConsultationAnswerService {
     }
 
     // 상담에 답변 추가
+    @Transactional
     public void addAnswer(Long consultationId, String answerContent) {
         Consultation consultation = consultationRepository.findById(consultationId)
                 .orElseThrow(() -> new IllegalArgumentException("상담이 존재하지 않습니다."));

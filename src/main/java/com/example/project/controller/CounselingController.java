@@ -55,7 +55,7 @@ public class CounselingController {
         counseling.setCounselingType("Type A"); // set the counseling type
         model.addAttribute("counseling", counseling);
 
-        return "center/counselingList";
+        return "center/counseling";
     }
 
 }
