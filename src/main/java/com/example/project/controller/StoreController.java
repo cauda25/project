@@ -14,21 +14,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.project.dto.AuthMemberDto;
-import com.example.project.dto.GenreDto;
-import com.example.project.dto.MovieDto;
-import com.example.project.dto.MoviePersonDto;
-import com.example.project.dto.PageRequestDTO;
-import com.example.project.dto.PageResultDTO;
-import com.example.project.dto.PersonDto;
-import com.example.project.entity.Movie;
-import com.example.project.entity.Person;
-import com.example.project.entity.constant.MemberRole;
-import com.example.project.service.GenreService;
-import com.example.project.service.MemberFavoriteMovieService;
-import com.example.project.service.MovieService;
-import com.example.project.service.PersonService;
+import com.example.project.dto.store.ProductDto;
+import com.example.project.service.store.ProductService;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -36,8 +25,21 @@ import com.example.project.service.PersonService;
 @RequestMapping("/store")
 public class StoreController {
 
+    private final ProductService productService;
+
     @GetMapping("/main")
-    public void getHome() {
+    public void getMain(Model model) {
+        log.info("main 폼 요청");
+        List<ProductDto> productDtos = productService.getAllProducts();
+        model.addAttribute("productDtos", productDtos);
+
+    }
+
+    @GetMapping("/productDetail")
+    public void getHome(@RequestParam Long id, Model model) {
         log.info("home 폼 요청");
+        ProductDto dto = productService.getProduct(id);
+        model.addAttribute("dto", dto);
+
     }
 }
