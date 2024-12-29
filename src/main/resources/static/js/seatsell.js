@@ -155,6 +155,29 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("좌석 정보를 불러오는 중 문제가 발생했습니다.");
     });
 });
+
+// document.getElementById("payment-button").addEventListener("click", (e) => {
+//   e.preventDefault();
+
+//   const script = document.createElement("script");
+//   script.src = "https://testpay.kcp.co.kr/plugin/payplus_web.jsp";
+//   script.onload = () => {
+//     if (typeof MakePayMessage === "function") {
+//       if (MakePayMessage()) {
+//         alert("결제가 성공적으로 완료되었습니다.");
+//       } else {
+//         alert("결제 요청 중 오류가 발생했습니다. 다시 시도해주세요.");
+//       }
+//     } else {
+//       alert("결제 함수를 로드하지 못했습니다.");
+//     }
+//   };
+//   script.onerror = () => {
+//     alert("KCP 결제 스크립트를 로드할 수 없습니다.");
+//   };
+//   document.head.appendChild(script);
+// });
+
 document.getElementById("payment-button").addEventListener("click", (e) => {
   e.preventDefault(); // 기본 동작 방지
 
@@ -166,25 +189,25 @@ document.getElementById("payment-button").addEventListener("click", (e) => {
 
   // 결제 폼 HTML
   const paymentFormHTML = `
-    <div class="payment-form">
-      <h3>결제 정보 입력</h3>
-      <form id="payment-form">
-        <div class="form-group">
-          <label for="card-number">카드 번호</label>
-          <input type="text" id="card-number" name="card-number" maxlength="16" placeholder="1234 5678 9012 3456" required />
-        </div>
-        <div class="form-group">
-          <label for="cvc">CVC</label>
-          <input type="text" id="cvc" name="cvc" maxlength="3" placeholder="123" required />
-        </div>
-        <div class="form-group">
-          <label for="password">비밀번호 앞 두자리</label>
-          <input type="password" id="password" name="password" maxlength="2" placeholder="**" required />
-        </div>
-        <button type="submit" id="submit-payment">결제하기</button>
-      </form>
-    </div>
-  `;
+  <div class="payment-form">
+    <h3>결제 정보 입력</h3>
+    <form id="payment-form">
+      <div class="form-group">
+        <label for="card-number">카드 번호</label>
+        <input type="text" id="card-number" name="card-number" maxlength="16" placeholder="1234 5678 9012 3456" required />
+      </div>
+      <div class="form-group">
+        <label for="cvc">CVC</label>
+        <input type="text" id="cvc" name="cvc" maxlength="3" placeholder="123" required />
+      </div>
+      <div class="form-group">
+        <label for="password">비밀번호 앞 두자리</label>
+        <input type="password" id="password" name="password" maxlength="2" placeholder="**" required />
+      </div>
+      <button type="submit" id="submit-payment">결제하기</button>
+    </form>
+  </div>
+`;
 
   // seat-container의 내용을 결제 폼으로 변경
   seatContainer.innerHTML = paymentFormHTML;
