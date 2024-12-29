@@ -78,14 +78,32 @@ public class ReserveController {
         return ResponseEntity.ok(screeningDtos);
     }
 
-    @GetMapping("/seats/{screeningId}")
-    public ResponseEntity<List<SeatStatusDto>> getSeatsByScreening(@PathVariable Long screeningId) {
-        List<SeatStatusDto> seatStatuses = reserveService.getSeatStatuses(screeningId);
-        if (seatStatuses == null || seatStatuses.isEmpty()) {
-            log.warn("No seat statuses found for screeningId: {}", screeningId);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
+    @GetMapping("/seat_sell")
+    public String getSeatSellPage(@RequestParam Long screeningId, Model model) {
+        log.info("Seat sell page requested for screening ID: " + screeningId);
+
+        // 상영 정보 확인 및 전달
+        ScreeningDto screening = reserveService.getScreeningById(screeningId);
+        if (screening == null) {
+            log.error("Invalid screening ID: " + screeningId);
+            return "error/404"; // 존재하지 않는 경우 404 페이지로 리다이렉트
         }
-        return ResponseEntity.ok(seatStatuses);
+
+        model.addAttribute("screening", screening);
+        model.addAttribute("screeningId", screeningId);
+
+        return "movie/seat_sell";
     }
 
+    @GetMapping("/seats/{screeningId}")
+    @ResponseBody
+    public ResponseEntity<List<SeatStatusDto>> getSeatsByScreeningId(@PathVariable Long screeningId) {
+        try {
+            List<SeatStatusDto> seatStatuses = reserveService.getSeatStatusesByScreening(screeningId);
+            return ResponseEntity.ok(seatStatuses);
+        } catch (Exception e) {
+            log.error("Error fetching seats for screening ID: " + screeningId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+        }
+    }
 }

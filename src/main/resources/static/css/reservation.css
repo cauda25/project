@@ -1,7 +1,7 @@
 .table {
   table-layout: fixed;
   width: 1140px;
-  max-height: 400px;
+  max-height: 500px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -12,7 +12,7 @@ th {
 
 tbody td {
   vertical-align: top;
-  max-height: 400px;
+  max-height: 500px;
   padding: 8px;
 }
 
@@ -32,7 +32,7 @@ tbody td {
   text-align: left !important;
   font-weight: bold;
   color: black;
-  max-height: 400px;
+  max-height: 500px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -239,45 +239,4 @@ tfoot td {
   height: 60px;
   vertical-align: middle;
   background-color: #d4d3d3 !important;
-}
-.seat-container {
-  position: relative;
-  width: 600px; /* 좌석 UI 전체 크기 */
-  height: 400px; /* 좌석 UI 전체 크기 */
-  margin: 0 auto;
-  border: 1px solid #ccc;
-}
-
-.seat {
-  position: absolute;
-  width: 20px; /* 좌석 크기 */
-  height: 20px;
-  border-radius: 5px; /* 좌석 모서리 둥글게 */
-  background-color: #4caf50; /* 기본 좌석 색상 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.seat.s6 {
-  background-color: #87ceeb;
-}
-.seat.selected {
-  border: 2px solid #000;
-}
-.seat.reserved {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-.seat-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-}
-
-.seat-row {
-  display: flex;
-  gap: 5px;
 }

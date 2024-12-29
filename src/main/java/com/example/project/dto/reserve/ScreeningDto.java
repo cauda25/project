@@ -19,8 +19,7 @@ public class ScreeningDto {
     private String movieTitle;
     private String runtime;
 
-    private LocalDate openDate;
-    private LocalDate closeDate;
+    private LocalDate screeningDate;
 
     private Long auditoriumNo;
     private String auditoriumName;

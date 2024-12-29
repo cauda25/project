@@ -42,6 +42,10 @@ public interface ReserveService {
 
     Map<String, Integer> getSeatCounts(Long screeningId);
 
+    List<SeatStatusDto> getSeatStatusesByScreening(Long screeningId);
+
+    ScreeningDto getScreeningById(Long screeningId);
+
     default Reserve dtoToEntity(ReserveDto reserveDto) {
         return Reserve.builder()
                 .reserveId(reserveDto.getReserveId())

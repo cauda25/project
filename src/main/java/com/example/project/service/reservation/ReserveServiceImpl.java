@@ -106,7 +106,8 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public List<ScreeningDto> getScreeningsByMovieAndDate(String movieTitle, LocalDate date) {
+    public List<ScreeningDto> getScreeningsByMovieAndDate(String movieTitle,
+            LocalDate date) {
         movieTitle = movieTitle.trim();
         System.out.println("Service - movieTitle: " + movieTitle);
         System.out.println("Service - date: " + date);
@@ -117,8 +118,7 @@ public class ReserveServiceImpl implements ReserveService {
                         .startTime(screening.getStartTime())
                         .movieTitle(screening.getMovieTitle())
                         .runtime(screening.getRuntime())
-                        .openDate(screening.getOpenDate())
-                        .closeDate(screening.getCloseDate())
+                        .screeningDate(screening.getScreeningDate()) // screeningDate 필드 추가
                         .auditoriumNo(screening.getAuditorium().getAuditoriumNo())
                         .auditoriumName(screening.getAuditorium().getAuditoriumName())
                         .build())
@@ -148,6 +148,39 @@ public class ReserveServiceImpl implements ReserveService {
         seatCounts.put("totalSeats", totalSeats);
 
         return seatCounts;
+    }
+
+    @Override
+    public List<SeatStatusDto> getSeatStatusesByScreening(Long screeningId) {
+        List<SeatStatus> seatStatuses = seatStatusRepository.findSeatStatusesByScreeningId(screeningId);
+
+        return seatStatuses.stream()
+                .map(seatStatus -> SeatStatusDto.builder()
+                        .seatStatusId(seatStatus.getSeatStatusId())
+                        .seatId(seatStatus.getSeat().getSeatId())
+                        .rowNum(seatStatus.getSeat().getRowNum())
+                        .seatNum(seatStatus.getSeat().getSeatNum())
+                        .status(seatStatus.getSeatStatusEnum())
+                        .price(seatStatus.getSeat().getAuditorium().getPrice())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ScreeningDto getScreeningById(Long screeningId) {
+
+        Screening screening = screeningRepository.findById(screeningId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid screening ID: " + screeningId));
+
+        return ScreeningDto.builder()
+                .screeningId(screening.getScreeningId())
+                .startTime(screening.getStartTime())
+                .movieTitle(screening.getMovieTitle())
+                .runtime(screening.getRuntime())
+                .screeningDate(screening.getScreeningDate())
+                .auditoriumNo(screening.getAuditorium().getAuditoriumNo())
+                .auditoriumName(screening.getAuditorium().getAuditoriumName())
+                .build();
     }
 
 }

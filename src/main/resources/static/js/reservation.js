@@ -267,7 +267,8 @@ function fetchScreenings(selectedMovie, selectedDate) {
                           data-movie="${selectedMovie}" 
                           data-auditorium="${auditoriumName}" 
                           data-time="${screening.startTime}" 
-                          data-auditorium-no="${screening.auditoriumNo}">
+                          data-auditorium-no="${screening.auditoriumNo}"
+                          data-screening-id="${screening.screeningId}">
                           <div>
                             <span class="time"><strong>${screening.startTime}</strong></span>
                             <span class="seat-hall">
@@ -306,6 +307,7 @@ function attachTimeClickHandler() {
       const auditoriumName = e.currentTarget.getAttribute("data-auditorium");
       const startTime = e.currentTarget.getAttribute("data-time");
       const auditoriumNo = e.currentTarget.getAttribute("data-auditorium-no");
+      const screeningId = e.currentTarget.getAttribute("data-screening-id");
       const selectedDate = document
         .querySelector(".date-btn.clicked")
         ?.getAttribute("data-date");
@@ -318,13 +320,21 @@ function attachTimeClickHandler() {
         selectedMovie,
         selectedDate, // 날짜는 이미 선택된 상태
         `${auditoriumName} (${auditoriumNo}관)`,
-        startTime
+        startTime,
+        screeningId
       );
     });
   });
 }
 
-function updateSelectionSummary(theater, movie, date, auditorium, time) {
+function updateSelectionSummary(
+  theater,
+  movie,
+  date,
+  auditorium,
+  time,
+  screeningId
+) {
   document.getElementById("selected-theater").textContent = theater || "-";
   document.getElementById("selected-movie").textContent = movie || "-";
   document.getElementById("selected-date").textContent = date || "-";
@@ -339,6 +349,7 @@ function updateSelectionSummary(theater, movie, date, auditorium, time) {
     selectInfo.setAttribute("data-date", date || "");
     selectInfo.setAttribute("data-auditorium", auditorium || "");
     selectInfo.setAttribute("data-time", time || "");
+    selectInfo.setAttribute("data-screening-id", screeningId || "");
   }
 }
 
@@ -381,6 +392,85 @@ document.querySelectorAll(".timeSelect a").forEach((timeLink) => {
   });
 });
 
+// document.querySelector(".select-info").addEventListener("click", (e) => {
+//   e.preventDefault();
+
+//   const selectInfo = e.currentTarget;
+//   const theater = selectInfo.getAttribute("data-theater");
+//   const movie = selectInfo.getAttribute("data-movie");
+//   const date = selectInfo.getAttribute("data-date");
+//   const auditorium = selectInfo.getAttribute("data-auditorium");
+//   const time = selectInfo.getAttribute("data-time");
+//   const screeningId = selectInfo.getAttribute("data-screening-id");
+
+//   const url = `/reservation/seat_sell?screeningId=${encodeURIComponent(
+//     screeningId
+//   )}`;
+//   window.location.href = url;
+
+// });
+// // 좌석 정보를 로드하는 함수
+// function loadSeats(screeningId) {
+//   fetch(`/reservation/seats/${screeningId}`)
+//     .then((response) => {
+//       if (!response.ok) {
+//         throw new Error("좌석 정보를 가져오는데 실패했습니다.");
+//       }
+//       return response.json();
+//     })
+//     .then((seatStatuses) => {
+//       const seatContainer = document.getElementById("seat-container");
+//       seatContainer.innerHTML = "";
+
+//       // 좌석 데이터를 화면에 그리기
+//       seatStatuses.forEach((seatStatus) => {
+//         const seat = document.createElement("button");
+//         seat.classList.add("seat");
+//         seat.textContent = `${seatStatus.rowNum}${seatStatus.seatNum}`;
+
+//         if (seatStatus.seatStatusEnum === "AVAILABLE") {
+//           seat.classList.add("available");
+//         } else if (seatStatus.seatStatusEnum === "RESERVED") {
+//           seat.classList.add("reserved");
+//           seat.disabled = true;
+//         }
+
+//         seatContainer.appendChild(seat);
+//       });
+//     })
+//     .catch((error) => {
+//       console.error("Error loading seats:", error);
+//       alert("좌석 정보를 불러오는데 문제가 발생했습니다.");
+//     });
+// }
+// fetch(`/reservation/seat-status?screeningId=${selectedScreeningId}`)
+//   .then((response) => response.json())
+//   .then((seats) => {
+//     const container = document.getElementById("seat-container");
+//     container.innerHTML = ""; // 기존 좌석 초기화
+
+//     seats.forEach((seat) => {
+//       const button = document.createElement("button");
+//       button.type = "button";
+//       button.className = `seat ${seat.seatStatusEnum.toLowerCase()}`;
+//       button.style.position = "absolute";
+//       button.style.left = `${seat.seatNum * 20}px`;
+//       button.style.top = `${seat.rowNum.charCodeAt(0) - 65} * 30}px`;
+//       button.textContent = `${seat.rowNum}${seat.seatNum}`;
+//       button.title = `${seat.rowNum}${seat.seatNum} - ${seat.seatStatusEnum}`;
+
+//       button.addEventListener("click", () => {
+//         if (seat.seatStatusEnum === "AVAILABLE") {
+//           button.classList.toggle("selected");
+//         } else {
+//           alert("선택할 수 없는 좌석입니다.");
+//         }
+//       });
+
+//       container.appendChild(button);
+//     });
+//   })
+//   .catch((error) => console.error("좌석 데이터를 불러오지 못했습니다:", error));
 document.querySelector(".select-info").addEventListener("click", (e) => {
   e.preventDefault();
 
@@ -390,62 +480,58 @@ document.querySelector(".select-info").addEventListener("click", (e) => {
   const date = selectInfo.getAttribute("data-date");
   const auditorium = selectInfo.getAttribute("data-auditorium");
   const time = selectInfo.getAttribute("data-time");
+  const screeningId = selectInfo.getAttribute("data-screening-id");
 
-  if (theater && movie && date && auditorium && time) {
-    const url = `/seat-selection?theater=${encodeURIComponent(
-      theater
-    )}&movie=${encodeURIComponent(movie)}&date=${encodeURIComponent(
-      date
-    )}&auditorium=${encodeURIComponent(auditorium)}&time=${encodeURIComponent(
-      time
-    )}`;
-    window.location.href = url;
-  } else {
+  if (!theater || !movie || !date || !auditorium || !time || !screeningId) {
     alert("모든 정보를 선택해주세요.");
+    return;
   }
+
+  // URL에 tfoot 정보 추가
+  const url = `/reservation/seat_sell?screeningId=${encodeURIComponent(
+    screeningId
+  )}&theater=${encodeURIComponent(theater)}&movie=${encodeURIComponent(
+    movie
+  )}&date=${encodeURIComponent(date)}&auditorium=${encodeURIComponent(
+    auditorium
+  )}&time=${encodeURIComponent(time)}`;
+
+  window.location.href = url;
 });
+
+// 좌석 정보를 로드하는 함수
 function loadSeats(screeningId) {
-  fetch(`/seats/${screeningId}`)
-    .then((response) => response.json())
-    .then((data) => {
-      const container = document.getElementById("seat-container");
-      container.innerHTML = "";
-
-      const rows = {};
-      data.forEach((seat) => {
-        if (!rows[seat.rowNum]) {
-          rows[seat.rowNum] = [];
-        }
-        rows[seat.rowNum].push(seat);
-      });
-
-      for (const [rowNum, seats] of Object.entries(rows)) {
-        const rowDiv = document.createElement("div");
-        rowDiv.classList.add("seat-row");
-        rowDiv.dataset.row = rowNum;
-
-        seats.forEach((seat) => {
-          const seatDiv = document.createElement("div");
-          seatDiv.classList.add("seat");
-          seatDiv.classList.add(seat.status.toLowerCase()); // 상태에 따라 스타일 적용
-          seatDiv.textContent = `${rowNum}${seat.seatNum}`;
-          seatDiv.dataset.seatId = seat.seatId;
-          seatDiv.dataset.rowNum = rowNum;
-          seatDiv.dataset.seatNum = seat.seatNum;
-
-          seatDiv.addEventListener("click", () => {
-            if (seat.status === "AVAILABLE") {
-              console.log(`Selected seat: ${rowNum}${seat.seatNum}`);
-            }
-          });
-
-          rowDiv.appendChild(seatDiv);
-        });
-
-        container.appendChild(rowDiv);
+  fetch(`/reservation/seats/${screeningId}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("좌석 정보를 가져오는데 실패했습니다.");
       }
+      return response.json();
     })
-    .catch((error) => console.error("Error loading seats:", error));
+    .then((seatStatuses) => {
+      const seatContainer = document.getElementById("seat-container");
+      seatContainer.innerHTML = "";
+
+      // 좌석 데이터를 화면에 그리기
+      seatStatuses.forEach((seatStatus) => {
+        const seat = document.createElement("button");
+        seat.classList.add("seat");
+        seat.textContent = `${seatStatus.rowNum}${seatStatus.seatNum}`;
+
+        if (seatStatus.seatStatusEnum === "AVAILABLE") {
+          seat.classList.add("available");
+        } else if (seatStatus.seatStatusEnum === "RESERVED") {
+          seat.classList.add("reserved");
+          seat.disabled = true;
+        }
+
+        seatContainer.appendChild(seat);
+      });
+    })
+    .catch((error) => {
+      console.error("Error loading seats:", error);
+      alert("좌석 정보를 불러오는데 문제가 발생했습니다.");
+    });
 }
 
 // document.querySelectorAll(".seat").forEach((seat) => {

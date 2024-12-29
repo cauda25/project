@@ -18,4 +18,8 @@ public interface SeatStatusRepository extends JpaRepository<SeatStatus, Long> {
 
     @Query("SELECT COUNT(s) FROM SeatStatus s WHERE s.screening.screeningId = :screeningId")
     int countTotalSeats(@Param("screeningId") Long screeningId);
+
+    // seat join해서 가져오기
+    @Query("SELECT ss FROM SeatStatus ss JOIN FETCH ss.seat s WHERE ss.screening.screeningId = :screeningId")
+    List<SeatStatus> findSeatStatusesByScreeningId(@Param("screeningId") Long screeningId);
 }
