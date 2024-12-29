@@ -73,7 +73,7 @@
         </div>
         <div class="col-lg-2">
           <div class="header__right">
-            <a href="#" class="search-switch"
+            <a th:href="@{/cart/main}" class="search-switch"
               ><span class="icon_search"></span
             ></a>
             <a sec:authorize="!isAuthenticated()" th:href="@{/member/login}"

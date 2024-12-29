@@ -74,7 +74,7 @@ function addToCart() {
             "상품이 장바구니에 추가되었습니다.\n장바구니로 이동하시겠습니까?"
           );
           if (goToCart) {
-            window.location.href = "/order/cart"; // 장바구니 페이지로 이동
+            window.location.href = "/cart/main"; // 장바구니 페이지로 이동
           }
 
         
