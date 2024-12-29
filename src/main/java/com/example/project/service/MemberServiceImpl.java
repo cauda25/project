@@ -12,7 +12,9 @@ import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.entity.Member;
 import com.example.project.entity.constant.MemberRole;
+import com.example.project.entity.store.Cart;
 import com.example.project.repository.MemberRepository;
+import com.example.project.repository.store.CartRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +26,8 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final CartRepository cartRepository;
 
     @Override
     public void registerMember(MemberDto memberDto) {
@@ -41,6 +45,9 @@ public class MemberServiceImpl implements MemberService {
                 .point(0)
                 .build();
         memberRepository.save(member);
+
+        Cart cart = Cart.builder().member(member).build();
+        cartRepository.save(cart);
     }
 
     @Override

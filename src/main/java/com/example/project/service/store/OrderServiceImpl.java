@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.example.project.dto.store.OrderDto;
 import com.example.project.dto.store.OrderItemDto;
 import com.example.project.dto.store.ProductDto;
 import com.example.project.entity.Member;
@@ -51,6 +52,11 @@ public class OrderServiceImpl implements OrderService {
         cart.setMember(Member.builder().mid(memberId).build());
         cart.setStatus(OrderStatus.CART);
         return orderRepository.save(cart);
+    }
+
+    @Override
+    public OrderDto getOrderDto(Long memberId, OrderStatus orderStatus) {
+        return entityToDto(orderRepository.findByMemberMidAndStatus(memberId, orderStatus));
     }
 
 }

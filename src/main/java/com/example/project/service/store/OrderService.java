@@ -2,11 +2,14 @@ package com.example.project.service.store;
 
 import com.example.project.dto.store.OrderDto;
 import com.example.project.entity.Member;
+import com.example.project.entity.constant.OrderStatus;
 import com.example.project.entity.store.Order;
 
 public interface OrderService {
 
     // void addToCart(Long memberId, Long productId, int quantity);
+
+    OrderDto getOrderDto(Long memberId, OrderStatus orderStatus);
 
     public default OrderDto entityToDto(Order order) {
         return OrderDto.builder()

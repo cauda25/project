@@ -20,17 +20,17 @@ import lombok.extern.log4j.Log4j2;
 @RequestMapping("/order")
 public class OrderController {
 
-    private final OrderItemService orderItemService;
+    // private final OrderItemService orderItemService;
 
-    @GetMapping("/cart")
-    public void getCart(Model model) {
-        log.info("cart 폼 요청");
+    // @GetMapping("/cart")
+    // public void getCart(Model model) {
+    // log.info("cart 폼 요청");
 
-        List<OrderItemDto> orderItemDtos = orderItemService.findByOrderId(1L);
-        System.out.println(orderItemDtos);
+    // // List<OrderItemDto> orderItemDtos = orderItemService.findByOrderId(1L);
+    // // System.out.println(orderItemDtos);
 
-        model.addAttribute("orderItemDtos", orderItemDtos);
+    // // model.addAttribute("orderItemDtos", orderItemDtos);
 
-    }
+    // }
 
 }
