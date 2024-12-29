@@ -13,35 +13,18 @@
                   <table id="example" class="display expandable-table" style="width: 100%">
                     <thead>
                       <tr>
-                        <th>회원.no</th>
-                        <th>유저 아이디</th>
-                        <th>유저 이름</th>
-                        <th>유저 이메일</th>
-                        <th>유저 성별</th>
-                        <th>생년월일</th>
-                        <th>포인트</th>
-                        <th>마지막 로그인</th>
-                        <th>활성 상태</th>
+                        <th>문의 번호</th>
+                        <th>이메일</th>
+                        <th>문의 내용</th>
+
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr th:each="dto : ${list}">
-                        <td th:text="${dto.mid}"></td>
-                        <td th:text="${dto.memberId}"></td>
-                        <td th:text="${dto.name}"></td>
-                        <td th:text="${dto.email}"></td>
-                        <td th:text="${dto.gender}"></td>
-                        <td th:text="${dto.birth}"></td>
-                        <td th:text="${dto.point}"></td>
-                        <td th:text="${#temporals.format(dto.lastLogin, 'yyyy/MM/dd hh:mm')}"></td>
-                        <td th:text="${dto.statusRole}"></td>
-                        <td>
-                          <form th:action="@{/admin/page/user}" method="post">
-                            <input type="hidden" name="mid" th:value="${dto.mid}" />
-                            <button type="submit" th:if="${dto.statusRole.toString().equals('INACTIVE')}">전환</button>
-                          </form>
-                        </td>
+                      <tr th:each="list : ${inquiry}">
+                        <th><a th:href="@{/admin/page/answer}" th:text="${list.id}"></a></th>
+                        <td th:text="${list.email}"></td>
+                        <td th:text="${list.content}"></td>
                       </tr>
                     </tbody>
                   </table>

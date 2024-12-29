@@ -26,8 +26,8 @@
           <form th:action="@{/dormancy}" method="post">
             <input type="hidden" name="mid" th:value="${param.mid}" />
             <table style="background: #333; color: #fff; border: 10px solid #333; width: 100%">
-              <tr>
-                <td>마지막 접속일 : <span></span></td>
+              <tr th:each="log : ${last}">
+                <td>마지막 접속일 : [[${#temporals.format(log.lastLogin, 'yyyy.MM.dd')}]]</td>
               </tr>
               <tr>
                 <!-- <td>휴면 계정 전환일 : yyyy.mm.dd</td> -->

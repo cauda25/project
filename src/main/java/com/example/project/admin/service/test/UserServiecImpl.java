@@ -15,24 +15,33 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.project.admin.Entity.MovieState;
-import com.example.project.admin.Entity.UserEntity;
 import com.example.project.admin.Entity.constant.StatusRole;
+import com.example.project.admin.dto.test.AdminInquiryDto;
 import com.example.project.admin.dto.test.MovieDetailsDTO;
 import com.example.project.admin.dto.test.MovieStateDto;
-import com.example.project.admin.dto.test.UserDto;
 import com.example.project.admin.repository.AdminMovieRepository;
 import com.example.project.admin.repository.MovieAddRepository;
 import com.example.project.admin.repository.MovieStateRepository;
-// import com.example.project.admin.repository.UserRepository;
 import com.example.project.dto.GenreDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.reserve.TheaterDto;
 import com.example.project.entity.Genre;
+import com.example.project.entity.Inquiry;
 import com.example.project.entity.Member;
+import com.example.project.entity.Movie;
+import com.example.project.entity.MovieGenre;
+import com.example.project.entity.MoviePerson;
+import com.example.project.entity.Person;
 import com.example.project.entity.reserve.Theater;
+import com.example.project.repository.InquiryRepository;
 import com.example.project.repository.MemberRepository;
 import com.example.project.repository.movie.GenreRepository;
+import com.example.project.repository.movie.MovieGenreRepository;
+import com.example.project.repository.movie.MoviePersonRepository;
+import com.example.project.repository.movie.MovieRepository;
+import com.example.project.repository.movie.PersonRepository;
 
+import groovyjarjarantlr4.v4.parse.ANTLRParser.ruleEntry_return;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -47,9 +56,17 @@ public class UserServiecImpl implements UserService {
     // private final UserRepository userRepository;
     private final AdminMovieRepository adminMovieRepository;
     private final MemberRepository memberRepository;
+
     private final MovieAddRepository movieAddRepository;
     private final MovieStateRepository movieStateRepository;
+
+    private final MovieRepository movieRepository;
+    private final MovieGenreRepository movieGenreRepository;
     private final GenreRepository genreRepository;
+    private final MoviePersonRepository moviePersonRepository;
+    private final PersonRepository personRepository;
+
+    private final InquiryRepository inquiryRepository;
 
     // 회원 정보 가져오기 test
     // @Override
@@ -196,7 +213,7 @@ public class UserServiecImpl implements UserService {
     // 휴면 계정으로 전환
     @Override
     public void inactiveAccounts() {
-        LocalDateTime lastTime = LocalDateTime.now().minusMinutes(1);
+        LocalDateTime lastTime = LocalDateTime.now().minusDays(2);
         List<Member> inactiveUsers = memberRepository.findInactiveUsers(lastTime, StatusRole.ACTIVE);
 
         for (Member member : inactiveUsers) {
@@ -228,4 +245,62 @@ public class UserServiecImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
     }
 
+    @Override
+    public List<Member> findLastLogin(Long mid) {
+        return memberRepository.findByLastLogin(mid);
+    }
+
+    @Transactional
+    @Override
+    public void addMovieWithDetails(Movie movie, List<Long> genreIds, List<String> actors, String directorName) {
+        // 1. 영화 저장
+        movieRepository.save(movie);
+        log.info("Saved Movie: {}" + movie);
+
+        // 2. 장르 추가
+        for (Long genreId : genreIds) {
+            Genre genre = genreRepository.findById(genreId)
+                    .orElseThrow(() -> new IllegalArgumentException("선택하신 장르를 찾을 수 없습니다. : " + genreId));
+            MovieGenre movieGenre = MovieGenre.builder()
+                    .movie(movie)
+                    .genre(genre)
+                    .build();
+            movieGenreRepository.save(movieGenre);
+            log.info("Saved MovieGenre: {}" + movieGenre);
+        }
+
+        // 3. 배우 추가
+        for (String actor : actors) {
+            Person actorPerson = Person.builder()
+                    .job("Acting")
+                    .name(actor)
+                    .build();
+            personRepository.save(actorPerson);
+            MoviePerson movieActor = MoviePerson.builder()
+                    .movie(movie)
+                    .person(actorPerson)
+                    .build();
+            moviePersonRepository.save(movieActor);
+            log.info("Saved MovieActor: {}" + movieActor);
+        }
+
+        // 4. 감독 추가
+        Person directorPerson = Person.builder()
+                .job("Directing")
+                .name(directorName)
+                .build();
+        personRepository.save(directorPerson);
+        MoviePerson movieDirector = MoviePerson.builder()
+                .movie(movie)
+                .person(directorPerson)
+                .build();
+        moviePersonRepository.save(movieDirector);
+        log.info("Saved MovieDirector: {}" + movieDirector);
+    }
+
+    @Override
+    public List<Inquiry> inquityList(AdminInquiryDto adminInquiryDto) {
+        List<Inquiry> list = inquiryRepository.findAll();
+        return list;
+    }
 }

@@ -6,18 +6,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.project.admin.Entity.UserEntity;
+import com.example.project.admin.dto.test.AdminCreateDto;
+import com.example.project.admin.dto.test.AdminInquiryDto;
 import com.example.project.admin.dto.test.MovieDetailsDTO;
 import com.example.project.admin.dto.test.MovieStateDto;
-import com.example.project.admin.dto.test.UserDto;
 import com.example.project.admin.service.test.UserService;
 import com.example.project.dto.GenreDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.reserve.TheaterDto;
+import com.example.project.entity.Inquiry;
 import com.example.project.entity.Member;
+import com.example.project.entity.Movie;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,17 +41,6 @@ public class AdminController {
         log.info("home 폼 요청");
 
     }
-
-    // 테스트
-    // @GetMapping("/user")
-    // public void getUserTest(UserDto userDto, Long uno, Model model) {
-    // log.info("home 폼 요청");
-    // List<UserEntity> list = userServie.testList(userDto);
-    // userServie.inactiveAccounts();
-    // // userServie.reactivateAccount(uno);
-    // model.addAttribute("list", list);
-
-    // }
 
     @GetMapping("/user")
     public void getUserTest(MemberDto memberDto, Long mid, Model model) {
@@ -89,6 +81,25 @@ public class AdminController {
         model.addAttribute("genres", genre);
     }
 
+    @PostMapping("/join")
+    public String postMethodName(@ModelAttribute AdminCreateDto adminCreateDto) {
+        log.info("어드민 등록 폼 요청 {}", adminCreateDto);
+        Movie movie = Movie.builder()
+                .title(adminCreateDto.getTitle())
+                .overview(adminCreateDto.getOverview())
+                .releaseDate(adminCreateDto.getReleaseDate())
+                .build();
+
+        // 서비스 호출
+        userServie.addMovieWithDetails(
+                movie,
+                adminCreateDto.getGenreIds(),
+                adminCreateDto.getActors(),
+                adminCreateDto.getDirectorName());
+
+        return "redirect:/admin/page/create";
+    }
+
     @GetMapping({ "/movie", "/movieAdd" })
     public void getMovie(String state, String theaterName, Model model) {
         log.info("movie 폼 요청 {} {}", state, theaterName);
@@ -115,6 +126,14 @@ public class AdminController {
         rttr.addAttribute("state", theaterState);
         return "redirect:/admin/page/movie?";
 
+    }
+
+    @GetMapping({ "/answer", "/answerList" })
+    public void getAnswer(AdminInquiryDto adminInquiryDto, Model model) {
+        log.info("home 폼 요청");
+        List<Inquiry> inquiList = userServie.inquityList(adminInquiryDto);
+
+        model.addAttribute("inquiry", inquiList);
     }
 
 }

@@ -16,20 +16,11 @@
     />
 
     <!-- Google Font -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
     <!-- Css Styles -->
-    <link
-      rel="stylesheet"
-      th:href="@{/admin/css/vertical-layout-light/style.css}"
-    />
+    <link rel="stylesheet" th:href="@{/admin/css/vertical-layout-light/style.css}" />
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" />
     <link rel="stylesheet" th:href="@{/admin/css/tailwind.output.css}" />
 
@@ -73,13 +64,13 @@
                 <span class="menu-title">영화관 관리</span>
               </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="#">
                 <span class="menu-title">예매 관리</span>
               </a>
-            </li>
+            </li> -->
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" th:href="@{/admin/page/answerList}">
                 <span class="menu-title">게시물 관리</span>
               </a>
             </li>

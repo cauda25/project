@@ -22,14 +22,14 @@ public interface AdminMovieRepository extends JpaRepository<Movie, Long> {
                         SELECT
                         m.id,
                         m.TITLE AS movie_title,
-                        LISTAGG(g.name, ', ') WITHIN GROUP (ORDER BY g.name) AS genres,
+                        LISTAGG(DISTINCT g.name, ', ') WITHIN GROUP (ORDER BY g.id) AS genres,
                         m.RELEASE_DATE AS release_date
                         FROM
-                        Movie m
+                        Movies m
                         JOIN
                         MOVIE_GENRE mg ON m.ID = mg.MOVIE_ID
                         JOIN
-                        Genre g ON g.ID = mg.GENRE_ID
+                        Genres g ON g.ID = mg.GENRE_ID
                         GROUP BY
                         m.id,m.TITLE, m.RELEASE_DATE, m.ID
                         ORDER BY
@@ -51,14 +51,14 @@ public interface AdminMovieRepository extends JpaRepository<Movie, Long> {
                         		p.name,
                         		ROW_NUMBER() OVER (PARTITION BY m.id ORDER BY p.popularity DESC) AS rnk
                         	FROM
-                        		Movie m
+                        		Movies m
                         	LEFT JOIN
-                        	MOVIE_PEOPLE mp
+                        	MOVIE_PERSON mp
                                  ON
                         		m.ID = mp.MOVIE_ID
                         	JOIN
                                 PEOPLE p ON
-                        		p.ID = mp.PEOPLE_ID
+                        		p.ID = mp.PERSON_ID
                         	WHERE
                         		p.job = 'Acting') PPPP
                         WHERE
@@ -82,14 +82,14 @@ public interface AdminMovieRepository extends JpaRepository<Movie, Long> {
                         		p.name,
                         		ROW_NUMBER() OVER (PARTITION BY m.id ORDER BY p.popularity DESC) AS rnk
                         	FROM
-                        		Movie m
+                        		Movies m
                         	LEFT JOIN
-                        	MOVIE_PEOPLE mp
+                        	MOVIE_PERSON mp
                                  ON
                         		m.ID = mp.MOVIE_ID
                         	JOIN
                                 PEOPLE p ON
-                        		p.ID = mp.PEOPLE_ID
+                        		p.ID = mp.PERSON_ID
                         	WHERE
                         		p.job = 'Directing') PPPP
                         WHERE

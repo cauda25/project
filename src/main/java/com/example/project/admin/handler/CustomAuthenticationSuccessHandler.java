@@ -10,7 +10,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
-import com.example.project.admin.Entity.UserEntity;
 import com.example.project.admin.Entity.constant.StatusRole;
 
 import jakarta.servlet.ServletException;

@@ -8,9 +8,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
-import com.example.project.admin.Entity.UserEntity;
 import com.example.project.admin.Entity.constant.StatusRole;
-// import com.example.project.admin.repository.UserRepository;
+
 import com.example.project.admin.service.test.UserService;
 import com.example.project.entity.Member;
 import com.example.project.repository.MemberRepository;
@@ -22,8 +21,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    // @Autowired
-    // private UserRepository userRepository;
     @Autowired
     private UserService userService;
 

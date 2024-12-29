@@ -18,8 +18,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.example.project.admin.filter.CustomSessionCookieFilter;
 import com.example.project.admin.handler.CustomAuthenticationFailureHandler;
 import com.example.project.admin.handler.CustomAuthenticationSuccessHandler;
 import com.example.project.admin.service.AdminDetailsServiceImpl;
@@ -43,7 +46,10 @@ public class SecurityConfig {
         private AdminDetailsServiceImpl adminDetailsServiceImpl;
         @Autowired
         private MemberLoginServiceImpl memberLoginServiceImpl;
+        @Autowired
+        private CustomSessionCookieFilter sessionCookieFilter;
 
+        @Order(2)
         @Bean
         SecurityFilterChain securityFilterChain1(HttpSecurity http) throws Exception {
 
@@ -52,7 +58,7 @@ public class SecurityConfig {
                                 .securityMatcher("/movie/**", "/member/**")
                                 .userDetailsService(memberLoginServiceImpl)
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/css/**", "/admin/**",
+                                                .requestMatchers("/css/**",
                                                                 "/fonts/**", "/img/**",
                                                                 "/js/**", "/sass/**", "/svg/**")
                                                 .permitAll() // 정적 리소스는 모두 허용
@@ -75,44 +81,32 @@ public class SecurityConfig {
                                 )
                                 // 로그아웃 설정
                                 .logout(logout -> logout
-                                                .logoutUrl("/logout") // 로그아웃 요청 URL
+                                                .logoutUrl("/member/logout") // 로그아웃 요청 URL
                                                 .logoutSuccessUrl("/member/login") // 로그아웃 성공 후 이동할 URL
                                                 .invalidateHttpSession(true) // 세션 무효화
                                                 .deleteCookies("JSESSIONID") // 세션 쿠키 삭제
-                                )
-                                // CSRF 설정
-                                .csrf(csrf -> csrf.disable()); // 필요에 따라 CSRF 비활성화
 
-                // http.authorizeHttpRequests(authorize -> authorize
-                // .requestMatchers("/css/**", "/fonts/**", "/img/**", "/js/**",
-                // "/sass/**",
-                // "/svg/**")
-                // .permitAll()
-                // .requestMatchers("/", "/admin/css/**",
-                // "/admin/js/**", "/admin/fonts/**")
-                // .permitAll()
-                // .requestMatchers("/dormancy").permitAll()
-                // .requestMatchers("/admin/page/**").hasAnyRole("ADMIN")
-                // .anyRequest().authenticated());
+                                );
 
-                // http.formLogin(adminLogin -> adminLogin.loginPage("/admin/login")
-                // .failureHandler(failureHandler)
-                // .successHandler(successHandler).permitAll());
-                // // .failureUrl("/dormancy")
-                // // .defaultSuccessUrl("/admin/page/index", true).permitAll());
+                // .sessionManagement(session -> session
+                // .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                // .sessionFixation(
+                // SessionManagementConfigurer.SessionFixationConfigurer::migrateSession))
 
-                // http.sessionManagement(session ->
-                // session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
+                // .rememberMe(remember -> remember
+                // .key("uniqueAndSecretForMember")
+                // .rememberMeCookieName("MEMBER_REMEMBER_ME")
+                // .tokenValiditySeconds(1209600) // 14일
+                // );
 
-                // http.logout(logout -> logout
-                // .logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout"))
-                // .logoutSuccessUrl("/admin/login"));
+                // CSRF 설정
+                http.csrf(csrf -> csrf.disable()); // 필요에 따라 CSRF 비활성화
 
-                // http.csrf(csrf -> csrf.disable());
                 return http.build();
 
         }
 
+        @Order(1)
         @Bean
         SecurityFilterChain securityFilterChain2(HttpSecurity http) throws Exception {
 
@@ -130,16 +124,33 @@ public class SecurityConfig {
                                                 .requestMatchers("/admin/page/**").hasAnyRole("ADMIN")
                                                 .anyRequest().authenticated());
 
-                http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
+                // http.sessionManagement(session ->
+                // session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
 
                 http.formLogin(adminLogin -> adminLogin.loginPage("/admin/login")
                                 .defaultSuccessUrl("/admin/page/index", true).permitAll());
 
                 http.logout(logout -> logout
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout"))
-                                .logoutSuccessUrl("/admin/login"));
+                                .logoutUrl("/admin/logout") // 로그아웃 요청 URL
+                                .logoutSuccessUrl("/admin/login") // 로그아웃 성공 후 이동할 URL
+                                .invalidateHttpSession(true) // 세션 무효화
+                                .deleteCookies("JSESSIONID")); // 세션 쿠키 삭제
+                // .logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout"))
+                // .logoutSuccessUrl("/admin/login"));
 
-                // http.csrf(csrf -> csrf.disable());
+                // http.sessionManagement(session -> session
+                // .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                // .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession)
+
+                // );
+
+                // http.rememberMe(remember -> remember
+                // .key("uniqueAndSecretForAdmin")
+                // .rememberMeCookieName("ADMIN_REMEMBER_ME")
+                // .tokenValiditySeconds(1209600) // 14일
+                // );
+
+                http.csrf(csrf -> csrf.disable());
                 return http.build();
 
         }
@@ -148,4 +159,5 @@ public class SecurityConfig {
         PasswordEncoder passwordEncoder() {
                 return PasswordEncoderFactories.createDelegatingPasswordEncoder();
         }
+
 }

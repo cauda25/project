@@ -1,6 +1,5 @@
 package com.example.project.admin.Entity;
 
-import com.example.project.admin.Entity.constant.AdminRole;
 import com.example.project.entity.constant.MemberRole;
 
 import jakarta.persistence.Column;

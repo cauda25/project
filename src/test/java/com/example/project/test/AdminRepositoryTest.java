@@ -1,5 +1,6 @@
 package com.example.project.test;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.LongStream;
@@ -12,24 +13,24 @@ import org.springframework.test.annotation.Commit;
 
 import com.example.project.admin.Entity.Admin;
 import com.example.project.admin.Entity.MovieState;
-import com.example.project.admin.Entity.UserEntity;
-import com.example.project.admin.Entity.constant.AdminRole;
 import com.example.project.admin.Entity.constant.StatusRole;
 import com.example.project.admin.repository.AdminMovieRepository;
 import com.example.project.admin.repository.AdminRepository;
 import com.example.project.admin.repository.MovieAddRepository;
 import com.example.project.admin.repository.MovieStateRepository;
-// import com.example.project.admin.repository.UserRepository;
 import com.example.project.entity.Genre;
 import com.example.project.entity.Movie;
 import com.example.project.entity.MovieGenre;
+import com.example.project.entity.MoviePerson;
+import com.example.project.entity.Person;
 import com.example.project.entity.constant.MemberRole;
 import com.example.project.entity.reserve.Theater;
 import com.example.project.repository.MemberRepository;
 import com.example.project.repository.movie.GenreRepository;
 import com.example.project.repository.movie.MovieGenreRepository;
+import com.example.project.repository.movie.MoviePersonRepository;
 import com.example.project.repository.movie.MovieRepository;
-
+import com.example.project.repository.movie.PersonRepository;
 import com.example.project.service.MovieService;
 import com.querydsl.core.types.Predicate;
 
@@ -39,20 +40,23 @@ import jakarta.transaction.Transactional;
 public class AdminRepositoryTest {
     @Autowired
     private AdminRepository adminRepository;
-    // @Autowired
-    // private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private MovieRepository movieRepository;
+    private AdminMovieRepository movieRepository;
 
     @Autowired
     private GenreRepository genreRepository;
 
     @Autowired
     private MovieGenreRepository movieGenreRepository;
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Autowired
+    private MoviePersonRepository moviePersonRepository;
     @Autowired
     private AdminMovieRepository adminMovieRepository;
     @Autowired
@@ -200,7 +204,8 @@ public class AdminRepositoryTest {
     public void addMovieWithGenres() {
 
         Movie movie = Movie.builder()
-                .title("test test test test")
+                .id(3L)
+                .title("테스트중입니다")
                 .overview("왜 안돼는가??")
                 .releaseDate("2024-12-20")
                 .build();
@@ -209,10 +214,11 @@ public class AdminRepositoryTest {
         System.out.println(movie);
 
         // Genre genre = genreRepository.findById(28L).get(); // 장르 하나 추가
-        List<Long> genreIds = List.of(28L, 80L, 16L); // 장르 여러개 추가
+        List<Long> genreIds = List.of(12L, 27L, 37L); // 장르 여러개 추가
         for (Long genreId : genreIds) {
             Genre genre = genreRepository.findById(genreId)
-                    .orElseThrow(() -> new IllegalArgumentException("선택하신 장르를 찾을 수 없습니다. : " + genreId)); // 선택한 장르가 없을때
+                    .orElseThrow(() -> new IllegalArgumentException("선택하신 장르를 찾을 수 없습니다. : " +
+                            genreId)); // 선택한 장르가 없을때
             System.out.println(genre);
 
             MovieGenre movieGenre = MovieGenre.builder()
@@ -223,6 +229,69 @@ public class AdminRepositoryTest {
             movieGenreRepository.save(movieGenre);
             System.out.println(movieGenre);
         }
+
+    }
+
+    @Commit
+    @Transactional
+    @Test
+    public void addMovieWithActor() {
+
+        Movie movie = movieRepository.findById(3L).get();
+
+        System.out.println(movie);
+
+        List<String> actors = List.of("김군", "이군", "박군"); // 새로운 배우 이름 리스트
+
+        for (String actor : actors) {
+            // 이름을 기준으로 배우 중복 여부 확인
+            Person person = Person.builder()
+                    .gender(1L) // 성별 설정
+                    .job("Acting") // 직업 설정
+                    .name(actor) // 이름 설정
+                    .build();
+
+            personRepository.save(person);
+
+            // MoviePerson 생성
+            MoviePerson moviePerson = MoviePerson.builder()
+                    .movie(movie)
+                    .person(person)
+                    .build();
+
+            // MoviePerson 저장
+            moviePersonRepository.save(moviePerson);
+            System.out.println("Saved MoviePerson: " + moviePerson);
+        }
+    }
+
+    @Commit
+    @Transactional
+    @Test
+    public void addMovieWithDirector() {
+
+        Movie movie = movieRepository.findById(3L).get();
+
+        System.out.println(movie);
+
+        Person person = Person.builder()
+                .gender(1L)
+                .job("Directing") // 직업 설정
+                .name("감독입니다") // 감독 이름 설정
+                .build();
+
+        personRepository.save(person);
+
+        // MoviePerson 생성
+        MoviePerson moviePerson = MoviePerson.builder()
+                .movie(movie)
+                .person(person)
+                .build();
+
+        // MoviePerson 저장
+        moviePersonRepository.save(moviePerson);
+        System.out.println("Saved MoviePerson: " + moviePerson);
+
     }
 
     @Transactional
@@ -287,4 +356,9 @@ public class AdminRepositoryTest {
 
     }
 
+    @Test
+    public void findLast() {
+        System.out.println(memberRepository.findByLastLogin(1L));
+
+    }
 }

@@ -3,27 +3,30 @@ package com.example.project.admin.service.test;
 import java.util.List;
 
 import org.springframework.scheduling.annotation.Scheduled;
-
 import com.example.project.admin.Entity.MovieState;
-import com.example.project.admin.Entity.UserEntity;
 import com.example.project.dto.GenreDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.MovieDto;
 import com.example.project.dto.PageRequestDTO;
 import com.example.project.dto.PageResultDTO;
 import com.example.project.dto.reserve.TheaterDto;
+import com.example.project.admin.dto.test.AdminInquiryDto;
 import com.example.project.admin.dto.test.MovieDetailsDTO;
 import com.example.project.admin.dto.test.MovieStateDto;
-import com.example.project.admin.dto.test.UserDto;
+
 import com.example.project.entity.Genre;
+import com.example.project.entity.Inquiry;
 import com.example.project.entity.Member;
 import com.example.project.entity.Movie;
 
 public interface UserService {
     // 회원 정보 리스트 테스트
     // List<Member> testList(MemberDto memberDto);
-
+    // 키 값 찾기
     Member findUsername(String memberId);
+
+    // 로그인 최종 기록 보여주기
+    List<Member> findLastLogin(Long mid);
 
     // 회원 정보 리스트
     List<Member> allList(MemberDto memberDto);
@@ -36,6 +39,9 @@ public interface UserService {
 
     // 영화 정보(감독) 리스트
     List<MovieDetailsDTO> movieDirector();
+
+    // 영화 등록
+    void addMovieWithDetails(Movie movie, List<Long> genreIds, List<String> actors, String directorName);
 
     // 영화관 지역선택 또는 영화관명 검색으로 리스트 출력
     List<TheaterDto> selectList(String state, String theaterName);
@@ -58,5 +64,8 @@ public interface UserService {
 
     // 휴면 계정 복구
     void reactivateAccount(Long mid);
+
+    // 이메일 문의 가져오기
+    List<Inquiry> inquityList(AdminInquiryDto adminInquiryDto);
 
 }
