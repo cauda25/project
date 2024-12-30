@@ -284,7 +284,7 @@ document
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                  seatNumbers: selectedSeats.map((seat) => seat.seatStatusId),
+                  seatStatuses: selectedSeats.map((seat) => seat.seatStatusId),
                   movieTitle: movieTitle,
                   screeningTime: screeningTime,
                 }),
@@ -293,7 +293,7 @@ document
             console.log(
               "서버로 전송된 데이터:",
               JSON.stringify({
-                seatNumbers: selectedSeats.map((seat) => seat.seatStatusId),
+                seatStatuses: selectedSeats.map((seat) => seat.seatStatusId),
                 movieTitle: movieTitle,
                 screeningTime: screeningTime,
               })
