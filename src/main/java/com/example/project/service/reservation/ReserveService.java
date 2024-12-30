@@ -55,6 +55,8 @@ public interface ReserveService {
 
         void removeSeatFromReserve(Reserve reserve, SeatStatus seatStatus);
 
+        List<ReserveDto> getMemberReservations(Long mid);
+
         default Reserve dtoToEntity(ReserveDto reserveDto) {
                 return Reserve.builder()
                                 .reserveId(reserveDto.getReserveId())
@@ -76,6 +78,7 @@ public interface ReserveService {
                                 .screeningTime(reserve.getScreeningTime())
                                 .totalPrice(reserve.getTotalPrice())
                                 .mid(reserve.getMember().getMid())
+                                .memberId(reserve.getMember().getMemberId())
                                 .seatNumbers(
                                                 reserve.getSeatStatuses().stream()
                                                                 .map(SeatStatus::getSeatStatusId)

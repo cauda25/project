@@ -22,10 +22,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.MovieDto;
-import com.example.project.dto.ReservationDto;
+import com.example.project.dto.reserve.ReserveDto;
 import com.example.project.service.FavoriteService;
 import com.example.project.service.MemberService;
-import com.example.project.service.ReservationService;
+import com.example.project.service.reservation.ReserveService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -41,7 +41,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final FavoriteService favoriteService;
-    private final ReservationService reservationService;
+    private final ReserveService reserveService;
 
     @GetMapping("/login")
     public void loginRedirect() {
@@ -178,7 +178,7 @@ public class MemberController {
     @GetMapping("/reservation")
     public String getReservation(@AuthenticationPrincipal AuthMemberDto authMemberDto, Model model) {
         Long memberId = authMemberDto.getMemberId(); // 인증된 사용자 ID 가져오기
-        List<ReservationDto> reservation = reservationService.getMemberReservations(memberId);
+        List<ReserveDto> reservation = reserveService.getMemberReservations(memberId);
         model.addAttribute("reservation", reservation);
         return "member/reservation"; // 템플릿 경로 수정 (member 디렉토리로 변경)
     }

@@ -145,14 +145,13 @@ public class ReserveController {
     public ResponseEntity<?> completePayment(@RequestBody ReserveDto reserveDto, HttpSession session) {
         try {
             // 세션에서 회원 정보 가져오기
-            Member loggedInMember = (Member) session.getAttribute("loggedInMember");
-            if (loggedInMember == null) {
-                throw new IllegalStateException("로그인된 회원이 없습니다.");
-            }
+            // Member loggedInMember = (Member) session.getAttribute("loggedInMember");
+            // if (loggedInMember == null) {
+            // throw new IllegalStateException("로그인된 회원이 없습니다.");
+            // }
 
             // 회원 정보를 ReserveDto에 매핑
-            reserveDto.setMid(loggedInMember.getMid()); // PK 값
-            reserveDto.setMemberId(loggedInMember.getMemberId()); // 회원가입 시 설정된 ID
+            // reserveDto.setMid(loggedInMember.getMid()); // PK 값
 
             // 예약 정보 저장
             Reserve reserve = reserveService.saveReservation(reserveDto);
