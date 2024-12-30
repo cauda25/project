@@ -66,6 +66,7 @@ public class SecurityConfig {
                                                 .requestMatchers("/review/**").authenticated() // 리뷰 관련 기타 요청 인증 필요
                                                 .requestMatchers("/member/mypage").authenticated() // 마이페이지 접근은 인증 필요
                                                 .requestMatchers("/mypage/reservations").authenticated() // 예매 내역 접근은 인증
+                                                .requestMatchers("/cart/main").authenticated()
                                                 .requestMatchers("/dormancy").permitAll()
                                                 // 필요
                                                 .anyRequest().permitAll() // 그 외 요청은 모두 허용

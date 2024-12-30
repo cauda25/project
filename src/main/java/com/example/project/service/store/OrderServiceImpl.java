@@ -77,4 +77,11 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
     }
 
+    @Override
+    public void setStatusCompleted(Long id) {
+        Order order = orderRepository.findById(id).get();
+        order.setStatus(OrderStatus.COMPLETED);
+        orderRepository.save(order);
+    }
+
 }

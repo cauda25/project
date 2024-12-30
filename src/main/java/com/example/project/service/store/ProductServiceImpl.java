@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.example.project.dto.store.ProductDto;
+import com.example.project.entity.constant.ProductCategory;
 import com.example.project.repository.store.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto getProduct(Long id) {
         return entityToDto(productRepository.findById(id).get());
+    }
+
+    @Override
+    public List<ProductDto> getProductDtosByCategory(ProductCategory productCategory) {
+        return productRepository.findByCategory(productCategory)
+                .stream()
+                .map(entity -> entityToDto(entity))
+                .collect(Collectors.toList());
     }
 
 }

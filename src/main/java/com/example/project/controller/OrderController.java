@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.project.dto.AuthMemberDto;
@@ -55,9 +56,27 @@ public class OrderController {
     }
 
     @GetMapping("/payment-success")
-    public void getSuccess() {
-        log.info("결제 성공 요청");
+    public void getSuccess(@RequestParam Long orderId) {
+        log.info("결제 성공 요청 {}", orderId);
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        AuthMemberDto authMemberDto = (AuthMemberDto) authentication.getPrincipal();
+        MemberDto memberDto = authMemberDto.getMemberDto();
 
+        orderService.setStatusCompleted(orderId);
+        cartItemService.deleteByOrderId(orderId, memberDto.getMid());
+    }
+
+    @GetMapping("/payment-history")
+    public void getHistory() {
+        log.info("결제 내역 요청 {}");
+        // SecurityContext context = SecurityContextHolder.getContext();
+        // Authentication authentication = context.getAuthentication();
+        // AuthMemberDto authMemberDto = (AuthMemberDto) authentication.getPrincipal();
+        // MemberDto memberDto = authMemberDto.getMemberDto();
+
+        // orderService.setStatusCompleted(orderId);
+        // cartItemService.deleteByOrderId(orderId, memberDto.getMid());
     }
 
 }

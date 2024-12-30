@@ -16,6 +16,8 @@ public interface CartItemService {
 
     void deleteCartItem(Long id);
 
+    void deleteByOrderId(Long orderId, Long memberId);
+
     public default CartItemDto entityToDto(CartItem cartItem, Product product) {
 
         ProductDto productDto = ProductDto.builder()

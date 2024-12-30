@@ -15,6 +15,8 @@ public interface OrderService {
 
     void setStatusCancelled(Long id);
 
+    void setStatusCompleted(Long id);
+
     public default OrderDto entityToDto(Order order) {
         return OrderDto.builder()
                 .id(order.getId())

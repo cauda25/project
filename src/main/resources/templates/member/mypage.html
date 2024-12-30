@@ -90,6 +90,21 @@
           >
             예매내역
           </a>
+          <a
+            th:href="@{/payment-history}"
+            style="
+              background-color: skyblue;
+              color: #fff;
+              border: none;
+              border-radius: 5px;
+              padding: 10px 20px;
+              font-size: 16px;
+              text-decoration: none;
+              text-align: center;
+            "
+          >
+            주문내역
+          </a>
           <form th:action="@{/member/logout}" method="post" style="margin: 0">
             <button
               type="submit"
