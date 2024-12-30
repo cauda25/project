@@ -17,7 +17,6 @@ public class ReviewDto {
 
     @NotNull
     private Long movieId; // 회원 ID
-    private String memberName; // 회원 이름 (리스트 표시용) // 영화 ID
     private String content; // 리뷰 내용
     private int rating; // 평점 (1~5)
     private String createdAt; // 작성 시간

@@ -6,13 +6,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-<<<<<<< HEAD
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-=======
->>>>>>> main
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,15 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-<<<<<<< HEAD
-import com.example.project.dto.AuthMemberDto;
-import com.example.project.dto.MemberDto;
 import com.example.project.dto.ReviewDto;
-import com.example.project.entity.Member;
-import com.example.project.service.MemberService;
-=======
-import com.example.project.dto.ReviewDto;
->>>>>>> main
 import com.example.project.service.ReviewService;
 
 import jakarta.validation.Valid;
@@ -49,7 +34,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    private final MemberService memberService;
+    // private final MemberService memberService;
 
     // @PostMapping("/submit")
     // public String submitReview(@RequestBody Long memberId,
@@ -74,50 +59,6 @@ public class ReviewController {
     // }
 
     @PostMapping("/submit")
-<<<<<<< HEAD
-    public String submitReview(@ModelAttribute ReviewDto reviewDto) {
-        // @ModelAttribute를 사용해 자동으로 DTO 매핑
-        Long memberId = reviewDto.getMemberId();
-        Long movieId = reviewDto.getMovieId();
-
-        // 디버깅 로그
-        System.out.println("Received Member ID: " + memberId);
-        System.out.println("Received Movie ID: " + movieId);
-
-        // 추가 로직 수행
-        reviewService.saveReview(reviewDto);
-
-        return "redirect:/movieDetail?id=" + movieId; // 상세 페이지로 리다이렉트
-    }
-
-    @GetMapping("/movie/{movieId}")
-    public ResponseEntity<List<ReviewDto>> getReviews(@PathVariable Long movieId) {
-        List<ReviewDto> reviews = reviewService.getReviewsByMovieId(movieId);
-        return ResponseEntity.ok(reviews);
-    }
-
-    @GetMapping("/movieDetail")
-    public String getMovieDetail(
-            Model model,
-            @AuthenticationPrincipal AuthMemberDto authMemberDto,
-            @RequestParam("id") Long movieId) {
-        if (authMemberDto == null) {
-            throw new IllegalArgumentException("로그인된 사용자 정보가 없습니다.");
-        }
-
-        MemberDto memberDto = authMemberDto.getMemberDto();
-        if (memberDto == null) {
-            throw new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
-        }
-
-        System.out.println("Member ID: " + memberDto.getMid());
-        System.out.println("Movie ID: " + movieId);
-
-        model.addAttribute("currentMemberId", memberDto.getMid());
-        model.addAttribute("currentMovieId", movieId);
-
-        return "movieDetail";
-=======
     public ResponseEntity<ReviewDto> submitReview(@RequestBody ReviewDto reviewDto) {
         log.info("리뷰: {}", reviewDto);
 
@@ -128,7 +69,6 @@ public class ReviewController {
     @GetMapping("/get")
     public ResponseEntity<ReviewDto> getReview(@RequestBody ReviewDto reviewDto) {
         return new ResponseEntity<>(reviewDto, HttpStatus.OK);
->>>>>>> main
     }
 
 }
