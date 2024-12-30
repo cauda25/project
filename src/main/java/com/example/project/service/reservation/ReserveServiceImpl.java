@@ -224,6 +224,9 @@ public class ReserveServiceImpl implements ReserveService {
     @Transactional
     @Override
     public Reserve saveReservation(ReserveDto reserveDto) {
+        Member member = memberRepository.findById(reserveDto.getMid())
+                .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다. ID: " + reserveDto.getMid()));
+
         List<Long> seatStatusIds = reserveDto.getSeatNumbers();
         if (seatStatusIds == null || seatStatusIds.isEmpty()) {
             throw new IllegalArgumentException("좌석 정보가 없습니다.");
@@ -248,6 +251,7 @@ public class ReserveServiceImpl implements ReserveService {
         reserve.setTotalPrice(calculateTotalPrice(seatStatuses));
         reserve.setMovieTitle(reserveDto.getMovieTitle());
         reserve.setScreeningTime(reserveDto.getScreeningTime());
+        reserve.setMember(member);
         // reserve.setMember(guestMember); // GUEST Member 연결
         return reserveRepository.save(reserve);
 

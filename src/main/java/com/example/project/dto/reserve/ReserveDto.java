@@ -30,6 +30,7 @@ public class ReserveDto {
     private List<Long> seatNumbers;
 
     private Long mid;
+    private String memberId;
 
     private LocalDateTime regDate;
     private LocalDateTime updateDate;

@@ -24,12 +24,13 @@ import com.example.project.dto.reserve.ReserveDto;
 import com.example.project.dto.reserve.ScreeningDto;
 import com.example.project.dto.reserve.SeatStatusDto;
 import com.example.project.dto.reserve.TheaterDto;
-
+import com.example.project.entity.Member;
 import com.example.project.entity.constant.SeatStatusEnum;
 import com.example.project.entity.reserve.Reserve;
 
 import com.example.project.service.reservation.ReserveService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -141,8 +142,18 @@ public class ReserveController {
     }
 
     @PostMapping("/confirm-payment")
-    public ResponseEntity<?> completePayment(@RequestBody ReserveDto reserveDto) {
+    public ResponseEntity<?> completePayment(@RequestBody ReserveDto reserveDto, HttpSession session) {
         try {
+            // 세션에서 회원 정보 가져오기
+            Member loggedInMember = (Member) session.getAttribute("loggedInMember");
+            if (loggedInMember == null) {
+                throw new IllegalStateException("로그인된 회원이 없습니다.");
+            }
+
+            // 회원 정보를 ReserveDto에 매핑
+            reserveDto.setMid(loggedInMember.getMid()); // PK 값
+            reserveDto.setMemberId(loggedInMember.getMemberId()); // 회원가입 시 설정된 ID
+
             // 예약 정보 저장
             Reserve reserve = reserveService.saveReservation(reserveDto);
 
