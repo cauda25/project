@@ -11,6 +11,10 @@ public interface OrderService {
 
     OrderDto getOrderDto(Long memberId, OrderStatus orderStatus);
 
+    Long createOrder(Long memberId);
+
+    void setStatusCancelled(Long id);
+
     public default OrderDto entityToDto(Order order) {
         return OrderDto.builder()
                 .id(order.getId())

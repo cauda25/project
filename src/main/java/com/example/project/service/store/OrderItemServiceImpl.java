@@ -11,12 +11,17 @@ import com.example.project.dto.store.ProductDto;
 import com.example.project.entity.Member;
 import com.example.project.entity.MemberFavoriteMovie;
 import com.example.project.entity.constant.OrderStatus;
+import com.example.project.entity.store.Cart;
+import com.example.project.entity.store.CartItem;
 import com.example.project.entity.store.Order;
 import com.example.project.entity.store.OrderItem;
+import com.example.project.repository.store.CartItemRepository;
+import com.example.project.repository.store.CartRepository;
 import com.example.project.repository.store.OrderItemRepository;
 import com.example.project.repository.store.OrderRepository;
 import com.example.project.repository.store.ProductRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -27,6 +32,9 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+    private final ProductRepository productRepository;
 
     @Override
     public void addToCart(Long memberId, OrderItemDto orderItemDto) {
@@ -36,9 +44,9 @@ public class OrderItemServiceImpl implements OrderItemService {
             Order cart = orderRepository.findByMemberMidAndStatus(memberId, OrderStatus.CART);
             cart.setTotalPrice(cart.getTotalPrice() + totalprice);
             orderItemDto.setOrderId(cart.getId());
-            if (orderItemRepository.existsByOrderIdAndProductId(cart.getId(), orderItemDto.getProductId())) {
+            if (orderItemRepository.existsByOrderIdAndProductId(cart.getId(), orderItemDto.getProductDto().getId())) {
                 OrderItem orderItem = orderItemRepository.findByOrderIdAndProductId(cart.getId(),
-                        orderItemDto.getProductId());
+                        orderItemDto.getProductDto().getId());
                 orderItem.setQuantity(orderItemDto.getQuantity() + orderItem.getQuantity());
                 orderItemRepository.save(orderItem);
             } else {
@@ -53,9 +61,9 @@ public class OrderItemServiceImpl implements OrderItemService {
                     .build();
             orderRepository.save(cart);
             orderItemDto.setOrderId(cart.getId());
-            if (orderItemRepository.existsByOrderIdAndProductId(cart.getId(), orderItemDto.getProductId())) {
+            if (orderItemRepository.existsByOrderIdAndProductId(cart.getId(), orderItemDto.getProductDto().getId())) {
                 OrderItem orderItem = orderItemRepository.findByOrderIdAndProductId(cart.getId(),
-                        orderItemDto.getProductId());
+                        orderItemDto.getProductDto().getId());
                 orderItem.setQuantity(orderItemDto.getQuantity() + orderItem.getQuantity());
                 orderItemRepository.save(orderItem);
             } else {
@@ -76,5 +84,31 @@ public class OrderItemServiceImpl implements OrderItemService {
         // orderItemDtos.add(entityToDto(orderItem));
         // }
         // return orderItemDtos;
+    }
+
+    @Override
+    public void insertOrderItems(Long memberId, Long orderId, List<Long> checkedItems) {
+        Long cartId = cartRepository.findByMemberMid(memberId).getId();
+        Long totalPrice = 0L;
+        for (Long checkedItem : checkedItems) {
+            CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cartId, checkedItem);
+            totalPrice += cartItem.getPrice() * cartItem.getQuantity();
+            OrderItem orderItem = OrderItem.builder()
+                    .price(cartItem.getPrice())
+                    .quantity(cartItem.getQuantity())
+                    .order(orderRepository.findById(orderId).get())
+                    .product(productRepository.findById(checkedItem).get())
+                    .build();
+            orderItemRepository.save(orderItem);
+        }
+        Order order = orderRepository.findById(orderId).get();
+        order.setTotalPrice(totalPrice);
+        orderRepository.save(order);
+    }
+
+    @Override
+    @Transactional
+    public void deleteOrderItems(Long orderId) {
+        orderItemRepository.deleteByOrderId(orderId);
     }
 }

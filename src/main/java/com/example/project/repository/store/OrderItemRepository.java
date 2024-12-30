@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 
 import com.example.project.entity.store.OrderItem;
 
@@ -16,5 +17,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     OrderItem findByOrderIdAndProductId(Long orderId, Long productId);
 
     boolean existsByOrderIdAndProductId(Long orderId, Long productId);
+
+    void deleteByOrderId(Long orderId);
 
 }

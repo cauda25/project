@@ -20,4 +20,9 @@ public class OrderItemRepositoryTest {
         System.out.println(orderItemRepository.findByOrderId(1L));
     }
 
+    @Test
+    public void deleteTest() {
+        orderItemRepository.deleteByOrderId(7L);
+    }
+
 }

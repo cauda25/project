@@ -59,4 +59,22 @@ public class OrderServiceImpl implements OrderService {
         return entityToDto(orderRepository.findByMemberMidAndStatus(memberId, orderStatus));
     }
 
+    @Override
+    public Long createOrder(Long memberId) {
+        Order order = Order.builder()
+                .status(OrderStatus.PENDING)
+                .member(Member.builder().mid(memberId).build())
+                .build();
+        orderRepository.save(order);
+
+        return order.getId();
+    }
+
+    @Override
+    public void setStatusCancelled(Long id) {
+        Order order = orderRepository.findById(id).get();
+        order.setStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order);
+    }
+
 }
