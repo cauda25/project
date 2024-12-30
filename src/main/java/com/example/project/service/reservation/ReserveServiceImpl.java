@@ -2,6 +2,7 @@ package com.example.project.service.reservation;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -16,12 +17,15 @@ import com.example.project.dto.reserve.ReserveDto;
 import com.example.project.dto.reserve.ScreeningDto;
 import com.example.project.dto.reserve.SeatStatusDto;
 import com.example.project.dto.reserve.TheaterDto;
+import com.example.project.entity.Member;
 import com.example.project.entity.Movie;
+import com.example.project.entity.constant.ReserveStatus;
 import com.example.project.entity.constant.SeatStatusEnum;
 import com.example.project.entity.reserve.Reserve;
 import com.example.project.entity.reserve.Screening;
 import com.example.project.entity.reserve.SeatStatus;
 import com.example.project.entity.reserve.Theater;
+import com.example.project.repository.MemberRepository;
 import com.example.project.repository.reserve.ReserveRepository;
 import com.example.project.repository.reserve.ScreeningRepository;
 import com.example.project.repository.reserve.SeatRepository;
@@ -39,42 +43,17 @@ public class ReserveServiceImpl implements ReserveService {
     private final ReserveRepository reserveRepository;
     private final TheaterRepository theaterRepository;
     private final ScreeningRepository screeningRepository;
-    private final SeatRepository seatRepository;
+    private final MemberRepository memberRepository;
     private final SeatStatusRepository seatStatusRepository;
 
     @Override
-    public Long createReserve(ReserveDto reserveDto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createReserve'");
-    }
-
-    @Override
-    public ReserveDto getReserve(Long reserveId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getReserve'");
-    }
-
-    @Override
     public List<ReserveDto> getAllReserves() {
-        // Reserve 엔티티 리스트를 조회
+
         List<Reserve> reserves = reserveRepository.findAll();
 
-        // Reserve 엔티티를 ReserveDto로 변환하여 반환
         return reserves.stream()
                 .map(reserve -> entityToDto(reserve))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public ReserveDto updateReserve(Long reserveId, ReserveDto reserveDto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateReserve'");
-    }
-
-    @Override
-    public void deleteReserve(Long reserveId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteReserve'");
     }
 
     @Override
@@ -190,14 +169,21 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Transactional
     @Override
-    public void updateSeatStatus(Long seatStatusId, SeatStatusEnum seatStatusEnum) {
+    public void updateSeatStatus(Long seatStatusId, SeatStatusEnum targetStatus) {
         SeatStatus seatStatus = seatStatusRepository.findById(seatStatusId)
                 .orElseThrow(() -> new IllegalArgumentException("좌석 정보를 찾을 수 없습니다. ID: " + seatStatusId));
-        if (seatStatus.getSeatStatusEnum() != SeatStatusEnum.AVAILABLE) {
-            throw new IllegalStateException("이미 예약된 좌석입니다: " + seatStatusId);
+
+        SeatStatusEnum currentStatus = seatStatus.getSeatStatusEnum();
+
+        // 상태 전이 검증 로직
+        if ((currentStatus == SeatStatusEnum.AVAILABLE && targetStatus == SeatStatusEnum.RESERVED) ||
+                (currentStatus == SeatStatusEnum.RESERVED && targetStatus == SeatStatusEnum.SOLD)) {
+            seatStatus.setSeatStatusEnum(targetStatus);
+            seatStatusRepository.save(seatStatus);
+        } else {
+            throw new IllegalStateException("상태 전이가 허용되지 않습니다. 현재 상태: "
+                    + currentStatus + ", 대상 상태: " + targetStatus);
         }
-        seatStatus.setSeatStatusEnum(seatStatusEnum);
-        seatStatusRepository.save(seatStatus);
     }
 
     @Override
@@ -215,31 +201,56 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public String generateReservationNumber() {
-        String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        long count = reserveRepository.countByRegDate(LocalDate.now()) + 1; // 당일 예약 순번
-        return currentDate + String.format("%04d", count); // yyyyMMdd + 순번
+    public Long generateReservationNumber() {
+        // 현재 날짜를 LocalDateTime으로 가져오기
+        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+
+        // 같은 날짜에 생성된 예약 건수를 카운트
+        Long count = reserveRepository.countByRegDateBetween(startOfDay, endOfDay);
+
+        // 예약 번호 생성 (현재 날짜 + 카운트 + 1)
+        return Long.valueOf(
+                String.format("%s%04d", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")), count + 1));
     }
 
     @Override
-    public Reserve saveReservation(Reserve reserve, List<Long> seatStatusIds) {
-        // 예매번호 생성
-        String reservationNumberString = generateReservationNumber();
-        Long reservationNumber = Long.valueOf(reservationNumberString); // Long 타입으로 변환
-        reserve.setReserveNo(reservationNumber);
+    public int calculateTotalPrice(List<SeatStatus> seatStatuses) {
+        return (int) seatStatuses.stream()
+                .mapToLong(seatStatus -> seatStatus.getSeat().getAuditorium().getPrice())
+                .sum();
+    }
 
-        // 좌석 상태 업데이트 및 연결
+    @Transactional
+    @Override
+    public Reserve saveReservation(ReserveDto reserveDto) {
+        List<Long> seatStatusIds = reserveDto.getSeatNumbers();
+        if (seatStatusIds == null || seatStatusIds.isEmpty()) {
+            throw new IllegalArgumentException("좌석 정보가 없습니다.");
+        }
         List<SeatStatus> seatStatuses = seatStatusRepository.findAllById(seatStatusIds);
-        seatStatuses.forEach(seatStatus -> {
-            if (seatStatus.getSeatStatusEnum() != SeatStatusEnum.AVAILABLE) {
-                throw new IllegalStateException("예약할 수 없는 좌석이 포함되어 있습니다: " + seatStatus.getSeatStatusId());
-            }
-            seatStatus.setSeatStatusEnum(SeatStatusEnum.SOLD);
-            reserve.addSeatStatus(seatStatus); // 양방향 관계 설정
-        });
 
-        // 예매 정보 저장
+        if (seatStatuses.isEmpty()) {
+            throw new IllegalArgumentException("유효하지 않은 seatNumbers입니다: " + seatStatusIds);
+        }
+        // // 더미 Member 생성
+        // Member guestMember = memberRepository.findById(0L)
+        // .orElseGet(() -> {
+        // Member newMember = new Member();
+        // newMember.setMid(0L); // ID를 0으로 설정 (예: 더미 사용자)
+        // newMember.setName("GUEST");
+        // return memberRepository.save(newMember); // 저장
+        // });
+        Reserve reserve = new Reserve();
+        reserve.setReserveStatus(ReserveStatus.COMPLETE);
+        reserve.setReserveNo(generateReservationNumber());
+        reserve.setSeatStatuses(seatStatuses);
+        reserve.setTotalPrice(calculateTotalPrice(seatStatuses));
+        reserve.setMovieTitle(reserveDto.getMovieTitle());
+        reserve.setScreeningTime(reserveDto.getScreeningTime());
+        // reserve.setMember(guestMember); // GUEST Member 연결
         return reserveRepository.save(reserve);
+
     }
 
     @Override
@@ -248,9 +259,9 @@ public class ReserveServiceImpl implements ReserveService {
             throw new IllegalStateException("이미 예약된 좌석입니다.");
         }
 
-        reserve.addSeatStatus(seatStatus); // Reserve에 좌석 추가
+        reserve.addSeatStatus(seatStatus);
         seatStatus.setSeatStatusEnum(SeatStatusEnum.RESERVED);
-        seatStatusRepository.save(seatStatus); // 변경 사항 저장
+        seatStatusRepository.save(seatStatus);
     }
 
     @Override
@@ -259,9 +270,9 @@ public class ReserveServiceImpl implements ReserveService {
             throw new IllegalStateException("해당 좌석은 예매 목록에 없습니다.");
         }
 
-        reserve.removeSeatStatus(seatStatus); // Reserve에서 좌석 제거
+        reserve.removeSeatStatus(seatStatus);
         seatStatus.setSeatStatusEnum(SeatStatusEnum.AVAILABLE);
-        seatStatusRepository.save(seatStatus); // 변경 사항 저장
+        seatStatusRepository.save(seatStatus);
     }
 
 }

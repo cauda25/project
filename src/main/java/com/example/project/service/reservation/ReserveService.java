@@ -23,86 +23,82 @@ import com.example.project.entity.reserve.Theater;
 
 public interface ReserveService {
 
-    // CRUD
-    Long createReserve(ReserveDto reserveDto);
+        List<ReserveDto> getAllReserves();
 
-    ReserveDto getReserve(Long reserveId);
+        List<String> getAllRegions();
 
-    List<ReserveDto> getAllReserves();
+        List<TheaterDto> getTheatersByRegion(String region);
 
-    ReserveDto updateReserve(Long reserveId, ReserveDto reserveDto);
+        List<String> getMoviesByTheaterId(Long theaterId);
 
-    void deleteReserve(Long reserveId);
+        List<ScreeningDto> getScreeningsByMovieAndDate(String movieTitle, LocalDate date);
 
-    List<String> getAllRegions();
+        List<SeatStatusDto> getSeatStatuses(Long screeningId);
 
-    List<TheaterDto> getTheatersByRegion(String region);
+        Map<String, Integer> getSeatCounts(Long screeningId);
 
-    List<String> getMoviesByTheaterId(Long theaterId);
+        List<SeatStatusDto> getSeatStatusesByScreening(Long screeningId);
 
-    List<ScreeningDto> getScreeningsByMovieAndDate(String movieTitle, LocalDate date);
+        ScreeningDto getScreeningById(Long screeningId);
 
-    List<SeatStatusDto> getSeatStatuses(Long screeningId);
+        void updateSeatStatus(Long seatStatusId, SeatStatusEnum seatStatusEnum);
 
-    Map<String, Integer> getSeatCounts(Long screeningId);
+        void resetExpiredReservations();
 
-    List<SeatStatusDto> getSeatStatusesByScreening(Long screeningId);
+        Long generateReservationNumber();
 
-    ScreeningDto getScreeningById(Long screeningId);
+        int calculateTotalPrice(List<SeatStatus> seatStatuses);
 
-    void updateSeatStatus(Long seatStatusId, SeatStatusEnum seatStatusEnum);
+        Reserve saveReservation(ReserveDto reserveDto);
 
-    void resetExpiredReservations();
+        void addSeatToReserve(Reserve reserve, SeatStatus seatStatus);
 
-    String generateReservationNumber();
+        void removeSeatFromReserve(Reserve reserve, SeatStatus seatStatus);
 
-    Reserve saveReservation(Reserve reserve, List<Long> seatIds);
+        default Reserve dtoToEntity(ReserveDto reserveDto) {
+                return Reserve.builder()
+                                .reserveId(reserveDto.getReserveId())
+                                .reserveNo(reserveDto.getReserveNo())
+                                .reserveStatus(ReserveStatus.valueOf(reserveDto.getReserveStatus()))
+                                .movieTitle(reserveDto.getMovieTitle())
+                                .screeningTime(reserveDto.getScreeningTime())
+                                .totalPrice(reserveDto.getTotalPrice())
+                                .member(Member.builder().mid(reserveDto.getMid()).build())
+                                .build();
+        }
 
-    void addSeatToReserve(Reserve reserve, SeatStatus seatStatus);
+        default ReserveDto entityToDto(Reserve reserve) {
+                return ReserveDto.builder()
+                                .reserveId(reserve.getReserveId())
+                                .reserveNo(reserve.getReserveNo())
+                                .reserveStatus(reserve.getReserveStatus().toString())
+                                .movieTitle(reserve.getMovieTitle())
+                                .screeningTime(reserve.getScreeningTime())
+                                .totalPrice(reserve.getTotalPrice())
+                                .mid(reserve.getMember().getMid())
+                                .seatNumbers(
+                                                reserve.getSeatStatuses().stream()
+                                                                .map(SeatStatus::getSeatStatusId)
+                                                                .collect(Collectors.toList()))
+                                .theaterName(
+                                                reserve.getSeatStatuses().isEmpty()
+                                                                ? null
+                                                                : reserve.getSeatStatuses().get(0).getScreening()
+                                                                                .getAuditorium().getTheater()
+                                                                                .getTheaterName())
+                                .auditoriumNo(
+                                                reserve.getSeatStatuses().isEmpty()
+                                                                ? null
+                                                                : reserve.getSeatStatuses().get(0).getScreening()
+                                                                                .getAuditorium().getAuditoriumNo())
+                                .auditoriumName(
+                                                reserve.getSeatStatuses().isEmpty()
+                                                                ? null
+                                                                : reserve.getSeatStatuses().get(0).getScreening()
+                                                                                .getAuditorium().getAuditoriumName())
+                                .regDate(reserve.getRegDate())
+                                .updateDate(reserve.getUpdateDate())
+                                .build();
 
-    void removeSeatFromReserve(Reserve reserve, SeatStatus seatStatus);
-
-    default Reserve dtoToEntity(ReserveDto reserveDto) {
-        return Reserve.builder()
-                .reserveId(reserveDto.getReserveId())
-                .reserveNo(reserveDto.getReserveNo())
-                .reserveStatus(ReserveStatus.valueOf(reserveDto.getReserveStatus()))
-                .movieTitle(reserveDto.getMovieTitle())
-                .screeningTime(reserveDto.getScreeningTime())
-                .totalPrice(reserveDto.getTotalPrice())
-                .member(Member.builder().mid(reserveDto.getMid()).build())
-                .build();
-    }
-
-    default ReserveDto entityToDto(Reserve reserve) {
-        return ReserveDto.builder()
-                .reserveId(reserve.getReserveId())
-                .reserveNo(reserve.getReserveNo())
-                .reserveStatus(reserve.getReserveStatus().toString())
-                .movieTitle(reserve.getMovieTitle())
-                .screeningTime(reserve.getScreeningTime())
-                .totalPrice(reserve.getTotalPrice())
-                .mid(reserve.getMember().getMid())
-                .seatNumbers(
-                        reserve.getSeatStatuses().stream()
-                                .map(SeatStatus::getSeatStatusId)
-                                .collect(Collectors.toList()))
-                .theaterName(
-                        reserve.getSeatStatuses().isEmpty()
-                                ? null
-                                : reserve.getSeatStatuses().get(0).getScreening().getAuditorium().getTheater()
-                                        .getTheaterName())
-                .auditoriumNo(
-                        reserve.getSeatStatuses().isEmpty()
-                                ? null
-                                : reserve.getSeatStatuses().get(0).getScreening().getAuditorium().getAuditoriumNo())
-                .auditoriumName(
-                        reserve.getSeatStatuses().isEmpty()
-                                ? null
-                                : reserve.getSeatStatuses().get(0).getScreening().getAuditorium().getAuditoriumName())
-                .regDate(reserve.getRegDate())
-                .updateDate(reserve.getUpdateDate())
-                .build();
-
-    }
+        }
 }

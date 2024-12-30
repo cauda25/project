@@ -204,7 +204,7 @@ tbody td {
   line-height: 1.5;
 }
 .selection-summary p {
-  margin: 0; /* 기본 마진 제거 */
+  margin: 0;
 }
 
 .selection-summary strong {
