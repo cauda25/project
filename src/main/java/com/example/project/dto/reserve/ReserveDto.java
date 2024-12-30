@@ -1,6 +1,7 @@
 package com.example.project.dto.reserve;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.example.project.entity.constant.ReserveStatus;
 
@@ -16,29 +17,19 @@ import lombok.NoArgsConstructor;
 public class ReserveDto {
     private Long reserveId; // 예매pk
     private Long reserveNo; // 예매번호
+    private String reserveStatus;
+    private String movieTitle;
+    private LocalDateTime screeningTime;
+    private int totalPrice;
 
-    // 극장 정보
-    private Long theaterId;
     private String theaterName;
 
-    // 상영관 정보
     private Long auditoriumNo;
     private String auditoriumName;
-    private Long price;
 
-    // 좌석 정보
-    private Long seatId;
-    private String rowNum;
-    private Long seatNum;
+    private List<Long> seatNumbers;
 
-    // 회원 정보
     private Long mid;
-
-    // 영화 정보
-    private Long id;
-    private String title;
-
-    private ReserveStatus status;
 
     private LocalDateTime regDate;
     private LocalDateTime updateDate;

@@ -1,11 +1,14 @@
 package com.example.project.service.reservation;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.example.project.dto.MovieDto;
@@ -14,6 +17,7 @@ import com.example.project.dto.reserve.ScreeningDto;
 import com.example.project.dto.reserve.SeatStatusDto;
 import com.example.project.dto.reserve.TheaterDto;
 import com.example.project.entity.Movie;
+import com.example.project.entity.constant.SeatStatusEnum;
 import com.example.project.entity.reserve.Reserve;
 import com.example.project.entity.reserve.Screening;
 import com.example.project.entity.reserve.SeatStatus;
@@ -24,6 +28,7 @@ import com.example.project.repository.reserve.SeatRepository;
 import com.example.project.repository.reserve.SeatStatusRepository;
 import com.example.project.repository.reserve.TheaterRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -181,6 +186,82 @@ public class ReserveServiceImpl implements ReserveService {
                 .auditoriumNo(screening.getAuditorium().getAuditoriumNo())
                 .auditoriumName(screening.getAuditorium().getAuditoriumName())
                 .build();
+    }
+
+    @Transactional
+    @Override
+    public void updateSeatStatus(Long seatStatusId, SeatStatusEnum seatStatusEnum) {
+        SeatStatus seatStatus = seatStatusRepository.findById(seatStatusId)
+                .orElseThrow(() -> new IllegalArgumentException("좌석 정보를 찾을 수 없습니다. ID: " + seatStatusId));
+        if (seatStatus.getSeatStatusEnum() != SeatStatusEnum.AVAILABLE) {
+            throw new IllegalStateException("이미 예약된 좌석입니다: " + seatStatusId);
+        }
+        seatStatus.setSeatStatusEnum(seatStatusEnum);
+        seatStatusRepository.save(seatStatus);
+    }
+
+    @Override
+    @Scheduled(fixedRate = 60000) // 1분마다 실행
+    public void resetExpiredReservations() {
+        LocalDateTime now = LocalDateTime.now();
+        List<SeatStatus> expiredSeats = seatStatusRepository.findBySeatStatusEnumAndUpdateDateBefore(
+                SeatStatusEnum.RESERVED, now.minusMinutes(5));
+
+        expiredSeats.forEach(seat -> {
+            seat.setSeatStatusEnum(SeatStatusEnum.AVAILABLE);
+        });
+
+        seatStatusRepository.saveAll(expiredSeats);
+    }
+
+    @Override
+    public String generateReservationNumber() {
+        String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        long count = reserveRepository.countByRegDate(LocalDate.now()) + 1; // 당일 예약 순번
+        return currentDate + String.format("%04d", count); // yyyyMMdd + 순번
+    }
+
+    @Override
+    public Reserve saveReservation(Reserve reserve, List<Long> seatStatusIds) {
+        // 예매번호 생성
+        String reservationNumberString = generateReservationNumber();
+        Long reservationNumber = Long.valueOf(reservationNumberString); // Long 타입으로 변환
+        reserve.setReserveNo(reservationNumber);
+
+        // 좌석 상태 업데이트 및 연결
+        List<SeatStatus> seatStatuses = seatStatusRepository.findAllById(seatStatusIds);
+        seatStatuses.forEach(seatStatus -> {
+            if (seatStatus.getSeatStatusEnum() != SeatStatusEnum.AVAILABLE) {
+                throw new IllegalStateException("예약할 수 없는 좌석이 포함되어 있습니다: " + seatStatus.getSeatStatusId());
+            }
+            seatStatus.setSeatStatusEnum(SeatStatusEnum.SOLD);
+            reserve.addSeatStatus(seatStatus); // 양방향 관계 설정
+        });
+
+        // 예매 정보 저장
+        return reserveRepository.save(reserve);
+    }
+
+    @Override
+    public void addSeatToReserve(Reserve reserve, SeatStatus seatStatus) {
+        if (seatStatus.getSeatStatusEnum() != SeatStatusEnum.AVAILABLE) {
+            throw new IllegalStateException("이미 예약된 좌석입니다.");
+        }
+
+        reserve.addSeatStatus(seatStatus); // Reserve에 좌석 추가
+        seatStatus.setSeatStatusEnum(SeatStatusEnum.RESERVED);
+        seatStatusRepository.save(seatStatus); // 변경 사항 저장
+    }
+
+    @Override
+    public void removeSeatFromReserve(Reserve reserve, SeatStatus seatStatus) {
+        if (!reserve.getSeatStatuses().contains(seatStatus)) {
+            throw new IllegalStateException("해당 좌석은 예매 목록에 없습니다.");
+        }
+
+        reserve.removeSeatStatus(seatStatus); // Reserve에서 좌석 제거
+        seatStatus.setSeatStatusEnum(SeatStatusEnum.AVAILABLE);
+        seatStatusRepository.save(seatStatus); // 변경 사항 저장
     }
 
 }

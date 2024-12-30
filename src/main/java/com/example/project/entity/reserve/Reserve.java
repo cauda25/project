@@ -1,10 +1,15 @@
 package com.example.project.entity.reserve;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.example.project.entity.BaseEntity;
 import com.example.project.entity.Member;
 import com.example.project.entity.Movie;
 import com.example.project.entity.constant.ReserveStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,6 +20,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,38 +34,40 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = { "theater", "auditorium", "member", "movie", "seat" })
+@ToString(exclude = "member")
 @Entity
 public class Reserve extends BaseEntity {
     @SequenceGenerator(name = "reserve_seq_gen", sequenceName = "reserve_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reserve_seq_gen")
     @Id
-    private Long reserveId; // 예매번호
+    private Long reserveId; // 예매pk
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private Long reserveNo; // 예매번호
 
     @Enumerated(EnumType.STRING)
     private ReserveStatus reserveStatus; // 예매상태
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "theater_id", nullable = false)
-    private Theater theater; // 극장 정보
+    private String movieTitle;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auditorium_No", nullable = false)
-    private Auditorium auditorium; // 상영관 정보
+    private LocalDateTime screeningTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seat_id", nullable = false)
-    private Seat seat; // 좌석
+    private int totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mid", nullable = false)
     private Member member; // 회원 정보
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "movie_id", nullable = false)
-    private Movie movie; // 영화 정보
+    @OneToMany(mappedBy = "reserve", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SeatStatus> seatStatuses = new ArrayList<>(); // 좌석 목록
 
+    public void addSeatStatus(SeatStatus seatStatus) {
+        seatStatuses.add(seatStatus);
+        seatStatus.setReserve(this); // 양방향 관계 설정
+    }
+
+    public void removeSeatStatus(SeatStatus seatStatus) {
+        seatStatuses.remove(seatStatus);
+        seatStatus.setReserve(null); // 양방향 관계 해제
+    }
 }

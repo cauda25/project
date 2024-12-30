@@ -1,5 +1,6 @@
 package com.example.project.repository.reserve;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +23,6 @@ public interface SeatStatusRepository extends JpaRepository<SeatStatus, Long> {
     // seat join해서 가져오기
     @Query("SELECT ss FROM SeatStatus ss JOIN FETCH ss.seat s WHERE ss.screening.screeningId = :screeningId")
     List<SeatStatus> findSeatStatusesByScreeningId(@Param("screeningId") Long screeningId);
+
+    List<SeatStatus> findBySeatStatusEnumAndUpdateDateBefore(SeatStatusEnum status, LocalDateTime time);
 }
