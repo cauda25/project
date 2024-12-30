@@ -1,4 +1,72 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/admin/layouts/layout}">
-  <div layout:fragment="content"></div>
+  <th:block layout:fragment="css"> </th:block>
+
+  <div layout:fragment="content">
+    <div
+      class="profile-container"
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 20px;
+        padding: 20px;
+        border: 1px solid lightgray;
+        border-radius: 10px;
+        background-color: #f8f9fa;
+      "
+    >
+      <!-- 왼쪽 프로필 카드 -->
+      <div
+        class="profile-card"
+        style="
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          border: 1px solid #e0e0e0;
+          border-radius: 10px;
+          background-color: white;
+        "
+      >
+        <img th:src="@{/img/119255016.1.jpg}" alt="" style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 10px" />
+        <h4>관리자님</h4>
+        <p style="font-size: 14px; color: gray">Accounts Manager</p>
+      </div>
+
+      <!-- 오른쪽 입력 폼 -->
+      <div class="form-card" style="flex: 2; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: white">
+        <h4>정보</h4>
+        <br />
+        <form>
+          <div style="margin-bottom: 10px">
+            <label for="name" style="display: block; margin-bottom: 5px">이름</label>
+            <input type="text" id="name" placeholder="관리자" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px" />
+          </div>
+
+          <div style="margin-bottom: 10px">
+            <label for="email" style="display: block; margin-bottom: 5px">이메일</label>
+            <input
+              type="text"
+              id="email"
+              placeholder="admin@gmail.com"
+              style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px"
+            />
+          </div>
+
+          <div style="margin-bottom: 10px">
+            <label for="phone" style="display: block; margin-bottom: 5px">연락처</label>
+            <input type="text" id="phone" placeholder="010-0000-0000" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px" />
+          </div>
+
+          <div>
+            <label for="message" style="display: block; margin-bottom: 5px">Message</label>
+            <textarea type="text" id="message" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px"> </textarea>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </html>

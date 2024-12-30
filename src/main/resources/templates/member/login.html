@@ -9,17 +9,13 @@
           <div class="col-lg-6">
             <div class="login__form">
               <h3>로그인</h3>
-              <form th:action="@{/member/login}" method="post">
+              <form th:action="@{/member/login}" method="post" id="loginForm">
                 <div class="input__item">
-                  <input type="text" name="username" placeholder="아이디" />
+                  <input type="text" name="username" id="username" placeholder="아이디" />
                   <span class="icon_mail"></span>
                 </div>
                 <div class="input__item">
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="비밀번호"
-                  />
+                  <input type="password" name="password" id="password" placeholder="비밀번호" />
                   <span class="icon_lock"></span>
                 </div>
                 <button type="submit" class="site-btn">로그인</button>
@@ -42,5 +38,5 @@
     </section>
   </div>
 
-  <th:block layout:fragment="js"></th:block>
+  <th:block layout:fragment="js"> </th:block>
 </html>
