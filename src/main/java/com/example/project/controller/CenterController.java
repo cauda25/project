@@ -41,13 +41,16 @@ public class CenterController {
         model.addAttribute("inquiries", inquiries);
         model.addAttribute("totalPages", inquiryService.getTotalPages());
         model.addAttribute("currentPage", page);
-        return "/center/email";
+        return "center/email";
     }
 
     @GetMapping("/counseling")
-    public String getCounseling() {
+    public String getCounseling(Model model) {
         log.info("상담 내역 요청");
-        return "/center/counseling";
+
+        List<Inquiry> inquiries = inquiryService.getAllInquiries();
+        model.addAttribute("inquiries", inquiries);
+        return "center/counseling";
     }
 
 }

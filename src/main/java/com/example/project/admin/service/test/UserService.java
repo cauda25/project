@@ -18,6 +18,7 @@ import com.example.project.entity.Genre;
 import com.example.project.entity.Inquiry;
 import com.example.project.entity.Member;
 import com.example.project.entity.Movie;
+import com.example.project.entity.User;
 
 public interface UserService {
     // 회원 정보 리스트 테스트
