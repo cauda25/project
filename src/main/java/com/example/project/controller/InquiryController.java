@@ -55,8 +55,8 @@ public class InquiryController {
     }
 
     // 이메일 삭제
-    @PostMapping("/center/email/delete")
-    public String deleteInquiry(@RequestParam("id") Long id) {
+    @PostMapping("/center/email/delete/{id}")
+    public String deleteInquiry(@PathVariable Long id) {
         inquiryService.deleteInquiry(id); // 삭제 서비스 호출
         return "redirect:/center/email";
     }

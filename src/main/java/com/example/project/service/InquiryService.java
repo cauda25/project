@@ -98,7 +98,7 @@ public class InquiryService {
                 .orElseThrow(() -> new IllegalArgumentException("Inquiry not found with id: " + id));
     }
 
-    public List<Inquiry> getInquiry() {
+    public List<Inquiry> findAll() {
         return inquiryRepository.findAll();
     }
 
@@ -109,5 +109,19 @@ public class InquiryService {
             inquiry.setAnswered(false);
         }
         return inquiry;
+    }
+
+    // ID로 문의 조회 메서드 추가
+    public Inquiry findInquiryById(Long id) {
+        return inquiryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Inquiry not found with id: " + id));
+    }
+
+    // 상담 저장
+    public void saveCounseling(String username, String content) {
+        Inquiry inquiry = new Inquiry();
+        inquiry.setUsername(username);
+        inquiry.setContent(content);
+        inquiryRepository.save(inquiry);
     }
 }
