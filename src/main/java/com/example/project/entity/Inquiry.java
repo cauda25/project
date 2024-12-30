@@ -14,11 +14,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -40,10 +42,13 @@ public class Inquiry {
     @Column(nullable = false)
     private String email;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "TEXT")
     private String content;
 
     private Boolean answered;
+
+    @Column(length = 500)
+    private String answer;
 
     @Enumerated(EnumType.STRING)
     private InquiryStatus status;
@@ -55,7 +60,7 @@ public class Inquiry {
     private String inquiryType;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     public String getCounselingType() {

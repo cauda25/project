@@ -19,12 +19,14 @@ import com.example.project.admin.repository.AdminRepository;
 import com.example.project.admin.repository.MovieAddRepository;
 import com.example.project.admin.repository.MovieStateRepository;
 import com.example.project.entity.Genre;
+import com.example.project.entity.Inquiry;
 import com.example.project.entity.Movie;
 import com.example.project.entity.MovieGenre;
 import com.example.project.entity.MoviePerson;
 import com.example.project.entity.Person;
 import com.example.project.entity.constant.MemberRole;
 import com.example.project.entity.reserve.Theater;
+import com.example.project.repository.InquiryRepository;
 import com.example.project.repository.MemberRepository;
 import com.example.project.repository.movie.GenreRepository;
 import com.example.project.repository.movie.MovieGenreRepository;
@@ -65,6 +67,8 @@ public class AdminRepositoryTest {
     private MovieStateRepository movieStateRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private InquiryRepository inquiryRepository;
 
     @Test
     public void insertAdmin() {
@@ -361,4 +365,11 @@ public class AdminRepositoryTest {
         System.out.println(memberRepository.findByLastLogin(1L));
 
     }
+
+    @Test
+    public void inquiry() {
+        System.out.println(inquiryRepository.findById(1L));
+
+    }
+
 }

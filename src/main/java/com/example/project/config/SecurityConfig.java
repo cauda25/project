@@ -21,6 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import com.example.project.admin.filter.CustomSessionCookieFilter;
 import com.example.project.admin.handler.CustomAuthenticationFailureHandler;
@@ -55,7 +56,7 @@ public class SecurityConfig {
 
                 http
                                 // 권한 설정
-                                .securityMatcher("/movie/**", "/member/**")
+                                // .securityMatcher("/movie/**", "/member/**")
                                 .userDetailsService(memberLoginServiceImpl)
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers("/css/**",
@@ -140,6 +141,7 @@ public class SecurityConfig {
 
                 // http.sessionManagement(session -> session
                 // .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                //
                 // .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession)
 
                 // );
