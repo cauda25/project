@@ -76,7 +76,7 @@
           </form> -->
         </div>
         <div class="col-md-7 col-lg-8">
-          <h4 class="mb-3 text-white">Billing address</h4>
+          <h4 class="mb-3 text-white">Shipping information</h4>
           <form class="needs-validation" novalidate>
             <div class="row g-3">
               <div class="col-12">
@@ -126,7 +126,7 @@
 
               <div class="col-12">
                 <label for="phoneNumber" class="form-label"
-                  >Phone Number
+                  >Phone number
                   <span class="text-body-secondary">(Optional)</span></label
                 >
                 <input
@@ -318,7 +318,10 @@
               </div>
             </div>
             <hr class="my-4" />
-            <button class="w-100 btn btn-primary btn-lg" type="submit">
+            <button
+              class="w-100 btn btn-primary btn-lg checkout-btn"
+              type="button"
+            >
               Continue to checkout
             </button>
           </form>
@@ -330,6 +333,10 @@
     <script>
       const orderId = "[[${orderDto.id}]]";
     </script>
+    <script
+      type="text/javascript"
+      src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"
+    ></script>
     <script th:src="@{/js/checkout.js}"></script>
     <script th:src="@{/js/order.js}"></script>
   </th:block>
