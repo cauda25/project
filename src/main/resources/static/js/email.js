@@ -30,12 +30,11 @@ document.querySelectorAll(".edit-btn").forEach((button) => {
 
 // 삭제 버튼 클릭 처리
 document.querySelectorAll(".delete-btn").forEach((button) => {
-  button.addEventListener("click", function () {
-    const id = this.getAttribute("data-id");
+  button.addEventListener("click", function (e) {
+    e.preventDefault();
+    const form = this.closest("form");
     if (confirm("정말 삭제하시겠습니까?")) {
-      fetch(`/inquiries/${id}`, { method: "DELETE" }).then(() =>
-        location.reload()
-      );
+      form.submit();
     }
   });
 });

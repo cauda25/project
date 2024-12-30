@@ -13,6 +13,7 @@ import com.example.project.admin.dto.test.MovieStateDto;
 import com.example.project.entity.Genre;
 import com.example.project.entity.Member;
 import com.example.project.entity.Movie;
+import com.example.project.entity.User;
 import com.example.project.entity.test.UserEntity;
 
 public interface UserService {
@@ -36,5 +37,7 @@ public interface UserService {
 
     // 영화관 삭제
     void delete(Long theaterId);
+
+    User getCurrentUser();
 
 }

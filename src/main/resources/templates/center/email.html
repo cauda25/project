@@ -39,7 +39,7 @@
                 </form>
               </td>
               <td>
-                <form action="/center/email/delete" method="post">
+                <form th:action="@{/center/email/delete}" method="post">
                   <input type="hidden" name="id" th:value="${inquiry.id}" />
                   <th:block th:if="${_csrf != null}">
                     <input
@@ -48,9 +48,7 @@
                       th:value="${_csrf.token}"
                     />
                   </th:block>
-                  <button class="delete-btn" th:data-id="${inquiry.id}">
-                    삭제
-                  </button>
+                  <button type="submit" class="delete-btn">삭제</button>
                 </form>
               </td>
             </tr>
