@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{/layouts/layout}">
+  <div layout:fragment="content">
+    <section class="register-form spad">
+      <div class="container">
+        <div
+          style="
+            background: #1e1e2d; /* 어두운 배경 */
+            border: 1px solid #444;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            margin: 0 auto;
+            color: #fff; /* 글씨 색상 */
+          "
+        >
+          <h3 style="text-align: center; font-weight: bold; margin-bottom: 20px; color: #ff4c4c; /* 강조색 */">휴면 계정 안내</h3>
+          <h5 style="color: #fff">
+            안녕하세요!<br />
+            회원님께서 계정의 대한 로그인을 오랫동안 해주지 않아 <br />
+            회원님의 계정이 잠에 들었습니다.
+          </h5>
+          <br />
+
+          <form th:action="@{/dormancy}" method="post">
+            <input type="hidden" name="mid" th:value="${param.mid}" />
+            <table style="background: #333; color: #fff; border: 10px solid #333; width: 100%">
+              <tr th:each="log : ${last}">
+                <td>마지막 접속일 : [[${#temporals.format(log.lastLogin, 'yyyy.MM.dd')}]]</td>
+              </tr>
+              <tr>
+                <!-- <td>휴면 계정 전환일 : yyyy.mm.dd</td> -->
+              </tr>
+            </table>
+            <br />
+            <h5 style="color: #fff">
+              회원님의 계정을 깨우고 서비스를 이용하시려면 <br />
+              <strong style="color: crimson">[휴면 해제하기]</strong>버튼을 클릭해주세요.
+            </h5>
+
+            <div style="text-align: center; margin-top: 20px">
+              <a
+                th:href="@{/movie/main}"
+                style="
+                  background-color: #fff;
+                  color: #1e1e2d;
+                  border: none;
+                  padding: 11px 50px;
+                  border-radius: 5px;
+                  cursor: pointer;
+                  font-weight: bold;
+                "
+              >
+                취소</a
+              >
+              <button
+                type="submit"
+                style="
+                  background-color: #ff4c4c;
+                  color: #1e1e2d;
+                  border: none;
+                  padding: 10px 20px;
+                  border-radius: 5px;
+                  cursor: pointer;
+                  font-weight: bold;
+                "
+              >
+                휴면 해제하기
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <th:block layout:fragment="js"> </th:block>
+</html>

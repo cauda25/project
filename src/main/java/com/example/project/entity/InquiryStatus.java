@@ -1,6 +1,8 @@
 package com.example.project.entity;
 
 public enum InquiryStatus {
-    미답변,
-    답변완료
+    PENDING, // 대기 중
+    ANSWERED, // 답변 완료
+    CLOSED // 종료
+
 }

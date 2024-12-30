@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.project.admin.Entity.constant.StatusRole;
 import com.example.project.entity.constant.MemberRole;
 
 import jakarta.persistence.CascadeType;
@@ -77,4 +78,7 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member")
     private List<MemberFavoriteMovie> memberFavoriteMovies = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private StatusRole statusRole; // 필요해서 추가합니다.
 }

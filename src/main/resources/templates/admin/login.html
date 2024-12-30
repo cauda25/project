@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/admin/css/login.css}" />
   </head>
   <body>
-    <form th:action="@{/admin/login}" method="post">
+    <form th:action="@{/admin/login}" method="post" id="loginForm">
       <h2>
         <span class="entypo-login"><i class="fa fa-sign-in"></i></span> Login
       </h2>
@@ -21,13 +21,11 @@
       <span class="entypo-key inputPassIcon">
         <i class="fa fa-key"></i>
       </span>
-      <input
-        type="password"
-        class="pass"
-        name="password"
-        placeholder="password"
-      />
+      <input type="password" class="pass" name="password" placeholder="password" />
     </form>
+    <div>
+      <p th:if="${param.error}" style="color: red; text-align: center">현재 계정을 찾을수 없습니다.</p>
+    </div>
   </body>
   <script th:src="@{/admin/js/login.js}"></script>
 </html>

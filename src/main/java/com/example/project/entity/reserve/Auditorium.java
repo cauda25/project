@@ -26,7 +26,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = { "theater", "seatStatuses", "seats" })
+@ToString(exclude = { "theater", "seats" })
 @Entity
 public class Auditorium {
     @SequenceGenerator(name = "auditorium_seq_gen", sequenceName = "auditorium_seq", allocationSize = 1)

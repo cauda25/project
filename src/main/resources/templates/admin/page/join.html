@@ -6,10 +6,11 @@
   <div layout:fragment="content">
     <div class="row">
       <div class="col-md-12 grid-margin stretch-card">
+        <form th:action="@{/admin/page/join}" method="post">
         <div class="card">
           <div class="card-body">
             <p class="card-title">
-              영화 등록 <a href="#" class="btn btn-outline-primary"> 등록 </a>
+              영화 등록 <button type="submit" class="btn btn-outline-primary"> 등록 </button>
             </p>
 
             <div class="row">
@@ -30,9 +31,9 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td><input type="text" name="" id="" /></td>
-                        <td><input type="text" name="" id="" /></td>
-                        <td><input type="text" name="" id="" /></td>
+                        <td><input type="text" name="title" id="" /></td>
+                        <td><input type="text" name="directorName" id="" /></td>
+                        <td><input type="text" name="actors" id="" /></td>
                       </tr>
                     </tbody>
                   </table>
@@ -56,7 +57,7 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td><textarea name="" id="" cols="150" rows="10"></textarea></td>
+                        <td><textarea name="overview" id="" cols="150" rows="10"></textarea></td>
                       </tr>
                     </tbody>
                   </table>
@@ -84,29 +85,13 @@
                       <tr>
                         <td>
                             <div class="select-box">장르 선택</div>
-                            <div class="checkbox-list">
-                              <label><input type="checkbox" value="액션"> 액션</label>
-                              <label><input type="checkbox" value="모험"> 모험</label>
-                              <label><input type="checkbox" value="애니메이션"> 애니메이션</label>
-                              <label><input type="checkbox" value="코미디"> 코미디</label>
-                              <label><input type="checkbox" value="범죄"> 범죄</label>
-                              <label><input type="checkbox" value="다큐멘터리"> 다큐멘터리</label>
-                              <label><input type="checkbox" value="드라마"> 드라마</label>
-                              <label><input type="checkbox" value="가족"> 가족</label>
-                              <label><input type="checkbox" value="판타지"> 판타지</label>
-                              <label><input type="checkbox" value="역사"> 역사</label>
-                              <label><input type="checkbox" value="공포"> 공포</label>
-                              <label><input type="checkbox" value="음악"> 음악</label>
-                              <label><input type="checkbox" value="미스터리"> 미스터리</label>
-                              <label><input type="checkbox" value="로맨스"> 로맨스</label>
-                              <label><input type="checkbox" value="SF"> SF</label>
-                              <label><input type="checkbox" value="TV 영화"> TV 영화</label>
-                              <label><input type="checkbox" value="스릴러"> 스릴러</label>
-                              <label><input type="checkbox" value="전쟁"> 전쟁</label>
-                              <label><input type="checkbox" value="서부"> 서부</label>
+                            <div class="checkbox-list" name="name">
+                              <label th:each="genre : ${genres}">
+                                <input type="checkbox" name="genreIds"  th:value="${genre.id}" th:text="${genre.name}">
+                              </label>
                             </div>
                         </td>
-                        <td><input type="date" name="" id="" /></td>
+                        <td><input type="date" name="releaseDate" id="" /></td>
                         <td><input type="file" name="" id="" /></td>
                       </tr>
                     </tbody>
@@ -119,6 +104,7 @@
             
           </div>
         </div>
+      </form>
       </div>
     </div>
   </div>

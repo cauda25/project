@@ -31,6 +31,7 @@ import lombok.ToString;
 @Entity
 public class Movie extends BaseEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String backdropPath;

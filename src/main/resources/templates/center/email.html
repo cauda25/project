@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
-  <div layout:fragment="content" class="bg-light">
-    <head>
-      <meta charset="UTF-8" />
-      <title>이메일 문의 게시판</title>
-      <link rel="stylesheet" th:href="@{/css/email.css}" />
-      <th:block layout:fragment="css"></th:block>
-    </head>
-    <body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>이메일 문의 게시판</title>
+    <link rel="stylesheet" th:href="@{/css/email.css}" />
+    <th:block layout:fragment="css"></th:block>
+  </head>
+  <body>
+    <div layout:fragment="content" class="bg-light">
       <h2>이메일 문의 게시판</h2>
       <div class="board-container">
         <!-- 글 작성 버튼 -->
@@ -38,7 +39,7 @@
                 </form>
               </td>
               <td>
-                <form action="/center/email/delete" method="post">
+                <form th:action="@{/center/email/delete}" method="post">
                   <input type="hidden" name="id" th:value="${inquiry.id}" />
                   <th:block th:if="${_csrf != null}">
                     <input
@@ -47,9 +48,7 @@
                       th:value="${_csrf.token}"
                     />
                   </th:block>
-                  <button class="delete-btn" th:data-id="${inquiry.id}">
-                    삭제
-                  </button>
+                  <button type="submit" class="delete-btn">삭제</button>
                 </form>
               </td>
             </tr>
@@ -108,13 +107,21 @@
           </div>
 
           <!-- 버튼들 -->
-          <button type="submit">저장</button>
-          <button type="reset">취소</button>
+          <div class="form-buttons">
+            <button type="submit">저장</button>
+            <button
+              type="button"
+              onclick="window.location.href='/center/email';"
+            >
+              취소
+            </button>
+          </div>
         </form>
       </div>
-    </body>
+    </div>
+
     <th:block layout:fragment="js">
       <script th:src="@{/js/email.js}"></script>
     </th:block>
-  </div>
+  </body>
 </html>

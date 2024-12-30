@@ -54,4 +54,10 @@ public class InquiryController {
         return ResponseEntity.ok(updatedInquiry);
     }
 
+    // 이메일 삭제
+    @PostMapping("/center/email/delete")
+    public String deleteInquiry(@RequestParam("id") Long id) {
+        inquiryService.deleteInquiry(id); // 삭제 서비스 호출
+        return "redirect:/center/email";
+    }
 }

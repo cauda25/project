@@ -3,23 +3,15 @@
   <header class="header" th:fragment="header">
     <!-- header -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-      <a
-        th:href="@{/admin/page/index}"
-        class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
-      >
+      <a th:href="@{/admin/page/index}" class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
         <h5>관리자 페이지</h5>
         <i class="fa-solid fa-screwdriver-wrench"></i>
       </a>
-      <nav
-        class="navbar-menu-wrapper d-flex align-items-center justify-content-end bg-dark"
-      >
+      <nav class="navbar-menu-wrapper d-flex align-items-center justify-content-end bg-dark">
         <div class="container-fluid">
           <h5 class="navbar-brand color_white">환영합니다</h5>
           <form class="d-flex" role="search">
-            <button class="btn btn-outline-primary" type="submit">
-              Search
-            </button>
-            <a href="#" class="btn btn-outline-primary"> 나가기 </a>
+            <a th:href="@{/admin/logout}" class="btn btn-outline-primary"> 나가기 </a>
           </form>
         </div>
       </nav>

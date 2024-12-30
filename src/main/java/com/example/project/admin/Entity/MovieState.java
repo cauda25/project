@@ -2,7 +2,6 @@ package com.example.project.admin.Entity;
 
 import java.util.List;
 
-import com.example.project.admin.Entity.constant.AdminRole;
 import com.example.project.entity.reserve.Theater;
 
 import jakarta.persistence.Column;
