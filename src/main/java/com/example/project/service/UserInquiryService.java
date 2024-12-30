@@ -23,4 +23,9 @@ public class UserInquiryService {
     public List<UserInquiry> findByUser(User user) {
         return userInquiryRepository.findByUser(user);
     }
+
+    public List<UserInquiry> getInquiriesByUser(User user) {
+        return userInquiryRepository.findByUser(user);
+    }
+
 }
