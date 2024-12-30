@@ -3,12 +3,14 @@ package com.example.project.service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.project.admin.Entity.constant.StatusRole;
 import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.entity.Member;
@@ -18,6 +20,7 @@ import com.example.project.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+// @Primary
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -43,6 +46,13 @@ public class MemberLoginServiceImpl implements UserDetailsService {
         // 최종 로그인 날짜 수정
         accessLogin(member);
 
+        // INACTIVE 상태인 경우 예외 처리
+        if (member.getStatusRole() == StatusRole.INACTIVE) {
+            throw new IllegalStateException("Inactive accounts cannot login. Please contact support.");
+        } // 필요해서 추가합니다
+
+        log.info("userEntity active {}", member);
+
         MemberDto memberDto = MemberDto.builder()
                 .mid(member.getMid())
                 .memberId(member.getMemberId())
@@ -56,6 +66,7 @@ public class MemberLoginServiceImpl implements UserDetailsService {
                 .district(member.getDistrict())
                 .point(member.getPoint())
                 .role(member.getRole())
+                .statusRole(member.getStatusRole()) // 필요해서 추가합니다
                 .build();
 
         return new AuthMemberDto(memberDto);

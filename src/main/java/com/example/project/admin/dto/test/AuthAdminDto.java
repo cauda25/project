@@ -1,4 +1,4 @@
-package com.example.project.dto;
+package com.example.project.admin.dto.test;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,16 +14,17 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class AuthAdminDto extends User{
-    
+public class AuthAdminDto extends User {
+
     private AdminDto adminDto;
 
     public AuthAdminDto(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-		super(username, password, authorities);
-	}
+        super(username, password, authorities);
+    }
 
-    public AuthAdminDto(AdminDto adminDto){
-        this(adminDto.getUserId(), adminDto.getPassword(),List.of(new SimpleGrantedAuthority("ROLE_"+adminDto.getRole())));
+    public AuthAdminDto(AdminDto adminDto) {
+        this(adminDto.getUserId(), adminDto.getPassword(),
+                List.of(new SimpleGrantedAuthority("ROLE_" + adminDto.getRole())));
         this.adminDto = adminDto;
     }
 }

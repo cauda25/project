@@ -4,7 +4,7 @@
     <head>
       <meta charset="UTF-8" />
       <title>상담 페이지</title>
-      <link rel="stylesheet" th:href="@{/css/consultation.css}" />
+      <link rel="stylesheet" th:href="@{/css/email.css}" />
     </head>
     <body>
       <h2>상담 페이지</h2>
@@ -34,21 +34,13 @@
               <td th:text="${consultation.status}"></td>
               <td>
                 <form th:action="@{/center/consultation/modify}" method="get">
-                  <input
-                    type="hidden"
-                    name="id"
-                    th:value="${consultation.id}"
-                  />
+                  <input type="hidden" name="id" th:value="${consultation.id}" />
                   <button type="submit" class="btn btn-primary">수정</button>
                 </form>
               </td>
               <td>
                 <form th:action="@{/center/consultation/delete}" method="post">
-                  <input
-                    type="hidden"
-                    name="id"
-                    th:value="${consultation.id}"
-                  />
+                  <input type="hidden" name="id" th:value="${consultation.id}" />
                   <button class="delete-btn">삭제</button>
                 </form>
               </td>

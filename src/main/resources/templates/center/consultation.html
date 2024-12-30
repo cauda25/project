@@ -4,7 +4,7 @@
     <head>
       <meta charset="UTF-8" />
       <title>상담 내역</title>
-      <link rel="stylesheet" th:href="@{/css/consultation.css}" />
+      <link rel="stylesheet" th:href="@{/css/email.css}" />
       <th:block layout:fragment="css"></th:block>
     </head>
     <body>
@@ -49,9 +49,7 @@
                 </button>
               </td>
               <td>
-                <button class="delete-btn" th:data-id="${consultation.id}">
-                  삭제
-                </button>
+                <button class="delete-btn" th:data-id="${consultation.id}">삭제</button>
               </td>
             </tr>
           </tbody>
@@ -70,11 +68,7 @@
 
       <!-- 상담 작성/수정 폼 -->
       <div id="form-container" style="display: none">
-        <form
-          th:action="@{/center/consultation/save}"
-          method="post"
-          id="consultationForm"
-        >
+        <form th:action="@{/center/consultation/save}" method="post" id="consultationForm">
           <input type="hidden" name="id" id="consultation-id" />
           <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
           <div>

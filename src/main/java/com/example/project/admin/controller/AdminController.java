@@ -6,16 +6,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.project.admin.dto.test.AdminCreateDto;
+import com.example.project.admin.dto.test.AdminInquiryDto;
 import com.example.project.admin.dto.test.MovieDetailsDTO;
 import com.example.project.admin.dto.test.MovieStateDto;
 import com.example.project.admin.service.test.UserService;
+import com.example.project.dto.GenreDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.reserve.TheaterDto;
+import com.example.project.entity.Inquiry;
 import com.example.project.entity.Member;
-import com.example.project.entity.test.UserEntity;
+import com.example.project.entity.Movie;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,29 +43,61 @@ public class AdminController {
     }
 
     @GetMapping("/user")
-    public void getUser(MemberDto memberDto, Model model) {
+    public void getUserTest(MemberDto memberDto, Long mid, Model model) {
         log.info("home 폼 요청");
         List<Member> list = userServie.allList(memberDto);
+        userServie.inactiveAccounts();
+        // userServie.reactivateAccount(uno);
         model.addAttribute("list", list);
+
+    }
+
+    @PostMapping("/user")
+    public String PostUser(Long mid) {
+        log.info("reactive 폼 요청 {}", mid);
+
+        userServie.reactivateAccount(mid);
+        return "redirect:/admin/page/user";
 
     }
 
     @GetMapping("/create")
     public void getCreate(Model model) {
         log.info("create 폼 요청");
-        // 서비스 호출
         List<MovieDetailsDTO> movieDetails = userServie.getMovieDetails();
         List<MovieDetailsDTO> movieActers = userServie.movieActers();
+        List<MovieDetailsDTO> movieDirector = userServie.movieDirector();
 
-        // 모델에 데이터 추가
         model.addAttribute("movieList", movieDetails);
         model.addAttribute("movieActers", movieActers);
+        model.addAttribute("movieDirector", movieDirector);
     }
 
     @GetMapping("/join")
-    public void getJoin() {
+    public void getJoin(Model model) {
         log.info("join 폼 요청");
+        List<GenreDto> genre = userServie.getAllGenres();
 
+        model.addAttribute("genres", genre);
+    }
+
+    @PostMapping("/join")
+    public String postMethodName(@ModelAttribute AdminCreateDto adminCreateDto) {
+        log.info("어드민 등록 폼 요청 {}", adminCreateDto);
+        Movie movie = Movie.builder()
+                .title(adminCreateDto.getTitle())
+                .overview(adminCreateDto.getOverview())
+                .releaseDate(adminCreateDto.getReleaseDate())
+                .build();
+
+        // 서비스 호출
+        userServie.addMovieWithDetails(
+                movie,
+                adminCreateDto.getGenreIds(),
+                adminCreateDto.getActors(),
+                adminCreateDto.getDirectorName());
+
+        return "redirect:/admin/page/create";
     }
 
     @GetMapping({ "/movie", "/movieAdd" })
@@ -91,12 +128,12 @@ public class AdminController {
 
     }
 
-    // @PostMapping("/remove")
-    // public String postRemove(Long tno) {
-    // log.info("영화관삭제 폼 요청 {} ", tno);
-    // userServie.delete(tno);
+    @GetMapping({ "/answer", "/answerList" })
+    public void getAnswer(AdminInquiryDto adminInquiryDto, Model model) {
+        log.info("home 폼 요청");
+        List<Inquiry> inquiList = userServie.inquityList(adminInquiryDto);
 
-    // return "redirect:/admin/page/movie";
-    // }
+        model.addAttribute("inquiry", inquiList);
+    }
 
 }

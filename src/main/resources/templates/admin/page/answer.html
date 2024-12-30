@@ -6,11 +6,11 @@
   <div layout:fragment="content">
     <div class="row">
       <div class="col-md-12 grid-margin stretch-card">
-        <form th:action="@{/admin/page/join}" method="post">
+        <form action="" method="post">
         <div class="card">
           <div class="card-body">
             <p class="card-title">
-              영화 등록 <button type="submit" class="btn btn-outline-primary"> 등록 </button>
+              문의 <button type="submit" class="btn btn-outline-primary"> 등록 </button>
             </p>
 
             <div class="row">
@@ -19,21 +19,46 @@
                   <table
                     id="example"
                     class="display expandable-table"
-                    style="width: 100%"
+                    style="width: 50%"
                   >
                     <thead>
                       <tr>
-                        <th>제목</th>
-                        <th>감독</th>
-                        <th>배우</th>
+                        <th>문의 번호</th>
+                        <th>문의 이메일</th>
+                        
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
+                      <tr th:each="list : ${inquiry}">
+                        <td th:text="${list.id}"></td>
+                        <td th:text="${list.email}"></td>
+                        
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table
+                    id="example"
+                    class="display expandable-table"
+                    style="width: 50%"
+                  >
+                    <thead>
                       <tr>
-                        <td><input type="text" name="title" id="" /></td>
-                        <td><input type="text" name="directorName" id="" /></td>
-                        <td><input type="text" name="actors" id="" /></td>
+                        <th>문의 내용</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="list : ${inquiry}">
+                        <td th:text="${list.email}"></td>
+                        
                       </tr>
                     </tbody>
                   </table>
@@ -51,13 +76,13 @@
                   >
                     <thead>
                       <tr>
-                        <th>상세 정보</th>
+                        <th>답변</th>
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td><textarea name="overview" id="" cols="150" rows="10"></textarea></td>
+                        <td><textarea name="" id="" cols="150" rows="10"></textarea></td>
                       </tr>
                     </tbody>
                   </table>
@@ -65,43 +90,7 @@
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-12">
-                <div class="table-responsive">
-                  <table
-                    id="example"
-                    class="display expandable-table"
-                    style="width: 100%"
-                  >
-                    <thead>
-                      <tr>
-                        <th>장르</th>
-                        <th>개봉일</th>
-                        <th>포스터</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                            <div class="select-box">장르 선택</div>
-                            <div class="checkbox-list" name="name">
-                              <label th:each="genre : ${genres}">
-                                <input type="checkbox" name="genreIds"  th:value="${genre.id}" th:text="${genre.name}">
-                              </label>
-                            </div>
-                        </td>
-                        <td><input type="date" name="releaseDate" id="" /></td>
-                        <td><input type="file" name="" id="" /></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            
-            
+          
           </div>
         </div>
       </form>
