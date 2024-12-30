@@ -7,6 +7,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 
+import com.example.project.entity.BaseEntity;
 import com.example.project.entity.constant.SeatStatusEnum;
 
 import jakarta.persistence.Entity;
@@ -25,9 +26,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = { "auditorium", "seat" })
+@ToString(exclude = { "screening", "seat", "reserve" })
 @Entity
-public class SeatStatus {
+public class SeatStatus extends BaseEntity {
     @SequenceGenerator(name = "seat_status_seq", sequenceName = "seat_status_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seat_status_seq")
     @Id
@@ -43,5 +44,17 @@ public class SeatStatus {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "screening_id", nullable = false)
     private Screening screening;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reserve_id")
+    private Reserve reserve;
+
+    public Reserve getReserve() {
+        return reserve;
+    }
+
+    public void setReserve(Reserve reserve) {
+        this.reserve = reserve;
+    }
 
 }

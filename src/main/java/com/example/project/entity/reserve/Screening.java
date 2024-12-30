@@ -21,11 +21,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "auditorium")
 @Builder
 @Entity
 public class Screening {
@@ -40,9 +42,7 @@ public class Screening {
 
     private String runtime;
 
-    private LocalDate openDate;
-
-    private LocalDate closeDate;
+    private LocalDate screeningDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "auditorium_no", nullable = false)

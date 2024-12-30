@@ -1,5 +1,7 @@
 package com.example.project.dto.reserve;
 
+import java.time.LocalDateTime;
+
 import com.example.project.entity.constant.SeatStatusEnum;
 
 import lombok.AllArgsConstructor;
@@ -18,4 +20,7 @@ public class SeatStatusDto {
     private Long seatNum;
     private SeatStatusEnum status;
     private String auditoriumName;
+    private Long price;
+    private LocalDateTime regDate;
+    private LocalDateTime updateDate;
 }

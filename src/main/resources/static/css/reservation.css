@@ -1,7 +1,7 @@
 .table {
   table-layout: fixed;
-  width: 100%;
-  max-height: 400px;
+  width: 1140px;
+  max-height: 500px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -12,7 +12,8 @@ th {
 
 tbody td {
   vertical-align: top;
-  max-height: 400px;
+  max-height: 500px;
+  padding: 8px;
 }
 
 .fw-bold.clicked {
@@ -31,7 +32,7 @@ tbody td {
   text-align: left !important;
   font-weight: bold;
   color: black;
-  max-height: 400px;
+  max-height: 500px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -46,23 +47,36 @@ tbody td {
   border-radius: 4px;
 }
 
+.custom-movie-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .movie-item {
-  padding: 10px 0;
+  display: block;
+  padding: 10px;
   cursor: pointer;
-  transition: border 0.3s ease, background-color 0.3s ease;
+  transition: all 0.3s ease;
+  color: black;
+}
+
+.movie-item:hover {
+  color: black;
 }
 
 .movie-item.clicked {
   border: 2px solid black;
+  color: black;
 }
 
 .date-btn {
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   text-align: center;
   position: relative;
-  margin: 3px;
+  margin: 1px;
 }
 
 .date-btn strong {
@@ -115,6 +129,7 @@ tbody td {
 
 .timelist-container {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   justify-content: flex-start;
   list-style: none;
@@ -175,20 +190,53 @@ tbody td {
   gap: 4px;
   font-size: 12px;
 }
+.selection-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 100px;
+}
+
+.selection-summary {
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+}
+.selection-summary p {
+  margin: 0; /* 기본 마진 제거 */
+}
+
+.selection-summary strong {
+  color: #000;
+  font-weight: bold;
+}
 
 .select-info {
-  padding: 0;
-  margin: 0;
   display: flex;
   align-items: center;
   height: 100px;
   font-size: 20px;
   justify-content: flex-end;
-  background-color: #b8b2b2;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #000;
+  border-radius: 5px;
+  border: 2px solid black;
+}
+
+.select-info:hover {
+  background-color: #7db0e7;
+  color: #000;
+}
+
+.select-info:active,
+.select-info:visited {
   color: #000;
 }
 
 tfoot td {
-  height: 60px; /* 영역 높이 설정 */
-  vertical-align: middle; /* 기본 세로 정렬 */
+  height: 60px;
+  vertical-align: middle;
+  background-color: #d4d3d3 !important;
 }
