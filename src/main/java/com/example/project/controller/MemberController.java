@@ -183,6 +183,14 @@ public class MemberController {
         return "member/reservation"; // 템플릿 경로 수정 (member 디렉토리로 변경)
     }
 
+    @GetMapping("/paymentDetails")
+    public void getPaymentDetails(@AuthenticationPrincipal AuthMemberDto authMemberDto, Model model) {
+        Long memberId = authMemberDto.getMemberId(); // 인증된 사용자 ID 가져오기
+        // List<ReservationDto> reservation =
+        // reservationService.getMemberReservations(memberId);
+        // model.addAttribute("reservation", reservation);
+    }
+
     // 개발자용 - Authentication 확인용
     @PreAuthorize("isAuthenticated()")
     @ResponseBody

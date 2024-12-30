@@ -160,9 +160,11 @@ public class AdminRepositoryTest {
         movieRepository.findAll().forEach(movie -> {
             System.out.println(movie);
 
-            movie.getMoviePeople().forEach(people -> System.out.println(people.getPerson().getName()));
+            // movie.getMoviePeople().forEach(people ->
+            // System.out.println(people.getPerson().getName()));
 
-            movie.getMovieGenres().forEach(genre -> System.out.println(genre.getGenre().getName()));
+            // movie.getMovieGenres().forEach(genre ->
+            // System.out.println(genre.getGenre().getName()));
         });
         ;
 

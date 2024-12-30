@@ -22,14 +22,13 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = { "movieGenres", "moviePeople", "reviews", "memberFavoriteMovies" })
+@ToString
 @Setter
 @Getter
 @Table(name = "movies")
 @Entity
 public class Movie extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String backdropPath;
@@ -51,16 +50,16 @@ public class Movie extends BaseEntity {
     private Double voteAverage;
     private Long voteCount;
 
-    @OneToMany(mappedBy = "movie")
-    private Set<MovieGenre> movieGenres;
+    // @OneToMany(mappedBy = "movie")
+    // private Set<MovieGenre> movieGenres;
 
-    @OneToMany(mappedBy = "movie")
-    private Set<MoviePerson> moviePeople;
+    // @OneToMany(mappedBy = "movie")
+    // private Set<MoviePerson> moviePeople;
 
-    @OneToMany(mappedBy = "movie")
-    private List<Review> reviews;
+    // @OneToMany(mappedBy = "movie")
+    // private List<Review> reviews;
 
-    @OneToMany(mappedBy = "movie")
-    private List<MemberFavoriteMovie> memberFavoriteMovies = new ArrayList<>();
+    // @OneToMany(mappedBy = "movie")
+    // private List<MemberFavoriteMovie> memberFavoriteMovies = new ArrayList<>();
 
 }

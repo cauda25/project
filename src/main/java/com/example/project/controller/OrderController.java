@@ -25,18 +25,19 @@ import com.example.project.service.store.OrderService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @Log4j2
 @Controller
-@RequestMapping("/order")
+// @RequestMapping("")
 public class OrderController {
 
     private final CartItemService cartItemService;
     private final OrderService orderService;
     private final OrderItemService orderItemService;
 
-    @GetMapping("")
+    @GetMapping("/order")
     public void getCart(Model model) {
         log.info("cart 폼 요청");
 
@@ -50,6 +51,12 @@ public class OrderController {
         model.addAttribute("memberDto", memberDto);
         model.addAttribute("orderDto", orderDto);
         model.addAttribute("orderItemDtos", orderItemDtos);
+
+    }
+
+    @GetMapping("/payment-success")
+    public void getSuccess() {
+        log.info("결제 성공 요청");
 
     }
 

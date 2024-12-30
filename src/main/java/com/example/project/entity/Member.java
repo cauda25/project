@@ -76,8 +76,8 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
-    @OneToMany(mappedBy = "member")
-    private List<MemberFavoriteMovie> memberFavoriteMovies = new ArrayList<>();
+    // @OneToMany(mappedBy = "member")
+    // private List<MemberFavoriteMovie> memberFavoriteMovies = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private StatusRole statusRole; // 필요해서 추가합니다.

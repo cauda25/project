@@ -26,6 +26,8 @@ import com.example.project.entity.MovieGenre;
 import com.example.project.entity.MoviePerson;
 import com.example.project.entity.Person;
 import com.example.project.repository.MemberFavoriteMovieRepository;
+import com.example.project.repository.movie.MovieGenreRepository;
+import com.example.project.repository.movie.MoviePersonRepository;
 import com.example.project.repository.movie.MovieRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,8 @@ public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
     private final MemberFavoriteMovieRepository favoriteMoviesRepository;
+    private final MovieGenreRepository movieGenreRepository;
+    private final MoviePersonRepository moviePersonRepository;
 
     @Override
     public PageResultDTO getList(PageRequestDTO requestDto) {
@@ -115,7 +119,7 @@ public class MovieServiceImpl implements MovieService {
         List<Genre> genres = new ArrayList<>();
         for (MemberFavoriteMovie favoriteMovie : favoriteMovies) {
             Movie movie = favoriteMovie.getMovie();
-            Set<MovieGenre> movieGenres = movie.getMovieGenres();
+            List<MovieGenre> movieGenres = movieGenreRepository.findByMovieId(movie.getId());
             for (MovieGenre movieGenre : movieGenres) {
                 genres.add(movieGenre.getGenre());
             }
@@ -140,7 +144,7 @@ public class MovieServiceImpl implements MovieService {
         Map<Long, Integer> directorMovieCount = new HashMap<>();
         for (MemberFavoriteMovie favoriteMovie : favoriteMovies) {
             Movie movie = favoriteMovie.getMovie();
-            Set<MoviePerson> moviePeople = movie.getMoviePeople();
+            List<MoviePerson> moviePeople = moviePersonRepository.findByMovieId(movie.getId());
             for (MoviePerson moviePerson : moviePeople) {
                 Person person = moviePerson.getPerson();
                 if (person.getJob().equals("Directing")) {
@@ -178,7 +182,7 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieDto> similarMovies(Long id) {
         Movie movie = movieRepository.findById(id).get();
         List<Genre> genres = new ArrayList<>();
-        Set<MovieGenre> movieGenres = movie.getMovieGenres();
+        List<MovieGenre> movieGenres = movieGenreRepository.findByMovieId(movie.getId());
         for (MovieGenre movieGenre : movieGenres) {
             genres.add(movieGenre.getGenre());
         }

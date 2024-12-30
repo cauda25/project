@@ -30,8 +30,8 @@ public class Genre extends BaseEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "genre")
-    @JsonManagedReference
-    private Set<MovieGenre> movieGenres;
+    // @OneToMany(mappedBy = "genre")
+    // @JsonManagedReference
+    // private Set<MovieGenre> movieGenres;
 
 }

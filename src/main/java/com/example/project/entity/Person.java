@@ -19,7 +19,7 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = { "moviePeople" })
+@ToString
 @Setter
 @Getter
 @Table(name = "people")
@@ -27,7 +27,6 @@ import lombok.ToString;
 public class Person extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private Long gender;
@@ -36,7 +35,7 @@ public class Person extends BaseEntity {
     private Double popularity;
     private String profilePath;
 
-    @OneToMany(mappedBy = "person")
-    private Set<MoviePerson> moviePeople;
+    // @OneToMany(mappedBy = "person")
+    // private Set<MoviePerson> moviePeople;
 
 }
