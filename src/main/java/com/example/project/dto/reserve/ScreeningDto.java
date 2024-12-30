@@ -1,4 +1,4 @@
-package com.example.project.dto;
+package com.example.project.dto.reserve;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,10 +19,11 @@ public class ScreeningDto {
     private String movieTitle;
     private String runtime;
 
-    private LocalDate openDate;
-    private LocalDate closeDate;
+    private LocalDate screeningDate;
 
     private Long auditoriumNo;
     private String auditoriumName;
 
+    private int availableSeats;
+    private int totalSeats;
 }

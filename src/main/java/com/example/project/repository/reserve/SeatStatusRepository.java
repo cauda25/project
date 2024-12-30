@@ -3,15 +3,23 @@ package com.example.project.repository.reserve;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.example.project.entity.constant.SeatStatusEnum;
 import com.example.project.entity.reserve.SeatStatus;
 
 public interface SeatStatusRepository extends JpaRepository<SeatStatus, Long> {
-    // List<SeatStatus> findByAuditorium_Seat(Long auditoriumNo); // 특정 상영관의 모든 좌석
-    // 상태 조회
+    @Query("SELECT ss FROM SeatStatus ss WHERE ss.screening.screeningId = :screeningId")
+    List<SeatStatus> findByScreeningId(@Param("screeningId") Long screeningId);
 
-    // List<SeatStatus> findBySeat_SeatId(Long seatId); // 특정 좌석의 상태 조회
+    @Query("SELECT COUNT(s) FROM SeatStatus s WHERE s.screening.screeningId = :screeningId AND s.seatStatusEnum = 'AVAILABLE'")
+    int countAvailableSeats(@Param("screeningId") Long screeningId);
 
-    // List<SeatStatus> findBySeatStatus(SeatStatusEnum status); // 특정 상태의 좌석 조회
+    @Query("SELECT COUNT(s) FROM SeatStatus s WHERE s.screening.screeningId = :screeningId")
+    int countTotalSeats(@Param("screeningId") Long screeningId);
+
+    // seat join해서 가져오기
+    @Query("SELECT ss FROM SeatStatus ss JOIN FETCH ss.seat s WHERE ss.screening.screeningId = :screeningId")
+    List<SeatStatus> findSeatStatusesByScreeningId(@Param("screeningId") Long screeningId);
 }

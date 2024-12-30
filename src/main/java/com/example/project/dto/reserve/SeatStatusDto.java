@@ -18,4 +18,5 @@ public class SeatStatusDto {
     private Long seatNum;
     private SeatStatusEnum status;
     private String auditoriumName;
+    private Long price;
 }

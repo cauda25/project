@@ -40,9 +40,7 @@ public class Screening {
 
     private String runtime;
 
-    private LocalDate openDate;
-
-    private LocalDate closeDate;
+    private LocalDate screeningDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "auditorium_no", nullable = false)
