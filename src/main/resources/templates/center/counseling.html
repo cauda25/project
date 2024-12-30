@@ -1,14 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
-<<<<<<< HEAD
-  <div layout:fragment="content" class="bg-light">
-    <head>
-      <meta charset="UTF-8" />
-      <title>상담 페이지</title>
-      <link rel="stylesheet" th:href="@{/css/email.css}" />
-    </head>
-    <body>
-=======
   <head>
     <meta charset="UTF-8" />
     <title>상담 페이지</title>
@@ -16,8 +7,7 @@
     <th:block layout:fragment="css"></th:block>
   </head>
   <body>
-    <div layout:fragment="content" class="bg-light">
->>>>>>> gyowoong
+    <div layout:fragment="content" class="bg-white">
       <h2>상담 페이지</h2>
       <div class="board-container">
         <table>
@@ -27,24 +17,38 @@
               <th>상담 유형</th>
               <th>내용</th>
               <th>상담 상태</th>
+              <th>상담 내용 보기</th>
             </tr>
           </thead>
           <!-- 상담 내역이 없을 경우 메시지 표시 -->
           <tbody th:if="${#lists.isEmpty(inquiries)}">
             <tr>
-              <td colspan="6">상담 내역이 없습니다.</td>
+              <td colspan="5">상담 내역이 없습니다.</td>
             </tr>
           </tbody>
           <tbody>
             <tr th:each="inquiry : ${inquiries}">
               <td th:text="${inquiry.id}"></td>
               <td>일반상담</td>
-              <td th:text="${inquiry.content}"></td>
+              <td>
+                <!-- 상담 내용을 클릭 시 보이도록 설정 -->
+                <p th:text="${inquiry.content}"></p>
+                <div id="content-${inquiry.id}" style="display: none">
+                  <p th:text="${inquiry.content}"></p>
+                  <p th:text="${inquiry.answer}"></p>
+                </div>
+              </td>
               <td
                 th:text="${inquiry.answered != null ? (inquiry.answered ? '답변' : '미답변') : '미답변'}"
               ></td>
-              <td th:text="${inquiry.counselingType}"></td>
-              <td th:text="${inquiry.status}"></td>
+              <!-- 상담 내용 보기 링크 추가 -->
+              <td>
+                <a
+                  th:href="@{/center/counseling/detail/{id}(id=${inquiry.id})}"
+                >
+                  상담 내용 보기
+                </a>
+              </td>
             </tr>
           </tbody>
         </table>
