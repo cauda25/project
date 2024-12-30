@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.example.project.entity.BaseEntity;
 import com.example.project.entity.Member;
-import com.example.project.entity.Movie;
 import com.example.project.entity.constant.ReserveStatus;
 
 import jakarta.persistence.CascadeType;
@@ -50,12 +49,12 @@ public class Reserve extends BaseEntity {
 
     private String movieTitle;
 
-    private LocalDateTime screeningTime;
+    private String screeningTime;
 
     private int totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mid", nullable = false)
+    @JoinColumn(name = "mid", nullable = true)
     private Member member; // 회원 정보
 
     @OneToMany(mappedBy = "reserve", cascade = CascadeType.ALL, orphanRemoval = true)

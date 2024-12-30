@@ -19,7 +19,7 @@ public class ReserveDto {
     private Long reserveNo; // 예매번호
     private String reserveStatus;
     private String movieTitle;
-    private LocalDateTime screeningTime;
+    private String screeningTime;
     private int totalPrice;
 
     private String theaterName;

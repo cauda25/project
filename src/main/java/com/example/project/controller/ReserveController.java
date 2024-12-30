@@ -20,20 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.project.dto.MovieDto;
 import com.example.project.dto.reserve.ReserveDto;
 import com.example.project.dto.reserve.ScreeningDto;
 import com.example.project.dto.reserve.SeatStatusDto;
 import com.example.project.dto.reserve.TheaterDto;
-import com.example.project.entity.Member;
-import com.example.project.entity.Movie;
-import com.example.project.entity.constant.ReserveStatus;
+
 import com.example.project.entity.constant.SeatStatusEnum;
 import com.example.project.entity.reserve.Reserve;
-import com.example.project.entity.reserve.Screening;
-import com.example.project.entity.reserve.Theater;
+
 import com.example.project.service.reservation.ReserveService;
-import com.example.project.service.reservation.ScreeningService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -146,62 +141,29 @@ public class ReserveController {
     }
 
     @PostMapping("/confirm-payment")
-    public ResponseEntity<Map<String, Object>> completePayment(@RequestBody ReserveDto reserveDto) {
-        // try {
-        // List<Map<String, Object>> seats = (List<Map<String, Object>>)
-        // payload.get("seats");
-
-        // for (Map<String, Object> seat : seats) {
-        // Long seatStatusId = Long.valueOf(seat.get("seatStatusId").toString()); //
-        // seatStatusId 사용
-        // reserveService.updateSeatStatus(seatStatusId, SeatStatusEnum.SOLD);
-        // }
-        // String bookingOrder = reserveService.generateReservationNumber();
-
-        // Map<String, Object> response = new HashMap<>();
-        // response.put("success", true);
-        // response.put("bookingOrder", bookingOrder);
-        // return ResponseEntity.ok(response);
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // Map<String, Object> response = new HashMap<>();
-        // response.put("success", false);
-        // response.put("error", e.getMessage());
-        // return
-        // ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        // }
+    public ResponseEntity<?> completePayment(@RequestBody ReserveDto reserveDto) {
         try {
-            // 예매 정보 저장
-            Reserve reserve = reserveService.saveReservation(
-                    reserveDtoToEntity(reserveDto),
-                    reserveDto.getSeatNumbers().stream()
-                            .map(Long::valueOf)
-                            .collect(Collectors.toList()));
+            // 예약 정보 저장
+            Reserve reserve = reserveService.saveReservation(reserveDto);
 
             // 응답 데이터 구성
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("reserveId", reserve.getReserveId());
             response.put("reserveNo", reserve.getReserveNo());
-            response.put("reserveStatus", reserve.getReserveStatus());
+            response.put("totalPrice", reserve.getTotalPrice());
+            for (Long seatStatusId : reserveDto.getSeatNumbers()) {
+                reserveService.updateSeatStatus(seatStatusId, SeatStatusEnum.SOLD);
+            }
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            // 에러 처리
             e.printStackTrace();
             Map<String, Object> response = new HashMap<>();
             response.put("success", false);
             response.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-    }
-
-    private Reserve reserveDtoToEntity(ReserveDto reserveDto) {
-        return Reserve.builder()
-                .movieTitle(reserveDto.getMovieTitle())
-                .screeningTime(reserveDto.getScreeningTime())
-                .totalPrice(reserveDto.getTotalPrice())
-                .reserveStatus(ReserveStatus.COMPLETE) // 결제 완료 상태
-                .member(Member.builder().mid(reserveDto.getMid()).build()) // 회원 정보
-                .build();
     }
 
 }

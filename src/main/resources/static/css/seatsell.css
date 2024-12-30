@@ -34,12 +34,12 @@ tbody td {
 }
 
 .seat.selected {
-  background-color: #ff9800; /* 선택된 좌석 */
+  background-color: #ff0000;
   border: 2px solid #000;
 }
 
 .seat.reserved {
-  background-color: #ccc; /* 예약된 좌석 */
+  background-color: #ccc;
   cursor: not-allowed;
 }
 .select-info {
@@ -68,7 +68,7 @@ tbody td {
   line-height: 1.5;
 }
 .selection-summary p {
-  margin: 0; /* 기본 마진 제거 */
+  margin: 0;
 }
 
 .selection-summary strong {
@@ -136,4 +136,40 @@ tfoot td {
 
 #submit-payment:hover {
   background-color: #0056b3;
+}
+.reservation-summary {
+  border-radius: 8px;
+  padding: 20px;
+  font-family: "Arial", sans-serif;
+  color: #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.reservation-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2d87ff;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.reservation-summary p {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.reservation-summary p strong {
+  font-weight: bold;
+  color: #555;
+}
+
+.reservation-value {
+  font-weight: bold;
+  color: #222;
+}
+
+.reservation-summary p:last-child {
+  font-size: 18px;
+  font-weight: bold;
 }
