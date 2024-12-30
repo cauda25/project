@@ -20,6 +20,7 @@ import com.example.project.dto.reserve.SeatStatusDto;
 import com.example.project.dto.reserve.TheaterDto;
 import com.example.project.entity.Member;
 import com.example.project.entity.Movie;
+import com.example.project.entity.Reservation;
 import com.example.project.entity.constant.ReserveStatus;
 import com.example.project.entity.constant.SeatStatusEnum;
 import com.example.project.entity.reserve.Reserve;

@@ -13,7 +13,7 @@ import com.example.project.entity.reserve.Screening;
 public interface ScreeningRepository extends JpaRepository<Screening, Long> {
 
     // 극장에 상영중인 영화
-    @Query("SELECT s FROM Screening s WHERE s.auditorium.theater.theaterId = :theaterId")
+    @Query("SELECT s FROM Screening s WHERE s.auditorium.theater.theaterId = :theaterId ORDER BY s.screeningId ASC")
     List<Screening> findScreeningsByTheaterId(@Param("theaterId") Long theaterId);
 
     // 영화별 상영시간표
