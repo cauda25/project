@@ -19,19 +19,6 @@
           th:text="${inquiry.answer != null ? inquiry.answer : '답변이 없습니다.'}"
         ></span>
       </p>
-      <!-- 상담 내용과 답변을 출력하는 부분 -->
-      <div class="inquiry-detail">
-        <p>
-          <strong>상담 내용:</strong> <span th:text="${inquiry.content}"></span>
-        </p>
-        <p>
-          <strong>상담 답변:</strong>
-          <span
-            th:text="${inquiry.answer != null ? inquiry.answer : '답변이 없습니다.'}"
-          ></span>
-        </p>
-      </div>
-
       <!-- 비회원과 회원에 따라 다르게 표시 -->
       <div>
         <strong>사용자 ID:</strong>
