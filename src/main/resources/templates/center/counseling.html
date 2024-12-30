@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
-  
-    <head>
-      <meta charset="UTF-8" />
-      <title>상담 페이지</title>
-      <link rel="stylesheet" th:href="@{/css/counseling.css}" />
-      <th:block layout:fragment="css"></th:block>
-    </head>
-    <body>
-      <div layout:fragment="content" class="bg-light">
+  <head>
+    <meta charset="UTF-8" />
+    <title>상담 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/counseling.css}" />
+    <th:block layout:fragment="css"></th:block>
+  </head>
+  <body>
+    <div layout:fragment="content" class="bg-light">
       <h2>상담 페이지</h2>
       <div class="board-container">
         <table>
@@ -18,8 +17,6 @@
               <th>상담 유형</th>
               <th>내용</th>
               <th>상담 상태</th>
-              <th>수정</th>
-              <th>삭제</th>
             </tr>
           </thead>
           <!-- 상담 내역이 없을 경우 메시지 표시 -->
@@ -31,29 +28,13 @@
           <tbody>
             <tr th:each="inquiry : ${inquiries}">
               <td th:text="${inquiry.id}"></td>
-              <td th:text="${inquiry.counselingType}"></td>
+              <td>일반상담</td>
               <td th:text="${inquiry.content}"></td>
+              <td
+                th:text="${inquiry.answered != null ? (inquiry.answered ? '답변' : '미답변') : '미답변'}"
+              ></td>
+              <td th:text="${inquiry.counselingType}"></td>
               <td th:text="${inquiry.status}"></td>
-              <td>
-                <form th:action="@{/center/counseling/modify}" method="get">
-                  <input
-                    type="hidden"
-                    name="id"
-                    th:value="${inquiry.id}"
-                  />
-                  <button type="submit" class="btn btn-primary">수정</button>
-                </form>
-              </td>
-              <td>
-                <form th:action="@{/center/counseling/delete}" method="post">
-                  <input
-                    type="hidden"
-                    name="id"
-                    th:value="${inquiry.id}"
-                  />
-                  <button class="delete-btn">삭제</button>
-                </form>
-              </td>
             </tr>
           </tbody>
         </table>

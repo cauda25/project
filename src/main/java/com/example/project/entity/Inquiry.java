@@ -43,6 +43,8 @@ public class Inquiry {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    private Boolean answered;
+
     @Enumerated(EnumType.STRING)
     private InquiryStatus status;
 
@@ -58,6 +60,14 @@ public class Inquiry {
 
     public String getCounselingType() {
         return counselingType;
+    }
+
+    public Boolean getAnswered() {
+        return answered;
+    }
+
+    public void setAnswered(Boolean answered) {
+        this.answered = answered;
     }
 
 }

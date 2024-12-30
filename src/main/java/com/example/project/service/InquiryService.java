@@ -12,6 +12,8 @@ import com.example.project.entity.Inquiry;
 import com.example.project.entity.InquiryStatus;
 import com.example.project.repository.InquiryRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class InquiryService {
 
@@ -100,4 +102,12 @@ public class InquiryService {
         return inquiryRepository.findAll();
     }
 
+    public Inquiry getInquiry(Long id) {
+        Inquiry inquiry = inquiryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Inquiry not found"));
+        if (inquiry.getAnswered() == null) {
+            inquiry.setAnswered(false);
+        }
+        return inquiry;
+    }
 }
