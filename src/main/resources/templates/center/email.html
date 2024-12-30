@@ -39,8 +39,10 @@
                 </form>
               </td>
               <td>
-                <form th:action="@{/center/email/delete}" method="post">
-                  <input type="hidden" name="id" th:value="${inquiry.id}" />
+                <form
+                  th:action="@{/center/email/delete/{id}(id=${inquiry.id})}"
+                  method="post"
+                >
                   <th:block th:if="${_csrf != null}">
                     <input
                       type="hidden"
