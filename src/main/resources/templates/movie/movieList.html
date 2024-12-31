@@ -29,27 +29,43 @@
       <input type="hidden" name="genre" th:value="${requestDto.genre}" />
       <input type="hidden" name="sort" th:value="${requestDto.sort}" />
       <input type="hidden" name="movieList" th:value="popular" />
-      <div class="d-flex">
-        <select name="type" id="type" class="form-select me-2">
-          <option value="mp" th:selected="${requestDto.type == 'mp'}">
+      <div class="d-flex mt-4 align-items-center justify-content-center">
+        <select
+          name="type"
+          id="type"
+          class="form-select me-2 border-danger border-2 border-2 bg-transparent text-white"
+        >
+          <option
+            class="text-dark"
+            value="mp"
+            th:selected="${requestDto.type == 'mp'}"
+          >
             전체
           </option>
-          <option value="m" th:selected="${requestDto.type == 'm'}">
+          <option
+            class="text-dark"
+            value="m"
+            th:selected="${requestDto.type == 'm'}"
+          >
             영화
           </option>
-          <option value="p" th:selected="${requestDto.type == 'p'}">
+          <option
+            class="text-dark"
+            value="p"
+            th:selected="${requestDto.type == 'p'}"
+          >
             인물
           </option>
         </select>
         <input
-          class="form-control me-2"
+          class="form-control me-2 border-danger border-2 bg-transparent text-white"
           type="search"
           placeholder="Search"
           aria-label="Search"
           name="keyword"
           th:value="${keyword}"
         />
-        <button class="btn btn-outline-success" type="submit">Search</button>
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
       </div>
     </form>
     <section class="product spad">
@@ -185,6 +201,11 @@
               <div class="mt-4"></div>
             </div>
             <!-- MY -->
+            <div class="row" th:if="${recommendMovies.size() == 0}">
+              <p class="text-white text-center fw-bold fs-3 mt-5 mb-5">
+                찜목록에 영화를 추가해주세요
+              </p>
+            </div>
             <div
               class="row trending__product-row"
               th:if="${requestDto.movieList == 'my' and recommendMovies.size() != 0}"

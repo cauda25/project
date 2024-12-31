@@ -320,10 +320,8 @@
       const movieId = "[[${movieDto.id}]]";
       const isLogin = "[[${isLogin}]]";
       let isExist = "[[${isExist}]]";
-      const directors = /*[[${directorList}]]*/ [];
-      console.log(directors);
-      console.log(typeof Boolean(isExist), isExist);
-      console.log(isLogin);
+      const directors = "[[${directorList[0].id}]]";
+      const directorName = "[[${directorList[0].name}]]";
     </script>
     <script th:src="@{/js/movietest.js}"></script>
   </th:block>

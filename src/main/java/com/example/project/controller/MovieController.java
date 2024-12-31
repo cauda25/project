@@ -139,6 +139,9 @@ public class MovieController {
                 }
             }
         }
+        if (directorList.isEmpty()) {
+            directorList.add(PersonDto.builder().id(0L).name("정보 없음").build());
+        }
         model.addAttribute("directorList", directorList);
         model.addAttribute("actorList", actorList);
 
