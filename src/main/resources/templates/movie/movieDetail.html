@@ -230,35 +230,29 @@
           <div class="row trending__product-row movie_director_row"></div>
         </div>
 
-        <div class="row" id="reviewreview" hidden>
+        <div class="row" id="reviewreview">
           <div class="col-lg-8 col-md-8">
             <div class="anime__details__review">
               <div class="section-title">
                 <h5>관람평</h5>
               </div>
-              <div class="anime__review__item">
-                <div class="anime__review__item__pic">
-                  <img src="" alt="" />
-                </div>
-                <div class="anime__review__item__text">
-                  <h6>작성자</h6>
-                  <p>댓글 내용</p>
-                </div>
+              <div id="reviewList">
+                <!-- 기존 리뷰 리스트가 여기에 추가됩니다. -->
               </div>
 
               <div class="anime__details__form">
                 <div class="section-title">
                   <h5>관람평 작성하기</h5>
                 </div>
-                <form action="#" method="post" id="reviewForm">
-                  <textarea placeholder="Your Comment" id="comment"></textarea>
+                <form id="reviewForm">
+                  <textarea
+                    placeholder="Your Comment"
+                    id="comment"
+                    required
+                  ></textarea>
                   <div class="star-rating">
-                    <input
-                      type="radio"
-                      id="star5"
-                      name="rating"
-                      value="5"
-                    /><label
+                    <input type="radio" id="star5" name="rating" value="5" />
+                    <label
                       for="star5"
                       title="5 stars"
                       class="fa-solid fa-star"
@@ -268,37 +262,27 @@
                       id="star4"
                       name="rating"
                       value="4"
-                    /><label
+                      checked
+                    />
+                    <label
                       for="star4"
                       title="4 stars"
                       class="fa-solid fa-star"
                     ></label>
-                    <input
-                      type="radio"
-                      id="star3"
-                      name="rating"
-                      value="3"
-                    /><label
+                    <input type="radio" id="star3" name="rating" value="3" />
+                    <label
                       for="star3"
                       title="3 stars"
                       class="fa-solid fa-star"
                     ></label>
-                    <input
-                      type="radio"
-                      id="star2"
-                      name="rating"
-                      value="2"
-                    /><label
+                    <input type="radio" id="star2" name="rating" value="2" />
+                    <label
                       for="star2"
                       title="2 stars"
                       class="fa-solid fa-star"
                     ></label>
-                    <input
-                      type="radio"
-                      id="star1"
-                      name="rating"
-                      value="1"
-                    /><label
+                    <input type="radio" id="star1" name="rating" value="1" />
+                    <label
                       for="star1"
                       title="1 star"
                       class="fa-solid fa-star"
@@ -308,6 +292,13 @@
                     <i class="fa fa-location-arrow"></i> 관람평 등록
                   </button>
                 </form>
+                <div
+                  id="movieDetail"
+                  data-movie-id="[[${movieDto.id}]]"
+                  data-member-id="[[${memberId}]]"
+                  data-is-login="[[${isLogin}]]"
+                  data-is-exist="[[${isExist}]]"
+                ></div>
               </div>
             </div>
           </div>
@@ -317,11 +308,22 @@
   </div>
   <th:block layout:fragment="js">
     <script>
-      const movieId = "[[${movieDto.id}]]";
+      const movieId = "[[${movieDto.id}]]"; // Thymeleaf 변수를 JavaScript로 전달
+      const memberId = "[[${memberId}]]";
       const isLogin = "[[${isLogin}]]";
       let isExist = "[[${isExist}]]";
+<<<<<<< HEAD
       const directors = "[[${directorList[0].id}]]";
       const directorName = "[[${directorList[0].name}]]";
+=======
+      const directorId = "[[${directorList[0].id}]]";
+      const directorName = "[[${directorList[0].name}]]";
+
+      console.log("movieId:", movieId);
+      console.log("memberId:", memberId);
+      console.log("isLogin:", isLogin);
+      console.log("isExist:", Boolean(isExist));
+>>>>>>> 05683a7f3ba9103bf2637bc02ebd5ed76bf9b164
     </script>
     <script th:src="@{/js/movietest.js}"></script>
   </th:block>

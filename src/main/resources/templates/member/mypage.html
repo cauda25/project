@@ -198,5 +198,10 @@
       </div>
     </section>
   </div>
-  <th:block layout:fragment="js"></th:block>
+  <th:block layout:fragment="js">
+    <script>
+      const memberId = "[[${member.memberId}]]"; // 서버에서 전달된 값
+      console.log("아이디:", memberId); // 콘솔에 출력
+    </script>
+  </th:block>
 </html>
