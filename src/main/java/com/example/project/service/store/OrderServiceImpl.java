@@ -91,6 +91,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getStatusCompleted(Long memberId) {
         return orderRepository.findByMemberMidAndStatus(memberId, OrderStatus.COMPLETED).stream()
+                .sorted((order1, order2) -> Long.compare(order1.getId(), order2.getId()))
                 .map(entity -> entityToDto(entity,
                         orderItemRepository.findByOrderId(entity.getId()).stream().map(orderItem -> {
                             Product product = productRepository.findById(orderItem.getProduct().getId()).get();

@@ -27,6 +27,7 @@ import lombok.ToString;
 public class Person extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO) // 데이터 정보 넣을 때 주석 처리
     private Long id;
 
     private Long gender;

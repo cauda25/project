@@ -114,17 +114,15 @@ public class StoreRestController {
     }
 
     @GetMapping("/cart/{productId}")
-    public ResponseEntity<Boolean> getIsInCart(@PathVariable(name = "productId") Long productId,
-            Principal principal) {
-        log.info("rest 상품 상세 요청");
+    public ResponseEntity<Boolean> getIsInCart(@PathVariable(name = "productId") Long productId) {
+        log.info("rest 상품 상세 요청: {}", productId);
 
-        // SecurityContext context = SecurityContextHolder.getContext();
-        // Authentication authentication = context.getAuthentication();
-        // AuthMemberDto authMemberDto = (AuthMemberDto) authentication.getPrincipal();
-        String memberId = principal.getName();
-        log.info("멤버 아이디", memberId);
-        MemberDto memberDto = memberService.getMemberById(memberId);
-        Boolean result = cartItemService.isInCart(memberDto.getMid(), productId);
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        log.info("멤버 아이디", authentication);
+        AuthMemberDto authMemberDto = (AuthMemberDto) authentication.getPrincipal();
+        Long memberId = authMemberDto.getMemberDto().getMid();
+        Boolean result = cartItemService.isInCart(memberId, productId);
         log.info("결과: {}", result);
 
         return new ResponseEntity<>(result, HttpStatus.OK);

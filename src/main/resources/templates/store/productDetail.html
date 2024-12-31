@@ -23,7 +23,7 @@
       .nav-tabs {
         justify-self: center;
       }
-      .product__item__pic{
+      .product__item__pic {
         object-fit: cover;
         width: 100%;
         height: 100%;
@@ -55,13 +55,25 @@
               <a class="nav-link active" th:href="@{/store?category=ticket}">영화관람권</a>
             </li> -->
             <li class="nav-item">
-              <a class="nav-link" th:href="@{/store?category=combo}">콤보</a>
+              <a
+                th:class="'nav-link ' + ${category == 'combo' ? 'active':''}"
+                th:href="@{/store/main(category=combo)}"
+                >콤보</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" th:href="@{/store?category=popcorn}">팝콘</a>
+              <a
+                th:class="'nav-link ' + ${category == 'popcorn' ? 'active':''}"
+                th:href="@{/store/main(category=popcorn)}"
+                >팝콘</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" th:href="@{/store?category=drink}">음료</a>
+              <a
+                th:class="'nav-link ' + ${category == 'drink' ? 'active':''}"
+                th:href="@{/store/main(category=drink)}"
+                >음료</a
+              >
             </li>
           </ul>
         </div>
@@ -74,13 +86,11 @@
         </div>
         <div class="row">
           <div class="col-6">
-            <img th:src="'/img/product' + ${dto.image}" alt="">
+            <img th:src="'/img/product' + ${dto.image}" alt="" />
           </div>
           <div class="col-6">
             <div class="product-detail">
-              <h3 
-              class="mb-3"
-              th:text="${dto.price} + '원'"></h3>
+              <h3 class="mb-3" th:text="${dto.price} + '원'"></h3>
               <ul class="mb-3">
                 <li>
                   <!-- <span class="font-weight-bold">상품구성: </span> -->
@@ -91,28 +101,56 @@
                 </li>
               </ul>
               <div class="row">
-
-  <div class="row ml-2 mb-2">
-    <div class="input-group col-4 quantity">
-      <button class="btn btn-outline-danger" type="button" id="quantity-minus-btn"><i class="fa-solid fa-minus"></i></button>
-      <input type="text" class="form-control border-danger bg-transparent text-center text-white quantity-count" value="1" readonly>
-      <button class="btn btn-outline-danger" type="button" id="quantity-plus-btn"><i class="fa-solid fa-plus"></i></button>
-    </div>
-    <div class="row col-7">
-        <h5 class="col-6 text-white text-center align-self-center">총 구매금액</h5>
-        <h4 class="col-6 text-white total-price text-end align-self-center" th:text="${dto.price} + '원'"></h4>
-    </div>
-  </div>
-  <div class="row ml-3">
-    <button type="submit" class="btn btn-outline-danger col-5 mr-2 btn-cart">장바구니</button>
-    <button type="submit" class="btn btn-danger col-5 btn-purchase">구매</button>
-  </div>
-
-
+                <div class="row ml-2 mb-2">
+                  <div class="input-group col-4 quantity">
+                    <button
+                      class="btn btn-outline-danger"
+                      type="button"
+                      id="quantity-minus-btn"
+                    >
+                      <i class="fa-solid fa-minus"></i>
+                    </button>
+                    <input
+                      type="text"
+                      class="form-control border-danger bg-transparent text-center text-white quantity-count"
+                      value="1"
+                      readonly
+                    />
+                    <button
+                      class="btn btn-outline-danger"
+                      type="button"
+                      id="quantity-plus-btn"
+                    >
+                      <i class="fa-solid fa-plus"></i>
+                    </button>
+                  </div>
+                  <div class="row col-7">
+                    <h5 class="col-6 text-white text-center align-self-center">
+                      총 구매금액
+                    </h5>
+                    <h4
+                      class="col-6 text-white total-price text-end align-self-center"
+                      th:text="${dto.price} + '원'"
+                    ></h4>
+                  </div>
+                </div>
+                <div class="row ml-3">
+                  <button
+                    type="submit"
+                    class="btn btn-outline-danger col-5 mr-2 btn-cart"
+                  >
+                    장바구니
+                  </button>
+                  <button
+                    type="submit"
+                    class="btn btn-danger col-5 btn-purchase"
+                  >
+                    구매
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
@@ -123,7 +161,7 @@
       var price = "[[${dto.price}]]";
       const productId = "[[${dto.id}]]";
     </script>
-    
-  <script th:src="@{/js/product.js}"></script>
+
+    <script th:src="@{/js/product.js}"></script>
   </th:block>
 </html>
