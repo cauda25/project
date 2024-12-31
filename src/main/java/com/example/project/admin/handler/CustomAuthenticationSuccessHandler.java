@@ -1,6 +1,8 @@
 package com.example.project.admin.handler;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.stereotype.Component;
 
 import com.example.project.admin.Entity.constant.StatusRole;
+import com.example.project.entity.constant.MemberRole;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +32,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         // UserEntity user = (UserEntity) authentication.getPrincipal();
         // log.info("로그인 성공 후 {}", user.getStatusRole());
 
-        // ACTIVE 상태면 기본 성공 URL로 이동
         response.sendRedirect("/movie/main");
 
     }

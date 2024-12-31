@@ -6,7 +6,12 @@
   <div layout:fragment="content">
     <div class="row">
       <div class="col-md-12 grid-margin stretch-card">
-        <form action="" method="post">
+        <form th:action="@{/admin/page/answer}" method="post">
+          <input type="hidden" name="id" th:value="${inid.id}" />
+          <input type="hidden" name="email" th:value="${inid.email}" />
+          <input type="hidden" name="name" th:value="${inid.name}" />
+          <input type="hidden" name="content" th:value="${inid.content}" />
+        
         <div class="card">
           <div class="card-body">
             <p class="card-title">
@@ -30,9 +35,9 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr th:each="list : ${inquiry}">
-                        <td th:text="${list.id}"></td>
-                        <td th:text="${list.email}"></td>
+                      <tr>
+                        <td name="id"  th:text="${inid.id}"></td>
+                        <td name="email"  th:text="${inid.email}"></td>
                         
                       </tr>
                     </tbody>
@@ -56,8 +61,8 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr th:each="list : ${inquiry}">
-                        <td th:text="${list.email}"></td>
+                      <tr >
+                        <td name="content"  th:text="${inid.content}"></td>
                         
                       </tr>
                     </tbody>
@@ -82,7 +87,7 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td><textarea name="" id="" cols="150" rows="10"></textarea></td>
+                        <td><textarea name="answer" id="" cols="150" rows="10"></textarea></td>
                       </tr>
                     </tbody>
                   </table>

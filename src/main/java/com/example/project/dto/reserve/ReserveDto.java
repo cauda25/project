@@ -1,5 +1,6 @@
 package com.example.project.dto.reserve;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +20,8 @@ public class ReserveDto {
     private Long reserveNo; // 예매번호
     private String reserveStatus;
     private String movieTitle;
-    private LocalDateTime screeningTime;
+    private LocalDate screeningDate;
+    private String screeningTime;
     private int totalPrice;
 
     private String theaterName;
@@ -27,11 +29,15 @@ public class ReserveDto {
     private Long auditoriumNo;
     private String auditoriumName;
 
-    private List<Long> seatNumbers;
+    private List<Long> seatStatuses;
+    private List<SeatDto> seats;
 
     private Long mid;
+    private String memberId;
 
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
+
+    private String formattedScreeningDate;
 
 }

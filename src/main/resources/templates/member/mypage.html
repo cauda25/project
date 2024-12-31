@@ -91,6 +91,10 @@
           "
         >
           <div
+<<<<<<< HEAD
+=======
+            class="col-lg-3 col-md-4 col-sm-6 mb-3 product"
+>>>>>>> main
             th:each="movie : ${favorites}"
             style="
               display: inline-block;
@@ -99,6 +103,7 @@
               text-align: center;
             "
           >
+<<<<<<< HEAD
             <img
               th:src="${movie.posterPath}"
               alt="Movie Poster"
@@ -114,6 +119,30 @@
               th:text="${movie.title}"
               style="color: #fff; font-size: 14px"
             ></span>
+=======
+            <div class="product__item mb-2">
+              <a th:href="@{/movie/movieDetail(id=${movie.id})}">
+                <img
+                  th:src="'https://image.tmdb.org/t/p/w500/' + ${movie.posterPath}"
+                  alt="Movie Poster"
+                  style="
+                    width: 100px;
+                    height: 150px;
+                    object-fit: cover;
+                    border-radius: 5px;
+                    margin-bottom: 5px;
+                  "
+              /></a>
+            </div>
+            <div class="">
+              <a th:href="@{/movie/movieDetail(id=${movie.id})}">
+                <span
+                  th:text="${movie.title}"
+                  style="color: #fff; font-size: 14px"
+                ></span
+              ></a>
+            </div>
+>>>>>>> main
           </div>
         </div>
 
@@ -154,6 +183,21 @@
             "
           >
             예매내역
+          </a>
+          <a
+            th:href="@{/payment-history}"
+            style="
+              background-color: skyblue;
+              color: #fff;
+              border: none;
+              border-radius: 5px;
+              padding: 10px 20px;
+              font-size: 16px;
+              text-decoration: none;
+              text-align: center;
+            "
+          >
+            주문내역
           </a>
           <form th:action="@{/member/logout}" method="post" style="margin: 0">
             <button

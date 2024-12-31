@@ -14,11 +14,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -37,11 +39,16 @@ public class Inquiry {
     @Column(nullable = false)
     private String name;
 
+    private String username;
+
     @Column(nullable = false)
     private String email;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "TEXT")
     private String content;
+
+    @Column(length = 500)
+    private String answer;
 
     private Boolean answered;
 
@@ -55,7 +62,7 @@ public class Inquiry {
     private String inquiryType;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     public String getCounselingType() {
@@ -70,4 +77,33 @@ public class Inquiry {
         this.answered = answered;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    // 매개변수가 있는 생성자 (편의용)
+    public Inquiry(String content, String answer) {
+        this.content = content;
+        this.answer = answer;
+    }
 }

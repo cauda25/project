@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.project.admin.dto.test.AdminCreateDto;
@@ -22,6 +23,7 @@ import com.example.project.entity.Inquiry;
 import com.example.project.entity.Member;
 import com.example.project.entity.Movie;
 
+import groovyjarjarpicocli.CommandLine.Parameters;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -128,12 +130,29 @@ public class AdminController {
 
     }
 
-    @GetMapping({ "/answer", "/answerList" })
-    public void getAnswer(AdminInquiryDto adminInquiryDto, Model model) {
+    @GetMapping("/answerList")
+    public void getAnswerList(AdminInquiryDto adminInquiryDto, Model model) {
         log.info("home 폼 요청");
         List<Inquiry> inquiList = userServie.inquityList(adminInquiryDto);
 
         model.addAttribute("inquiry", inquiList);
+    }
+
+    @GetMapping("/answer")
+    public void getAnswer(@RequestParam Long id, Inquiry inquiry, Model model) {
+        log.info("Answer 요청, ID: {}", id);
+        Inquiry inid = userServie.getInquity(id);
+
+        model.addAttribute("inid", inid);
+
+    }
+
+    @PostMapping("/answer")
+    public String postAnswer(Inquiry inquiry, String answer) {
+        log.info("Received email: {}", inquiry.getEmail());
+        userServie.insertInquity(inquiry, answer);
+
+        return "redirect:/admin/page/answerList";
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.project.controller;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,21 +22,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.project.dto.MovieDto;
+import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.reserve.ReserveDto;
 import com.example.project.dto.reserve.ScreeningDto;
 import com.example.project.dto.reserve.SeatStatusDto;
 import com.example.project.dto.reserve.TheaterDto;
 import com.example.project.entity.Member;
-import com.example.project.entity.Movie;
-import com.example.project.entity.constant.ReserveStatus;
 import com.example.project.entity.constant.SeatStatusEnum;
 import com.example.project.entity.reserve.Reserve;
-import com.example.project.entity.reserve.Screening;
-import com.example.project.entity.reserve.Theater;
-import com.example.project.service.reservation.ReserveService;
-import com.example.project.service.reservation.ScreeningService;
 
+import com.example.project.service.reservation.ReserveService;
+
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -146,46 +145,31 @@ public class ReserveController {
     }
 
     @PostMapping("/confirm-payment")
-    public ResponseEntity<Map<String, Object>> completePayment(@RequestBody ReserveDto reserveDto) {
-        // try {
-        // List<Map<String, Object>> seats = (List<Map<String, Object>>)
-        // payload.get("seats");
-
-        // for (Map<String, Object> seat : seats) {
-        // Long seatStatusId = Long.valueOf(seat.get("seatStatusId").toString()); //
-        // seatStatusId 사용
-        // reserveService.updateSeatStatus(seatStatusId, SeatStatusEnum.SOLD);
-        // }
-        // String bookingOrder = reserveService.generateReservationNumber();
-
-        // Map<String, Object> response = new HashMap<>();
-        // response.put("success", true);
-        // response.put("bookingOrder", bookingOrder);
-        // return ResponseEntity.ok(response);
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // Map<String, Object> response = new HashMap<>();
-        // response.put("success", false);
-        // response.put("error", e.getMessage());
-        // return
-        // ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        // }
+    public ResponseEntity<?> completePayment(@RequestBody ReserveDto reserveDto,
+            @AuthenticationPrincipal AuthMemberDto authMemberDto) {
+        log.info("Received ReserveDto: {}", reserveDto);
+        Long mid = authMemberDto.getMemberId();
+        // Long dummyMemberId = 1L;
         try {
-            // 예매 정보 저장
-            Reserve reserve = reserveService.saveReservation(
-                    reserveDtoToEntity(reserveDto),
-                    reserveDto.getSeatNumbers().stream()
-                            .map(Long::valueOf)
-                            .collect(Collectors.toList()));
+            reserveDto.setMid(mid);
+            // reserveDto.setMid(dummyMemberId);
 
+            // 예약 정보 저장
+            Reserve reserve = reserveService.saveReservation(reserveDto);
+
+            for (Long seatStatusId : reserveDto.getSeatStatuses()) {
+                reserveService.updateSeatStatus(seatStatusId, SeatStatusEnum.SOLD);
+            }
             // 응답 데이터 구성
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("reserveId", reserve.getReserveId());
             response.put("reserveNo", reserve.getReserveNo());
-            response.put("reserveStatus", reserve.getReserveStatus());
+            response.put("totalPrice", reserve.getTotalPrice());
             return ResponseEntity.ok(response);
+
         } catch (Exception e) {
+            // 에러 처리
             e.printStackTrace();
             Map<String, Object> response = new HashMap<>();
             response.put("success", false);
@@ -194,14 +178,24 @@ public class ReserveController {
         }
     }
 
-    private Reserve reserveDtoToEntity(ReserveDto reserveDto) {
-        return Reserve.builder()
-                .movieTitle(reserveDto.getMovieTitle())
-                .screeningTime(reserveDto.getScreeningTime())
-                .totalPrice(reserveDto.getTotalPrice())
-                .reserveStatus(ReserveStatus.COMPLETE) // 결제 완료 상태
-                .member(Member.builder().mid(reserveDto.getMid()).build()) // 회원 정보
-                .build();
+    @PostMapping("/cancel")
+    public ResponseEntity<?> cancelReservation(@RequestBody Map<String, Long> payload) {
+        try {
+            Long reserveId = Long.valueOf(payload.get("reserveId").toString());
+            reserveService.cancelReservation(reserveId);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "예매가 성공적으로 취소되었습니다.");
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
 }

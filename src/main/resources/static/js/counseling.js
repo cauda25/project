@@ -1,13 +1,47 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const inquiryBtn = document.getElementById("counselingInquiryBtn");
+  // 상담 내용 보기 버튼 클릭 이벤트
+  const viewButtons = document.querySelectorAll(".view-btn");
+  viewButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const content = button.getAttribute("data-content"); // 상담 내용
+      const answer = button.getAttribute("data-answer"); // 상담 답변
 
-  if (inquiryBtn) {
-    inquiryBtn.addEventListener("click", (e) => {
-      e.preventDefault(); // 기본 동작 방지 (폼 제출 등)
-      window.location.href = "/center/counseling"; // 페이지 이동
+      // 모달에 내용 채우기
+      document.getElementById("inquiryContent").innerText = content;
+      document.getElementById("inquiryAnswer").innerText = answer
+        ? answer
+        : "답변이 없습니다.";
+
+      // 모달 표시
+      const modal = document.getElementById("inquiryDetailModal");
+      modal.style.display = "block";
     });
-  }
+  });
+
+  // 모달 닫기 이벤트
+  const closeModal = document.querySelector(".close");
+  closeModal.addEventListener("click", () => {
+    const modal = document.getElementById("inquiryDetailModal");
+    modal.style.display = "none";
+  });
+
+  // 모달 외부 클릭 시 닫기
+  window.addEventListener("click", (event) => {
+    const modal = document.getElementById("inquiryDetailModal");
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
 });
+
+// 상담 목록 페이지 이동 버튼 (예시)
+const inquiryBtn = document.getElementById("counselingInquiryBtn");
+if (inquiryBtn) {
+  inquiryBtn.addEventListener("click", (e) => {
+    e.preventDefault(); // 기본 동작 방지 (폼 제출 등)
+    window.location.href = "/center/counseling"; // 페이지 이동
+  });
+}
 
 // 취소 버튼 클릭 시 폼 숨기기
 const resetButton = document.querySelector('button[type="reset"]');

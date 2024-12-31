@@ -236,8 +236,19 @@
               <div class="section-title">
                 <h5>관람평</h5>
               </div>
+<<<<<<< HEAD
               <div id="reviewList">
                 <!-- 기존 리뷰 리스트가 여기에 추가됩니다. -->
+=======
+              <div class="anime__review__item">
+                <div class="anime__review__item__pic">
+                  <img src="" alt="" />
+                </div>
+                <div class="anime__review__item__text">
+                  <h6>작성자</h6>
+                  <p>댓글 내용</p>
+                </div>
+>>>>>>> main
               </div>
 
               <div class="anime__details__form">
@@ -312,6 +323,7 @@
       const memberId = "[[${memberId}]]";
       const isLogin = "[[${isLogin}]]";
       let isExist = "[[${isExist}]]";
+<<<<<<< HEAD
       const directorId = "[[${directorList[0].id}]]";
       const directorName = "[[${directorList[0].name}]]";
 
@@ -319,6 +331,12 @@
       console.log("memberId:", memberId);
       console.log("isLogin:", isLogin);
       console.log("isExist:", Boolean(isExist));
+=======
+      const directors = /*[[${directorList}]]*/ [];
+      console.log(directors);
+      console.log(typeof Boolean(isExist), isExist);
+      console.log(isLogin);
+>>>>>>> main
     </script>
     <script th:src="@{/js/movietest.js}"></script>
   </th:block>

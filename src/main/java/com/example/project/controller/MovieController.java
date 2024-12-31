@@ -58,13 +58,9 @@ public class MovieController {
             if (requestDto.getType().contains("m")) {
                 PageResultDTO<MovieDto, Movie> movies = movieService.getList(requestDto);
                 model.addAttribute("movies", movies);
-                log.info("토탈 {}", movies.getTotalPage());
             }
             if (requestDto.getType().contains("p")) {
-
                 PageResultDTO<PersonDto, Person> people = peopleService.getList(requestDto);
-                log.info("토탈 {}", people.getTotalPage());
-                log.info("인물 {}", people.getDtoList());
                 model.addAttribute("people", people);
 
             }

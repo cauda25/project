@@ -69,4 +69,10 @@ public interface UserService {
     // 이메일 문의 가져오기
     List<Inquiry> inquityList(AdminInquiryDto adminInquiryDto);
 
+    // 이메일 상세 문의 가져오기
+    Inquiry getInquity(Long id);
+
+    // 이메일 답변
+    void insertInquity(Inquiry inquiry, String answer);
+
 }

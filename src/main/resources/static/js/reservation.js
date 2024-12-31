@@ -246,7 +246,29 @@ function fetchScreenings(selectedMovie, selectedDate) {
         return;
       }
 
-      const groupedScreenings = screenings.reduce((acc, screening) => {
+      const now = new Date();
+      // 선택된 날짜가 오늘인 경우 현재 시간 이후만 필터링
+      const filteredScreenings =
+        selectedDate === now.toISOString().slice(0, 10) // YYYY-MM-DD 형태 비교
+          ? screenings.filter((screening) => {
+              const [hours, minutes] = screening.startTime.split(":");
+              const screeningTime = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate(),
+                parseInt(hours, 10),
+                parseInt(minutes, 10)
+              );
+              return screeningTime > now; // 현재 시간 이후의 상영만 포함
+            })
+          : screenings;
+
+      if (!filteredScreenings.length) {
+        screeningsDiv.innerHTML = "<p>해당 날짜에 상영시간표가 없습니다.</p>";
+        return;
+      }
+
+      const groupedScreenings = filteredScreenings.reduce((acc, screening) => {
         const { auditoriumName } = screening;
         if (!acc[auditoriumName]) {
           acc[auditoriumName] = [];
@@ -419,38 +441,3 @@ document.querySelector(".select-info").addEventListener("click", (e) => {
 
   window.location.href = url;
 });
-
-// 좌석 정보를 로드하는 함수
-function loadSeats(screeningId) {
-  fetch(`/reservation/seats/${screeningId}`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("좌석 정보를 가져오는데 실패했습니다.");
-      }
-      return response.json();
-    })
-    .then((seatStatuses) => {
-      const seatContainer = document.getElementById("seat-container");
-      seatContainer.innerHTML = "";
-
-      // 좌석 데이터를 화면에 그리기
-      seatStatuses.forEach((seatStatus) => {
-        const seat = document.createElement("button");
-        seat.classList.add("seat");
-        seat.textContent = `${seatStatus.rowNum}${seatStatus.seatNum}`;
-
-        if (seatStatus.seatStatusEnum === "AVAILABLE") {
-          seat.classList.add("available");
-        } else if (seatStatus.seatStatusEnum === "RESERVED") {
-          seat.classList.add("reserved");
-          seat.disabled = true;
-        }
-
-        seatContainer.appendChild(seat);
-      });
-    })
-    .catch((error) => {
-      console.error("Error loading seats:", error);
-      alert("좌석 정보를 불러오는데 문제가 발생했습니다.");
-    });
-}

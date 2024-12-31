@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         seatButton.style.height = `${seatHeight}px`;
         seatButton.style.lineHeight = `${seatHeight}px`; // 텍스트 가운데 정렬
         seatButton.title = `${seatStatus.rowNum}${seatStatus.seatNum} (${
-          seatStatus.seatStatusEnum || "UNKNOWN"
+          seatStatus.status || "UNKNOWN"
         })`;
 
         // 좌석 버튼 내부 내용
@@ -268,6 +268,15 @@ document
           }
 
           try {
+            const movieTitle =
+              document.getElementById("selected-movie").textContent;
+            const screeningTime =
+              document.getElementById("selected-time").textContent;
+
+            if (!movieTitle || !screeningTime) {
+              alert("영화 제목 또는 상영 시간이 누락되었습니다.");
+              return;
+            }
             // 결제 요청 및 좌석 SOLD 상태 변경
             const paymentResponse = await fetch(
               "/reservation/confirm-payment",
@@ -275,13 +284,20 @@ document
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                  seats: selectedSeats.map((seat) => ({
-                    seatStatusId: seat.seatStatusId,
-                  })),
+                  seatStatuses: selectedSeats.map((seat) => seat.seatStatusId),
+                  movieTitle: movieTitle,
+                  screeningTime: screeningTime,
                 }),
               }
             );
-
+            console.log(
+              "서버로 전송된 데이터:",
+              JSON.stringify({
+                seatStatuses: selectedSeats.map((seat) => seat.seatStatusId),
+                movieTitle: movieTitle,
+                screeningTime: screeningTime,
+              })
+            );
             if (!paymentResponse.ok) {
               throw new Error("결제 처리 실패");
             }
@@ -289,46 +305,44 @@ document
             const result = await paymentResponse.json();
             if (result.success) {
               // 예매번호 생성
-              const bookingNumber =
-                new Date().toISOString().slice(0, 10).replace(/-/g, "") + // yyyyMMdd
-                String(result.bookingOrder).padStart(4, "0"); // 순번
+              const bookingNumber = result.reserveNo; // 서버에서 전달받은 예매번호
+              console.log("예매번호:", bookingNumber);
 
               // 결제 완료 UI 업데이트
               const tbody = document.querySelector("tbody");
               tbody.innerHTML = `
                 <tr>
-                  <td colspan="3">
-                    <h3>예매가 완료되었습니다!</h3>
-                    <p><strong>예매번호:</strong> ${bookingNumber}</p>
-                    <p><strong>선택한 영화:</strong> ${
+                  <td colspan="3" class="reservation-summary">
+                    <h3 class="reservation-title">예매가 완료되었습니다!</h3>
+                    <p><strong>예매번호:</strong> <span class="reservation-value">${bookingNumber}</span></p>
+                    <p><strong>선택한 영화:</strong> <span class="reservation-value">${
                       document.getElementById("selected-movie").textContent
-                    }</p>
-                    <p><strong>선택한 날짜:</strong> ${
+                    }</span></p>
+                    <p><strong>선택한 날짜:</strong> <span class="reservation-value">${
                       document.getElementById("selected-date").textContent
-                    }</p>
-                    <p><strong>선택한 극장:</strong> ${
+                    }</span></p>
+                    <p><strong>선택한 극장:</strong> <span class="reservation-value">${
                       document.getElementById("selected-theater").textContent
-                    }</p>
-                    <p><strong>선택한 상영관:</strong> ${
+                    }</span></p>
+                    <p><strong>선택한 상영관:</strong> <span class="reservation-value">${
                       document.getElementById("selected-auditorium").textContent
-                    }</p>
-                    <p><strong>선택한 시간:</strong> ${
+                    }</span></p>
+                    <p><strong>선택한 시간:</strong> <span class="reservation-value">${
                       document.getElementById("selected-time").textContent
-                    }</p>
-                    <p><strong>좌석 번호:</strong> ${selectedSeats
+                    }</span></p>
+                    <p><strong>좌석 번호:</strong> <span class="reservation-value">${selectedSeats
                       .map((seat) => `${seat.rowNum}${seat.seatNum}`)
-                      .join(", ")}</p>
-                    <p><strong>결제 금액:</strong> ${selectedSeats.reduce(
+                      .join(", ")}</span></p>
+                    <p><strong>결제 금액:</strong> <span class="reservation-value">${selectedSeats.reduce(
                       (sum, seat) => sum + seat.price,
                       0
-                    )}원</p>
+                    )}원</span></p>
                   </td>
                 </tr>
               `;
 
               // tfoot와 price-display 영역 초기화
               document.querySelector("tfoot").innerHTML = "";
-              document.getElementById("price-display").innerHTML = "";
             } else {
               alert("결제 중 문제가 발생했습니다.");
             }

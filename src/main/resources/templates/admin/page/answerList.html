@@ -22,7 +22,7 @@
                     </thead>
                     <tbody>
                       <tr th:each="list : ${inquiry}">
-                        <th><a th:href="@{/admin/page/answer}" th:text="${list.id}"></a></th>
+                        <th><a th:href="@{/admin/page/answer(id=${list.id})}" th:text="${list.id}"></a></th>
                         <td th:text="${list.email}"></td>
                         <td th:text="${list.content}"></td>
                       </tr>

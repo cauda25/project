@@ -121,8 +121,34 @@ th {
   background-color: #007bff;
 }
 
-/* 에러 메세지 */
-.error {
-  color: red;
-  font-size: 0.9em;
+/* 상담 내용과 답변을 숨기거나 보이게 할 CSS */
+.inquiry-content,
+.answer-content {
+  display: none;
+  padding-left: 20px;
+}
+
+.inquiry-item {
+  cursor: pointer;
+}
+
+.inquiry-item:hover {
+  background-color: #f1f1f1;
+}
+
+.toggle-button {
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: underline;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center; /* 열 텍스트 중앙 정렬 */
+}
+
+h2 {
+  text-align: center; /* 제목 중앙 정렬 */
 }

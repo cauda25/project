@@ -3,6 +3,7 @@ package com.example.project.admin.service.test;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,26 +82,6 @@ public class UserServiecImpl implements UserService {
         List<Member> list = memberRepository.findAll();
         return list;
     }
-
-    // @Transactional
-    // @Override
-    // public List<MovieDto> getMovieDetailsWithGenres(Long id) {
-    // // JPQL 쿼리 호출
-    // List<Object[]> results = movieRepository.getMovieDetailsWithGenres(id);
-
-    // // 결과를 저장할 리스트
-    // List<MovieDto> details = new ArrayList<>();
-
-    // for (Object[] result : results) {
-    // Movie movie = (Movie) result[0]; // Movie 엔티티
-    // Genre genre = (Genre) result[1]; // Genre 엔티티
-
-    // // details.add(new MovieDetailsDTO(movie.getTitle(), movie.getReleaseDate(),
-    // genre.getName()));
-    // }
-
-    // return details; // 리스트 반환
-    // }
 
     // 영화 리스트 출력
     @Transactional
@@ -302,5 +283,17 @@ public class UserServiecImpl implements UserService {
     public List<Inquiry> inquityList(AdminInquiryDto adminInquiryDto) {
         List<Inquiry> list = inquiryRepository.findAll();
         return list;
+    }
+
+    @Override
+    public Inquiry getInquity(Long id) {
+        return inquiryRepository.findById(id).get();
+
+    }
+
+    @Override
+    public void insertInquity(Inquiry inquiry, String answer) {
+        inquiry.setAnswer(answer);
+        inquiryRepository.save(inquiry);
     }
 }

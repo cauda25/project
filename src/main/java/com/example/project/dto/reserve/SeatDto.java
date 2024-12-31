@@ -15,4 +15,9 @@ public class SeatDto {
     private Long seatNum;
     private Long auditoriumNo;
     private String auditoriumName;
+
+    @Override
+    public String toString() {
+        return rowNum + seatNum;
+    }
 }
