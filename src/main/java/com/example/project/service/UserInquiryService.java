@@ -20,7 +20,7 @@ public class UserInquiryService {
         this.userInquiryRepository = userInquiryRepository;
     }
 
-    public List<UserInquiry> findByUser(User user) {
-        return userInquiryRepository.findByUser(user);
-    }
+    // public List<UserInquiry> findByUser(User user) {
+    // return userInquiryRepository.findByUser(user);
+    // }
 }

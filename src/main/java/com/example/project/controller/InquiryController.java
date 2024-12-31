@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.project.entity.Inquiry;
 import com.example.project.service.InquiryService;
 
 @Controller
+@RequestMapping("/center/email")
 public class InquiryController {
 
     private final InquiryService inquiryService;
@@ -21,7 +23,7 @@ public class InquiryController {
         this.inquiryService = inquiryService;
     }
 
-    @PostMapping("/center/email/save")
+    @PostMapping("/save")
     public String saveInquiry(@RequestParam String name,
             @RequestParam String email,
             @RequestParam String content) {
@@ -34,14 +36,14 @@ public class InquiryController {
         return "redirect:/center/email"; // 저장 후 게시판으로 리다이렉트
     }
 
-    @GetMapping("/center/email/modify")
+    @GetMapping("/modify")
     public String ModifyForm(@RequestParam Long id, Model model) {
         Inquiry inquiry = inquiryService.getInquiryById(id);
         model.addAttribute("inquiry", inquiry);
         return "modify";
     }
 
-    @PostMapping("/center/email/update")
+    @PostMapping("/update")
     public String updateInquiry(Inquiry inquiry) {
         inquiryService.update(inquiry);
         return "redirect:/center/email";
@@ -55,9 +57,10 @@ public class InquiryController {
     }
 
     // 이메일 삭제
-    @PostMapping("/center/email/delete")
-    public String deleteInquiry(@RequestParam("id") Long id) {
+    @PostMapping("/delete/{id}")
+    public String deleteInquiry(@PathVariable Long id) {
         inquiryService.deleteInquiry(id); // 삭제 서비스 호출
         return "redirect:/center/email";
     }
+
 }

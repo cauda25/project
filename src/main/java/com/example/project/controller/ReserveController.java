@@ -24,12 +24,13 @@ import com.example.project.dto.reserve.ReserveDto;
 import com.example.project.dto.reserve.ScreeningDto;
 import com.example.project.dto.reserve.SeatStatusDto;
 import com.example.project.dto.reserve.TheaterDto;
-
+import com.example.project.entity.Member;
 import com.example.project.entity.constant.SeatStatusEnum;
 import com.example.project.entity.reserve.Reserve;
 
 import com.example.project.service.reservation.ReserveService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -142,22 +143,57 @@ public class ReserveController {
 
     @PostMapping("/confirm-payment")
     public ResponseEntity<?> completePayment(@RequestBody ReserveDto reserveDto) {
+        log.info("Received ReserveDto: {}", reserveDto);
+        Long dummyMemberId = 1L;
         try {
+            // , HttpSession session
+            // 세션에서 회원 정보 가져오기
+            // Member loggedInMember = (Member) session.getAttribute("loggedInMember");
+            // if (loggedInMember == null) {
+            // throw new IllegalStateException("로그인된 회원이 없습니다.");
+            // }
+
+            // 회원 정보를 ReserveDto에 매핑
+            // reserveDto.setMid(loggedInMember.getMid()); // PK 값
+            // reserveDto.setMemberId(loggedInMember.getMemberId()); // 회원가입 시 설정된 ID
+
+            reserveDto.setMid(dummyMemberId);
             // 예약 정보 저장
             Reserve reserve = reserveService.saveReservation(reserveDto);
 
+            for (Long seatStatusId : reserveDto.getSeatStatuses()) {
+                reserveService.updateSeatStatus(seatStatusId, SeatStatusEnum.SOLD);
+            }
             // 응답 데이터 구성
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("reserveId", reserve.getReserveId());
             response.put("reserveNo", reserve.getReserveNo());
             response.put("totalPrice", reserve.getTotalPrice());
-            for (Long seatStatusId : reserveDto.getSeatNumbers()) {
-                reserveService.updateSeatStatus(seatStatusId, SeatStatusEnum.SOLD);
-            }
             return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             // 에러 처리
+            e.printStackTrace();
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<?> cancelReservation(@RequestBody Map<String, Long> payload) {
+        try {
+            Long reserveId = Long.valueOf(payload.get("reserveId").toString());
+            reserveService.cancelReservation(reserveId);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "예매가 성공적으로 취소되었습니다.");
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
             e.printStackTrace();
             Map<String, Object> response = new HashMap<>();
             response.put("success", false);

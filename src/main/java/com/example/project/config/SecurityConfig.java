@@ -143,7 +143,6 @@ public class SecurityConfig {
 
                 // http.sessionManagement(session -> session
                 // .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                //
                 // .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession)
 
                 // );

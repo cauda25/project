@@ -1,6 +1,7 @@
 package com.example.project.controller;
 
 import java.security.Principal;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,9 +24,11 @@ import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.MovieDto;
 import com.example.project.dto.ReservationDto;
+import com.example.project.dto.reserve.ReserveDto;
 import com.example.project.service.FavoriteService;
 import com.example.project.service.MemberService;
 import com.example.project.service.ReservationService;
+import com.example.project.service.reservation.ReserveService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -41,7 +44,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final FavoriteService favoriteService;
-    private final ReservationService reservationService;
+    private final ReserveService reserveService;
 
     @GetMapping("/login")
     public void loginRedirect() {
@@ -177,9 +180,15 @@ public class MemberController {
 
     @GetMapping("/reservation")
     public String getReservation(@AuthenticationPrincipal AuthMemberDto authMemberDto, Model model) {
-        Long memberId = authMemberDto.getMemberId(); // 인증된 사용자 ID 가져오기
-        List<ReservationDto> reservation = reservationService.getMemberReservations(memberId);
-        model.addAttribute("reservation", reservation);
+        Long mid = authMemberDto.getMemberId(); // 인증된 사용자 ID 가져오기
+        List<ReserveDto> reservations = reserveService.getMemberReservations(mid);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        reservations.forEach(reservation -> {
+            if (reservation.getScreeningDate() != null) {
+                reservation.setFormattedScreeningDate(reservation.getScreeningDate().format(formatter));
+            }
+        });
+        model.addAttribute("reservations", reservations);
         return "member/reservation"; // 템플릿 경로 수정 (member 디렉토리로 변경)
     }
 
