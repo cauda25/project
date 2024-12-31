@@ -226,7 +226,6 @@ document.querySelector("#btnradio4").addEventListener("click", (e) => {
       str = `<div class="row trending__product-row actor_row">`;
       str = `<div class="section-title"><h5>비슷한 장르의 영화</h5></div>`;
       data.slice(0, 8).forEach((movie) => {
-<<<<<<< HEAD
         if (movie.id != movieId) {
           str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
           str += `<div class="product__item mb-2">`;
@@ -241,20 +240,6 @@ document.querySelector("#btnradio4").addEventListener("click", (e) => {
           str += `</div>`;
           str += `</div></div>`;
         }
-=======
-        str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
-        str += `<div class="product__item mb-2">`;
-        str += `<a href="movieDetail?id=${movie.id}"><img src=${
-          movie.posterPath != null
-            ? "https://image.tmdb.org/t/p/w500" + movie.posterPath
-            : "https://placehold.co/217x325?text=Movie"
-        } alt="" class="product__item__pic set-bg"></a></div>`;
-        str += `<div class="product__item__text mx-4 pt-0">`;
-        str += `<h5><a href="movieDetail?id=${movie.id}">${movie.title}</a></h5>`;
-        str += `<div class="text-white">${movie.releaseDate}`;
-        str += `</div>`;
-        str += `</div></div>`;
->>>>>>> 05683a7f3ba9103bf2637bc02ebd5ed76bf9b164
       });
       document.querySelector(".movie_similar_row").innerHTML = str;
     })
@@ -262,13 +247,8 @@ document.querySelector("#btnradio4").addEventListener("click", (e) => {
       alert("Failed to add to favorites: " + error.message); // 오류 메시지
     });
 
-<<<<<<< HEAD
   if (directors > 0) {
     fetch(`/rest/movieDetail/director/${directors}`)
-=======
-  if (directors.length > 0) {
-    fetch(`/rest/movieDetail/director/${directors[0]}`)
->>>>>>> 05683a7f3ba9103bf2637bc02ebd5ed76bf9b164
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to add to favorites");
@@ -281,7 +261,6 @@ document.querySelector("#btnradio4").addEventListener("click", (e) => {
         document.querySelector(".director_row").innerHTML = "";
         document.querySelector(".actor_row").innerHTML = "";
         document.querySelector(".review_row").innerHTML = "";
-<<<<<<< HEAD
         document.getElementById("reviewreview").setAttribute("hidden", "");
 
         str = "";
@@ -303,26 +282,6 @@ document.querySelector("#btnradio4").addEventListener("click", (e) => {
             str += `</div>`;
             str += `</div></div>`;
           }
-=======
-
-        str = "";
-        document.querySelector(".movie_director_row").innerHTML = str;
-        str = `<div class="row trending__product-row actor_row">`;
-        str = `<div class="section-title"><h5>${directorName} 감독의 다른 영화</h5></div>`;
-        data.forEach((movie) => {
-          str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
-          str += `<div class="product__item mb-2">`;
-          str += `<a href="movieDetail?id=${movie.id}"><img src=${
-            movie.posterPath != null
-              ? "https://image.tmdb.org/t/p/w500" + movie.posterPath
-              : "https://placehold.co/217x325?text=Movie"
-          } alt="" class="product__item__pic set-bg"></a></div>`;
-          str += `<div class="product__item__text mx-4 pt-0">`;
-          str += `<h5><a href="movieDetail?id=${movie.id}">${movie.title}</a></h5>`;
-          str += `<div class="text-white">${movie.releaseDate}`;
-          str += `</div>`;
-          str += `</div></div>`;
->>>>>>> 05683a7f3ba9103bf2637bc02ebd5ed76bf9b164
         });
         document.querySelector(".movie_director_row").innerHTML = str;
       })
