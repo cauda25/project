@@ -10,5 +10,5 @@ import com.example.project.entity.Inquiry;
 @Repository
 public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
-    List<Inquiry> findByUserId(Long userId);
+    List<Inquiry> findByUsername(String username);
 }

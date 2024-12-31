@@ -125,6 +125,10 @@ public class InquiryService {
         inquiryRepository.save(inquiry);
     }
 
+    public List<Inquiry> getInquiriesByUsername(String username) {
+        return inquiryRepository.findByUsername(username);
+    }
+
     // 사용자 이름(username)을 통해 이메일 조회
     public String getEmailByUsername(String username) {
         // 도메인 배열 생성

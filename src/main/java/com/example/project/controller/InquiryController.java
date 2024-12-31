@@ -1,8 +1,12 @@
 package com.example.project.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -81,5 +85,29 @@ public class InquiryController {
     public String deleteInquiry(@PathVariable Long id) {
         inquiryService.deleteInquiry(id); // 삭제 서비스 호출
         return "redirect:/center/email";
+    }
+
+    @GetMapping("/my-inquiries")
+    public String getMyInquiries(Model model) {
+        // 현재 로그인된 사용자 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            // 인증되지 않은 경우 로그인 페이지로 리다이렉트
+            return "redirect:/login";
+        }
+
+        // 사용자 이름(username) 가져오기
+        Object principal = authentication.getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        // 사용자 상담 내역 조회
+        List<Inquiry> inquiries = inquiryService.getInquiriesByUsername(username);
+        model.addAttribute("inquiries", inquiries);
+        return "my-inquiries";
     }
 }
