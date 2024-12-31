@@ -30,29 +30,28 @@ public class MemberLoginServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // 시큐리티 로그인 post 처리
-        log.info("service username : {}", username);
+        log.info("Authenticating username: {}", username);
 
-        // 로그인 요청
+        // 사용자 조회
         Optional<Member> result = memberRepository.findByMemberId(username);
 
         if (!result.isPresent()) {
-            throw new UsernameNotFoundException("아이디나 비밀번호 확인");
+            throw new UsernameNotFoundException("Invalid username or password.");
         }
 
-        // 이메일이 존재한다면 entity => dto 변경
         Member member = result.get();
 
-        // 최종 로그인 날짜 수정
+        // 로그인 날짜 업데이트
         accessLogin(member);
 
-        // INACTIVE 상태인 경우 예외 처리
+        // 사용자 상태 확인
         if (member.getStatusRole() == StatusRole.INACTIVE) {
-            throw new IllegalStateException("Inactive accounts cannot login. Please contact support.");
-        } // 필요해서 추가합니다
+            throw new IllegalStateException("Account is inactive. Please contact support.");
+        }
 
-        log.info("userEntity active {}", member);
+        log.info("Authenticated user: {}", member);
 
+        // 사용자 정보를 DTO로 변환
         MemberDto memberDto = MemberDto.builder()
                 .mid(member.getMid())
                 .memberId(member.getMemberId())
@@ -66,14 +65,15 @@ public class MemberLoginServiceImpl implements UserDetailsService {
                 .district(member.getDistrict())
                 .point(member.getPoint())
                 .role(member.getRole())
-                .statusRole(member.getStatusRole()) // 필요해서 추가합니다
+                .statusRole(member.getStatusRole())
                 .build();
 
+        // AuthMemberDto로 변환하여 반환
         return new AuthMemberDto(memberDto);
     }
 
+    // 로그인 날짜 업데이트 메서드
     private void accessLogin(Member member) {
-
         member.setLastLogin(LocalDateTime.now());
         memberRepository.save(member);
     }
