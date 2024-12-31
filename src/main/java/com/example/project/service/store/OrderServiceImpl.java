@@ -1,6 +1,7 @@
 package com.example.project.service.store;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,8 +16,10 @@ import com.example.project.entity.constant.OrderStatus;
 import com.example.project.entity.store.Order;
 import com.example.project.entity.store.OrderItem;
 import com.example.project.entity.store.Product;
+import com.example.project.repository.store.OrderItemRepository;
 import com.example.project.repository.store.OrderRepository;
 import com.example.project.repository.store.ProductRepository;
+import com.querydsl.core.Tuple;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -28,6 +31,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
 
     // @Override
     // public void addToCart(Long memberId, OrderItemDto orderItemDto) {
@@ -56,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto getOrderDto(Long memberId, OrderStatus orderStatus) {
-        return entityToDto(orderRepository.findByMemberMidAndStatus(memberId, orderStatus));
+        return entityToDto(orderRepository.findByMemberMidAndStatus(memberId, orderStatus).get(0), null);
     }
 
     @Override
@@ -76,5 +80,44 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
     }
+
+    @Override
+    public void setStatusCompleted(Long id) {
+        Order order = orderRepository.findById(id).get();
+        order.setStatus(OrderStatus.COMPLETED);
+        orderRepository.save(order);
+    }
+
+    @Override
+    public List<OrderDto> getStatusCompleted(Long memberId) {
+        return orderRepository.findByMemberMidAndStatus(memberId, OrderStatus.COMPLETED).stream()
+                .map(entity -> entityToDto(entity,
+                        orderItemRepository.findByOrderId(entity.getId()).stream().map(orderItem -> {
+                            Product product = productRepository.findById(orderItem.getProduct().getId()).get();
+                            return OrderItemDto.builder().orderId(orderItem.getId())
+                                    .productDto(ProductDto.builder()
+                                            .id(product.getId())
+                                            .name(product.getName())
+                                            .itemDetails(product.getItemDetails())
+                                            .category(product.getCategory())
+                                            .price(product.getPrice())
+                                            .image(product.getImage())
+                                            .build())
+                                    .orderId(entity.getId())
+                                    .quantity(orderItem.getQuantity())
+                                    .price(orderItem.getPrice())
+                                    .build();
+                        }).collect(Collectors.toList())))
+                .collect(Collectors.toList());
+    }
+
+    // @Override
+    // public List<> getStatusCompleted(Long memberId) {
+    // List<Tuple> results = orderRepository.getOrderDetails(memberId);
+    // for (Tuple tuple : results) {
+    // tuple.get()
+    // }
+
+    // }
 
 }

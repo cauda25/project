@@ -1,5 +1,8 @@
 package com.example.project.dto.store;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import com.example.project.dto.MemberDto;
 import com.example.project.entity.Member;
 import com.example.project.entity.constant.OrderStatus;
@@ -20,5 +23,9 @@ public class OrderDto {
     private Long totalPrice;
 
     private OrderStatus status;
+
+    private List<OrderItemDto> orderItemDtos;
+
+    private LocalDateTime updateDate;
 
 }

@@ -8,10 +8,13 @@ import org.springframework.stereotype.Service;
 import com.example.project.dto.store.CartItemDto;
 import com.example.project.entity.store.Cart;
 import com.example.project.entity.store.CartItem;
+import com.example.project.entity.store.OrderItem;
 import com.example.project.entity.store.Product;
 import com.example.project.repository.store.CartItemRepository;
 import com.example.project.repository.store.CartRepository;
+import com.example.project.repository.store.OrderItemRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -22,6 +25,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Override
     public List<CartItemDto> findByMemberMid(Long memberId) {
@@ -49,6 +53,23 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public void deleteCartItem(Long id) {
         cartItemRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByOrderId(Long orderId, Long memberId) {
+        List<OrderItem> orderItems = orderItemRepository.findByOrderId(orderId);
+        Long cartId = cartRepository.findByMemberMid(memberId).getId();
+        for (OrderItem orderItem : orderItems) {
+            Long productId = orderItem.getProduct().getId();
+            cartItemRepository.deleteByCartIdAndProductId(cartId, productId);
+        }
+    }
+
+    @Override
+    public boolean isInCart(Long memberId, Long productId) {
+        Long cartId = cartRepository.findByMemberMid(memberId).getId();
+        return cartItemRepository.existsByCartIdAndProductId(cartId, productId);
     }
 
 }

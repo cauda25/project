@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.example.project.entity.Genre;
 import com.example.project.entity.Movie;
 
 public interface MovieCustomRepository {
@@ -17,6 +18,10 @@ public interface MovieCustomRepository {
 
     // 해당 영화의 상세 정보
     Object[] getMovieDetailById(Long id);
+
+    List<Movie> findMoviesByDirectorId(Long directorId);
+
+    List<Movie> findMoviesByGenres(List<Genre> genres);
 
     // List<String> getDirectorList(Long id);
 

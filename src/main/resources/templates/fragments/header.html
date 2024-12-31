@@ -39,7 +39,7 @@
                   </ul>
                 </li>
                 <li>
-                  <a th:href="@{/store/main}">스토어</a>
+                  <a th:href="@{/store/main(category=combo)}">스토어</a>
                   <ul class="dropdown">
                     <li><a href="./categories.html">이벤트</a></li>
                     <li><a href="./anime-details.html">스토어</a></li>
@@ -56,9 +56,21 @@
         </div>
         <div class="col-lg-2">
           <div class="header__right">
+<<<<<<< HEAD
             <a th:href="@{/cart/main}" class="search-switch"><span class="icon_search"></span></a>
             <a sec:authorize="!isAuthenticated()" th:href="@{/member/login}"><span class="icon_profile"></span></a>
             <a sec:authorize="isAuthenticated()" th:href="@{/member/mypage}"><span class="icon_profile"></span></a>
+=======
+            <a th:href="@{/cart/main}" class="search-switch"
+              ><span class="icon_cart"></span
+            ></a>
+            <a sec:authorize="!isAuthenticated()" th:href="@{/member/login}"
+              ><span class="icon_profile"></span
+            ></a>
+            <a sec:authorize="isAuthenticated()" th:href="@{/member/mypage}"
+              ><span class="icon_profile"></span
+            ></a>
+>>>>>>> leejoonwoo
           </div>
         </div>
       </div>

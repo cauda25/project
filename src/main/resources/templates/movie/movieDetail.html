@@ -238,7 +238,7 @@
               </div>
               <div class="anime__review__item">
                 <div class="anime__review__item__pic">
-                  <img src="img/anime/review-1.jpg" alt="" />
+                  <img src="" alt="" />
                 </div>
                 <div class="anime__review__item__text">
                   <h6>작성자</h6>
@@ -320,9 +320,8 @@
       const movieId = "[[${movieDto.id}]]";
       const isLogin = "[[${isLogin}]]";
       let isExist = "[[${isExist}]]";
-      const directorId = "[[${directorList[0].id}]]";
-      const directorName = "[[${directorList[0].Name}]]";
-      console.log("[[${memberId}]]");
+      const directors = /*[[${directorList}]]*/ [];
+      console.log(directors);
       console.log(typeof Boolean(isExist), isExist);
       console.log(isLogin);
     </script>

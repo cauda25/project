@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{/layouts/layout}">
+  <div layout:fragment="content">
+    <section class="reservation-history spad">
+      <div
+        class="container"
+        style="
+          max-width: 800px;
+          margin: 0 auto;
+          background-color: #222;
+          padding: 20px;
+          border-radius: 10px;
+          color: #ddd;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        "
+      >
+        <h3
+          style="
+            color: #fff;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+          "
+        >
+          예매 내역
+        </h3>
+
+        <div style="display: flex; flex-direction: column; gap: 20px">
+          <div
+            th:each="res : ${reservation}"
+            style="
+              display: flex;
+              align-items: center;
+              gap: 15px;
+              background-color: #333;
+              padding: 10px;
+              border-radius: 5px;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            "
+          >
+            <img
+              th:src="${res.moviePosterPath}"
+              alt="Movie Poster"
+              style="
+                width: 80px;
+                height: 120px;
+                object-fit: cover;
+                border-radius: 5px;
+              "
+            />
+            <div
+              style="flex: 1; display: flex; flex-direction: column; gap: 5px"
+            >
+              <p style="color: #ffb74d; font-size: 18px; margin: 0">
+                <strong th:text="${res.movieTitle}"></strong>
+              </p>
+              <p style="margin: 0; color: #ddd">
+                예매일:
+                <span
+                  th:text="${#dates.format(res.reservationDate, 'yyyy-MM-dd HH:mm')}"
+                ></span>
+              </p>
+              <p style="margin: 0; color: #ddd">
+                좌석 번호: <span th:text="${res.seatNumber}"></span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          th:if="${#lists.isEmpty(reservation)}"
+          style="text-align: center; margin-top: 20px; color: #ff8f00"
+        >
+          <p>예매 내역이 없습니다.</p>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+          "
+        >
+          <a
+            th:href="@{/member/mypage}"
+            style="
+              background-color: #ffb74d;
+              color: #222;
+              border: none;
+              border-radius: 5px;
+              padding: 10px 20px;
+              font-size: 16px;
+              text-decoration: none;
+              text-align: center;
+            "
+          >
+            마이페이지로 돌아가기
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+  <th:block layout:fragment="js"></th:block>
+</html>

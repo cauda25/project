@@ -317,4 +317,51 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
         return new Object[] { movieResult, moviePersonList, personList, genreList };
     }
 
+    @Override
+    public List<Movie> findMoviesByDirectorId(Long directorId) {
+        QMovie movie = QMovie.movie;
+        QMoviePerson moviePerson = QMoviePerson.moviePerson;
+        QPerson person = QPerson.person;
+
+        JPQLQuery<Movie> query = from(movie).leftJoin(moviePerson).on(movie.id.eq(moviePerson.movie.id))
+                .leftJoin(moviePerson).on(moviePerson.person.id.eq(person.id));
+
+        // 기본 조건: movie.id > 0
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(movie.id.gt(0L));
+
+        builder.and(person.id.eq(directorId));
+
+        query.where(builder);
+
+        List<Movie> result = query.fetch();
+
+        return result;
+
+    }
+
+    @Override
+    public List<Movie> findMoviesByGenres(List<Genre> genres) {
+        QMovie movie = QMovie.movie;
+        QMovieGenre movieGenre = QMovieGenre.movieGenre;
+        QGenre genre = QGenre.genre;
+
+        JPQLQuery<Movie> query = from(movie).leftJoin(movieGenre).on(movie.id.eq(movieGenre.movie.id))
+                .leftJoin(movieGenre).on(movieGenre.genre.id.eq(genre.id));
+
+        // 기본 조건: movie.id > 0
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(movie.id.gt(0L));
+
+        // genres 리스트에 포함된 장르와 일치하는 영화만 필터링
+        if (genres != null && !genres.isEmpty()) {
+            builder.and(genre.id.in(genres.stream().map(Genre::getId).collect(Collectors.toList())));
+        }
+
+        query.where(builder);
+
+        List<Movie> result = query.fetch();
+
+        return result;
+    }
 }

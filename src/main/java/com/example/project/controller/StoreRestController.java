@@ -113,6 +113,23 @@ public class StoreRestController {
         return ResponseEntity.ok("장바구니에서 제거되었습니다.");
     }
 
+    @GetMapping("/cart/{productId}")
+    public ResponseEntity<Boolean> getIsInCart(@PathVariable(name = "productId") Long productId,
+            Principal principal) {
+        log.info("rest 상품 상세 요청");
+
+        // SecurityContext context = SecurityContextHolder.getContext();
+        // Authentication authentication = context.getAuthentication();
+        // AuthMemberDto authMemberDto = (AuthMemberDto) authentication.getPrincipal();
+        String memberId = principal.getName();
+        log.info("멤버 아이디", memberId);
+        MemberDto memberDto = memberService.getMemberById(memberId);
+        Boolean result = cartItemService.isInCart(memberDto.getMid(), productId);
+        log.info("결과: {}", result);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @GetMapping("/check-auth")
     public ResponseEntity<Boolean> checkAuth(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {

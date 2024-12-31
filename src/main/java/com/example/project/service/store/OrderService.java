@@ -1,9 +1,15 @@
 package com.example.project.service.store;
 
+import java.util.List;
+
 import com.example.project.dto.store.OrderDto;
+import com.example.project.dto.store.OrderItemDto;
 import com.example.project.entity.Member;
 import com.example.project.entity.constant.OrderStatus;
 import com.example.project.entity.store.Order;
+import com.example.project.entity.store.OrderItem;
+
+import jakarta.persistence.Tuple;
 
 public interface OrderService {
 
@@ -15,12 +21,21 @@ public interface OrderService {
 
     void setStatusCancelled(Long id);
 
-    public default OrderDto entityToDto(Order order) {
+    void setStatusCompleted(Long id);
+
+    // List<Tuple> getStatusCompleted(Long memberId);
+
+    List<OrderDto> getStatusCompleted(Long memberId);
+
+    public default OrderDto entityToDto(Order order, List<OrderItemDto> orderItem) {
+
         return OrderDto.builder()
                 .id(order.getId())
                 .memberId(order.getMember().getMid())
                 .totalPrice(order.getTotalPrice())
                 .status(order.getStatus())
+                .orderItemDtos(orderItem)
+                .updateDate(order.getUpdateDate())
                 .build();
     }
 

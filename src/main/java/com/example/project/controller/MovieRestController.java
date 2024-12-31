@@ -83,13 +83,13 @@ public class MovieRestController {
         AuthMemberDto authMemberDto = (AuthMemberDto) authentication.getPrincipal();
         if (!memberFavoriteMoviesService.existsByMemberIdAndMovieId(authMemberDto.getMemberDto().getMid(), id)) {
             try {
-                memberFavoriteMoviesService.addFavoriteMovie(1L, id);
+                memberFavoriteMoviesService.addFavoriteMovie(authMemberDto.getMemberDto().getMid(), id);
                 return ResponseEntity.ok("영화가 찜 목록에 추가되었습니다.");
             } catch (RuntimeException e) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             }
         } else {
-            memberFavoriteMoviesService.deleteFavoriteMovie(1L, id);
+            memberFavoriteMoviesService.deleteFavoriteMovie(authMemberDto.getMemberDto().getMid(), id);
             return ResponseEntity.ok("영화가 찜 목록에서 제거되었습니다.");
         }
     }
