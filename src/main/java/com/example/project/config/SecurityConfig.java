@@ -2,20 +2,13 @@ package com.example.project.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-// import com.example.project.admin.service.AdminDetailsServiceImpl;
 
 @Configuration
 @EnableMethodSecurity
@@ -27,15 +20,21 @@ public class SecurityConfig {
                 http
                                 // 권한 설정
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/css/**", "/admin/**",
-                                                                "/fonts/**", "/img/**",
+                                                .requestMatchers("/css/**", "/admin/**", "/fonts/**", "/img/**",
                                                                 "/js/**", "/sass/**", "/svg/**")
                                                 .permitAll() // 정적 리소스는 모두 허용
+                                                .requestMatchers("/member/login", "/member/register").permitAll() // 로그인
+                                                                                                                  // 및
+                                                                                                                  // 회원가입은
+                                                                                                                  // 모두
+                                                                                                                  // 허용
                                                 .requestMatchers("/review/submit").authenticated() // 리뷰 작성 요청은 인증 필요
                                                 .requestMatchers("/review/**").authenticated() // 리뷰 관련 기타 요청 인증 필요
                                                 .requestMatchers("/member/mypage").authenticated() // 마이페이지 접근은 인증 필요
                                                 .requestMatchers("/mypage/reservations").authenticated() // 예매 내역 접근은 인증
-                                                // 필요
+                                                                                                         // 필요
+                                                .requestMatchers("/center/counseling/**", "/email-board/**")
+                                                .authenticated() // 상담 및 이메일 게시판은 인증 필요
                                                 .anyRequest().permitAll() // 그 외 요청은 모두 허용
                                 )
                                 // 로그인 설정
@@ -54,26 +53,6 @@ public class SecurityConfig {
                                 // CSRF 설정
                                 .csrf(csrf -> csrf.disable()); // 필요에 따라 CSRF 비활성화
 
-                // http.authorizeHttpRequests(authorize -> authorize
-                // .requestMatchers("/", "/admin/css/**",
-                // "/admin/js/**", "/admin/fonts/**")
-                // .permitAll()
-                // .requestMatchers("/admin/page/**").hasRole("ADMIN")
-                // // .anyRequest().permitAll()
-                // // .requestMatchers("/admin/page/user").permitAll()
-                // .anyRequest().authenticated());
-
-                // http.formLogin(login -> login.loginPage("/admin/login")
-                // .defaultSuccessUrl("/admin/page/index", true).permitAll());
-
-                // http.sessionManagement(session ->
-                // session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
-
-                // http.logout(logout -> logout
-                // .logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout"))
-                // .logoutSuccessUrl("/"));
-
-                // http.csrf(csrf -> csrf.disable());
                 return http.build();
         }
 
