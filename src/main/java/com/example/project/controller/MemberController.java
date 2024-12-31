@@ -1,12 +1,9 @@
 package com.example.project.controller;
 
 import java.security.Principal;
-import java.util.HashMap;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,6 +25,7 @@ import com.example.project.dto.MemberDto;
 import com.example.project.dto.MovieDto;
 import com.example.project.dto.reserve.ReserveDto;
 import com.example.project.service.FavoriteService;
+import com.example.project.service.MemberFavoriteMovieService;
 import com.example.project.service.MemberService;
 import com.example.project.service.MovieService;
 import com.example.project.service.reservation.ReserveService;
@@ -102,7 +100,7 @@ public class MemberController {
         model.addAttribute("member", memberDto);
 
         // 찜 목록 가져오기
-        List<MovieDto> favorites = favoriteService.getFavorites(memberId);
+        List<MovieDto> favorites = movieService.getFavoriteMoviesByMemberId(memberDto.getMid());
         model.addAttribute("favorites", favorites);
 
         return "member/mypage"; // mypage.html 반환
@@ -183,23 +181,25 @@ public class MemberController {
 
     @GetMapping("/reservation")
     public String getReservation(@AuthenticationPrincipal AuthMemberDto authMemberDto, Model model) {
-        Long memberId = authMemberDto.getMemberId(); // 인증된 사용자 ID 가져오기
-        List<ReserveDto> reservation = reserveService.getMemberReservations(memberId);
-        model.addAttribute("reservation", reservation);
+        Long mid = authMemberDto.getMemberId(); // 인증된 사용자 ID 가져오기
+        log.info("사용자" + mid);
+        List<ReserveDto> reservations = reserveService.getMemberReservations(mid);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        reservations.forEach(reservation -> {
+            if (reservation.getScreeningDate() != null) {
+                reservation.setFormattedScreeningDate(reservation.getScreeningDate().format(formatter));
+            }
+        });
+        model.addAttribute("reservations", reservations);
         return "member/reservation"; // 템플릿 경로 수정 (member 디렉토리로 변경)
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<Map<String, String>> getLoggedInUser(Authentication authentication) {
-        if (authentication == null || !(authentication.getPrincipal() instanceof AuthMemberDto)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        AuthMemberDto authMember = (AuthMemberDto) authentication.getPrincipal();
-
-        Map<String, String> response = new HashMap<>();
-        response.put("memberId", authMember.getUsername()); // 로그인된 사용자 ID 반환
-        return ResponseEntity.ok(response);
+    @GetMapping("/paymentDetails")
+    public void getPaymentDetails(@AuthenticationPrincipal AuthMemberDto authMemberDto, Model model) {
+        Long memberId = authMemberDto.getMemberId(); // 인증된 사용자 ID 가져오기
+        // List<ReservationDto> reservation =
+        // reservationService.getMemberReservations(memberId);
+        // model.addAttribute("reservation", reservation);
     }
 
     // 개발자용 - Authentication 확인용
