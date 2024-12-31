@@ -71,3 +71,33 @@ deleteButtons.forEach((button) => {
     }
   });
 });
+
+// 답변 미답변
+function fetchInquiryDetails(id) {
+  fetch(`/inquiries/${id}`)
+    .then((response) => response.json())
+    .then((data) => {
+      // 상담 상세 정보 표시
+      document.getElementById("detail-content").innerText =
+        data.content || "내용 없음";
+      document.getElementById("detail-answer").innerText =
+        data.answer || "답변 없음";
+
+      // 상태 업데이트
+      if (data.status === "답변") {
+        document.getElementById(`status-${id}`).innerText = "답변";
+      }
+
+      // 상담 상세 정보 패널 표시
+      document.getElementById("inquiry-details").style.display = "block";
+    })
+    .catch((error) => {
+      console.error("Error fetching inquiry details:", error);
+      alert("상담 내용을 가져오는 중 오류가 발생했습니다.");
+    });
+}
+
+function closeDetails() {
+  // 상담 상세 정보 패널 숨기기
+  document.getElementById("inquiry-details").style.display = "none";
+}

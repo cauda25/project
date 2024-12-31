@@ -1,6 +1,9 @@
 package com.example.project.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -141,5 +144,26 @@ public class InquiryService {
         // 예시: username 기반으로 이메일 생성
         // 실제 구현은 데이터베이스나 사용자 관리 서비스와의 연동 필요
         return username + selectedDomain; // 예시로 도메인 추가
+    }
+
+    // 답변 및 미답변
+    public Map<String, String> getInquiryDetails(Long id) {
+        Optional<Inquiry> inquiryOptional = inquiryRepository.findById(id);
+        Map<String, String> response = new HashMap<>();
+
+        if (inquiryOptional.isPresent()) {
+            Inquiry inquiry = inquiryOptional.get();
+            if (inquiry.getAnswer() != null && !inquiry.getAnswer().isEmpty()) {
+                response.put("status", "답변");
+                response.put("answer", inquiry.getAnswer());
+            } else {
+                response.put("status", "미답변");
+                response.put("answer", null);
+            }
+        } else {
+            throw new RuntimeException("해당 ID의 상담이 존재하지 않습니다.");
+        }
+
+        return response;
     }
 }

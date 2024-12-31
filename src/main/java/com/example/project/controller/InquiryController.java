@@ -1,8 +1,11 @@
 package com.example.project.controller;
 
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -110,4 +113,16 @@ public class InquiryController {
         model.addAttribute("inquiries", inquiries);
         return "my-inquiries";
     }
+
+    // 답변 및 미답변
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, String>> getInquiry(@PathVariable Long id) {
+        try {
+            Map<String, String> response = inquiryService.getInquiryDetails(id);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
