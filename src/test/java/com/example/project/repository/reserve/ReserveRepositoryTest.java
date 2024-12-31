@@ -1,78 +1,62 @@
 package com.example.project.repository.reserve;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
-import com.example.project.entity.Genre;
-import com.example.project.entity.Movie;
-import com.example.project.entity.MovieGenre;
 import com.example.project.entity.constant.SeatStatusEnum;
-import com.example.project.entity.reserve.Auditorium;
 import com.example.project.entity.reserve.Screening;
 import com.example.project.entity.reserve.Seat;
 import com.example.project.entity.reserve.SeatStatus;
-import com.example.project.entity.reserve.Theater;
-import com.example.project.repository.movie.MovieRepository;
-import com.example.project.repository.reserve.AuditoriumRepository;
-import com.example.project.repository.reserve.ScreeningRepository;
-import com.example.project.repository.reserve.SeatStatusRepository;
-import com.example.project.repository.reserve.TheaterRepository;
-import com.example.project.service.MovieService;
 
 @SpringBootTest
-@Transactional
 public class ReserveRepositoryTest {
-
+    @Autowired
+    private ReserveRepository reserveRepository;
     @Autowired
     private ScreeningRepository screeningRepository;
-
     @Autowired
-    private TheaterRepository theaterRepository;
-
+    private SeatStatusRepository seatStatusRepository;
     @Autowired
     private SeatRepository seatRepository;
 
-    @Autowired
-    private AuditoriumRepository auditoriumRepository;
-
-    @Autowired
-    private SeatStatusRepository seatStatusRepository;
-
     // @Test
-    // public void testFindByScreeningId() {
+    // public void insertSeatStatusByScreeningRange() {
+    // SeatStatusEnum defaultStatus = SeatStatusEnum.AVAILABLE;
 
-    // // 데이터 삽입
-    // Seat seat = new Seat();
-    // seat.setRowNum("A");
-    // seat.setSeatNum(1L);
-    // // ... set other fields
-    // seat = seatRepository.save(seat);
+    // IntStream.rangeClosed(100, 110).forEach(screeningId -> {
+    // System.out.println("Processing Screening ID: " + screeningId);
 
-    // Screening screening = new Screening();
-    // // ... set screening fields
-    // screening = screeningRepository.save(screening);
+    // Optional<Screening> optionalScreening = screeningRepository.findById((long)
+    // screeningId);
+    // if (optionalScreening.isPresent()) {
+    // Screening screening = optionalScreening.get();
+    // System.out.println("Found Screening: " + screening);
 
+    // Long auditoriumId = screening.getAuditorium().getAuditoriumNo();
+    // System.out.println("Auditorium ID: " + auditoriumId);
+
+    // List<Seat> seats =
+    // seatRepository.findByAuditorium_AuditoriumNo(auditoriumId);
+    // System.out.println("Found Seats: " + seats.size());
+
+    // seats.forEach(seat -> {
     // SeatStatus seatStatus = new SeatStatus();
     // seatStatus.setSeat(seat);
     // seatStatus.setScreening(screening);
-    // seatStatus.setSeatStatusEnum(SeatStatusEnum.AVAILABLE);
+    // seatStatus.setSeatStatusEnum(defaultStatus);
+
     // seatStatusRepository.save(seatStatus);
+    // });
 
-    // // 테스트
-    // Long screeningId = screening.getScreeningId();
-    // var result = seatStatusRepository.findByScreeningId(screeningId);
-    // assertNotNull(result);
-    // assertFalse(result.isEmpty());
+    // System.out.println("Inserted SeatStatus for Screening ID: " + screeningId);
+    // } else {
+    // System.out.println("Screening ID not found: " + screeningId);
     // }
-
+    // });
+    // }
 }
