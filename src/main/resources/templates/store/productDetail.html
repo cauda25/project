@@ -56,21 +56,21 @@
             </li> -->
             <li class="nav-item">
               <a
-                th:class="'nav-link ' + ${category == 'combo' ? 'active':''}"
+                th:class="'nav-link ' + ${category == 'combo' ? 'active':'text-white'}"
                 th:href="@{/store/main(category=combo)}"
                 >콤보</a
               >
             </li>
             <li class="nav-item">
               <a
-                th:class="'nav-link ' + ${category == 'popcorn' ? 'active':''}"
+                th:class="'nav-link ' + ${category == 'popcorn' ? 'active':'text-white'}"
                 th:href="@{/store/main(category=popcorn)}"
                 >팝콘</a
               >
             </li>
             <li class="nav-item">
               <a
-                th:class="'nav-link ' + ${category == 'drink' ? 'active':''}"
+                th:class="'nav-link ' + ${category == 'drink' ? 'active':'text-white'}"
                 th:href="@{/store/main(category=drink)}"
                 >음료</a
               >

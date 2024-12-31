@@ -125,16 +125,20 @@ public class MovieServiceImpl implements MovieService {
             }
             // 영화에 관련된 장르들을 모두 추출
         }
+        if (!genres.isEmpty()) {
+            // 장르에 기반하여 추천 영화 리스트 가져오기
+            List<Movie> recommendedMovies = movieRepository.findMoviesByGenres(genres);
 
-        // 장르에 기반하여 추천 영화 리스트 가져오기
-        List<Movie> recommendedMovies = movieRepository.findMoviesByGenres(genres);
+            // Movie 객체를 MovieDto로 변환
+            List<MovieDto> movieDtos = recommendedMovies.stream()
+                    .map(movie -> entityToDto(movie, null, null, genres))
+                    .collect(Collectors.toList());
+            return movieDtos;
+        } else {
+            List<MovieDto> movieDtos = new ArrayList<>();
+            return movieDtos;
+        }
 
-        // Movie 객체를 MovieDto로 변환
-        List<MovieDto> movieDtos = recommendedMovies.stream()
-                .map(movie -> entityToDto(movie, null, null, genres))
-                .collect(Collectors.toList());
-
-        return movieDtos;
     }
 
     @Override

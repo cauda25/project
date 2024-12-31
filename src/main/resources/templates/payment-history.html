@@ -82,14 +82,15 @@
               <ul th:each="orderDto : ${orderDtos}">
                 <li class="list-group-item">
                   <div class="row">
-                    <div class="col-1">[[${orderDto.id}]]</div>
-                    <div class="col-2">
+                    <!-- <div class="col-1 fw-bold">[[${orderDto.id}]]</div> -->
+                    <div class="col-2 fw-bold">
                       [[${#temporals.format(orderDto.updateDate,'yyyy-MM-dd
                       HH:mm')}]]
                     </div>
-                    <div class="col-5 text-center">상품정보</div>
-                    <div class="col-2 text-center">수량</div>
-                    <div class="col-2 text-center">주문금액</div>
+                    <div class="col-1 fw-bold"></div>
+                    <div class="col-5 text-center fw-bold">상품정보</div>
+                    <div class="col-2 text-center fw-bold">수량</div>
+                    <div class="col-2 text-center fw-bold">주문금액</div>
                   </div>
                 </li>
                 <li
@@ -102,34 +103,52 @@
                     </div> -->
                     <div class="col-8">
                       <div class="row">
-                        <div class="col-4">
+                        <div class="col-3">
                           <img
                             th:src="'/img/product' + ${orderItemDtos.productDto.image}"
                             class="img-thumbnail item-pic"
                           />
                         </div>
-                        <div class="col-6">
-                          <p>상품 이름: [[${orderItemDtos.productDto.name}]]</p>
-                          <p>
-                            상품 설명:
-                            [[${orderItemDtos.productDto.itemDetails}]]
-                          </p>
-                          <p>
-                            상품 가격: [[${orderItemDtos.productDto.price}]]원
-                          </p>
+                        <div class="col-7">
+                          <div
+                            class="row d-flex align-items-center justify-content-center"
+                          >
+                            <div class="row">
+                              <span class="fs-2 fw-bold"
+                                >[[${orderItemDtos.productDto.name}]]</span
+                              >
+                            </div>
+                            <div class="row">
+                              <span class="fw-semibold text-secondary">
+                                [[${orderItemDtos.productDto.itemDetails}]]
+                              </span>
+                            </div>
+                            <div class="row">
+                              <span class="text-secondary">
+                                [[${orderItemDtos.productDto.price}]]원
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-2">
-                      <p>[[${orderItemDtos.quantity}]]개</p>
+                    <div
+                      class="col-2 text-center d-flex align-items-center justify-content-center"
+                    >
+                      <p class="fs-5 fw-bolder">
+                        [[${orderItemDtos.quantity}]]개
+                      </p>
                     </div>
-                    <div class="col-2">
-                      <p>
+                    <div
+                      class="col-2 text-center d-flex align-items-center justify-content-center"
+                    >
+                      <p class="fs-5 fw-bolder">
                         [[${orderItemDtos.Price * orderItemDtos.quantity}]]원
                       </p>
                     </div>
                   </div>
                 </li>
+                <div class="mb-1"></div>
               </ul>
               <!-- <li class="list-group-item">A second item</li>
               <li class="list-group-item">A third item</li>
