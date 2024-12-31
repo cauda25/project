@@ -24,13 +24,13 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-@ToString
+@ToString(exclude = { "movie", "member" })
 @AllArgsConstructor
 @NoArgsConstructor
 public class Review extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long rid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id", nullable = false)
@@ -47,5 +47,13 @@ public class Review extends BaseEntity {
     private int rating;
 
     @Column(nullable = false)
-    private String createdAt;
+    private LocalDateTime createdAt;
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
 }

@@ -81,4 +81,8 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private StatusRole statusRole; // 필요해서 추가합니다.
+
+    public Long getMid() {
+        return mid;
+    }
 }

@@ -3,12 +3,9 @@ package com.example.project.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-<<<<<<< HEAD
-import org.springframework.http.HttpMethod;
-=======
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
->>>>>>> main
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -31,6 +28,9 @@ import com.example.project.admin.handler.CustomAuthenticationFailureHandler;
 import com.example.project.admin.handler.CustomAuthenticationSuccessHandler;
 import com.example.project.admin.service.AdminDetailsServiceImpl;
 import com.example.project.service.MemberLoginServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -59,29 +59,37 @@ public class SecurityConfig {
 
                 http
                                 // 권한 설정
-                                .securityMatcher("/movie/**", "/member/**")
+                                .securityMatcher("/movie/**", "/member/**") // 특정 경로에 보안 설정 적용
                                 .userDetailsService(memberLoginServiceImpl)
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/css/**",
-                                                                "/fonts/**", "/img/**",
-                                                                "/js/**", "/sass/**", "/svg/**")
-                                                .permitAll() // 정적 리소스는 모두 허용
+                                                // 정적 리소스는 모두 허용
+                                                .requestMatchers("/css/**", "/fonts/**", "/img/**", "/js/**",
+                                                                "/sass/**", "/svg/**")
+                                                .permitAll()
+
+                                                // POST 요청에 대한 설정
                                                 .requestMatchers(HttpMethod.POST, "/review/submit").authenticated() // POST
-                                                                                                                    // 요청만
+                                                                                                                    // 요청은
                                                                                                                     // 인증
                                                                                                                     // 필요
+                                                .requestMatchers(HttpMethod.POST, "/reviews/**").authenticated() // 리뷰
+                                                                                                                 // 등록
+                                                                                                                 // 요청
+                                                                                                                 // 인증
+                                                                                                                 // 필요
 
-                                                .requestMatchers("/review/**").authenticated() // 기타 리뷰 요청도 인증 필요
-                                                .requestMatchers("/member/mypage").authenticated() // 마이페이지 접근은 인증 필요
-                                                .requestMatchers("/mypage/reservations").authenticated() // 예매 내역 접근은 인증
-<<<<<<< HEAD
-                                                                                                         // 필요
-=======
+                                                // 기타 리뷰 요청도 인증 필요
+                                                .requestMatchers("/review/**").authenticated()
+
+                                                // 마이페이지 접근은 인증 필요
+                                                .requestMatchers("/member/mypage").authenticated()
+                                                .requestMatchers("/mypage/reservations").authenticated()
+
+                                                // 특정 요청은 인증 없이 허용
                                                 .requestMatchers("/dormancy").permitAll()
-                                                // 필요
->>>>>>> main
-                                                .anyRequest().permitAll() // 그 외 요청은 모두 허용
-                                )
+
+                                                // 그 외 요청은 모두 허용
+                                                .anyRequest().permitAll())
 
                                 // 로그인 설정
                                 .formLogin(login -> login
@@ -165,6 +173,14 @@ public class SecurityConfig {
                 http.csrf(csrf -> csrf.disable());
                 return http.build();
 
+        }
+
+        @Bean
+        public ObjectMapper objectMapper() {
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.registerModule(new JavaTimeModule()); // LocalDateTime 직렬화/역직렬화 지원
+                mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+                return mapper;
         }
 
         @Bean

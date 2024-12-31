@@ -27,7 +27,7 @@ import lombok.ToString;
 public class Person extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    // @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private Long gender;

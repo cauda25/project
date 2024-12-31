@@ -1,8 +1,12 @@
 package com.example.project.controller;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -181,6 +185,19 @@ public class MemberController {
         List<ReservationDto> reservation = reservationService.getMemberReservations(memberId);
         model.addAttribute("reservation", reservation);
         return "member/reservation"; // 템플릿 경로 수정 (member 디렉토리로 변경)
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<Map<String, String>> getLoggedInUser(Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof AuthMemberDto)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        AuthMemberDto authMember = (AuthMemberDto) authentication.getPrincipal();
+
+        Map<String, String> response = new HashMap<>();
+        response.put("memberId", authMember.getUsername()); // 로그인된 사용자 ID 반환
+        return ResponseEntity.ok(response);
     }
 
     // 개발자용 - Authentication 확인용

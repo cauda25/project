@@ -31,7 +31,7 @@ import lombok.ToString;
 @Entity
 public class Movie extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    // @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String backdropPath;
@@ -59,8 +59,9 @@ public class Movie extends BaseEntity {
     @OneToMany(mappedBy = "movie")
     private Set<MoviePerson> moviePeople;
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews = new ArrayList<>();
+    // @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval =
+    // true)
+    // private List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "movie")
     private List<MemberFavoriteMovie> memberFavoriteMovies = new ArrayList<>();
