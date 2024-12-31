@@ -18,11 +18,11 @@ public class UserInquiry {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false) // DB에서 "user_id" 컬럼과 연결
     private User user;
 
     @OneToOne
-    @JoinColumn(name = "inquiry_id", nullable = false)
+    @JoinColumn(name = "inquiry_id", nullable = false) // DB에서 "inquiry_id" 컬럼과 연결
     private Inquiry inquiry;
 
     // Getters and Setters

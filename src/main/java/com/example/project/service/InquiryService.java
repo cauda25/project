@@ -23,14 +23,17 @@ public class InquiryService {
     @Autowired
     private InquiryRepository inquiryRepository;
 
+    // ID로 문의를 조회하는 메소드
     public Inquiry getInquiryById(Long id) {
         return inquiryRepository.findById(id).orElseThrow(() -> new RuntimeException("Inquiry not found"));
     }
 
+    // 문의를 저장하는 메소드
     public void saveInquiry(Inquiry inquiry) {
         inquiryRepository.save(inquiry);
     }
 
+    // ID로 문의를 삭제하는 메소드
     public void deleteInquiry(Long id) {
         inquiryRepository.deleteById(id);
     }
@@ -40,6 +43,7 @@ public class InquiryService {
         return inquiryRepository.findAll();
     }
 
+    // 문의 상태 업데이트
     public Inquiry updateStatus(Long id, String status) {
         Inquiry inquiry = inquiryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("문의가 존재하지 않습니다."));
@@ -72,15 +76,18 @@ public class InquiryService {
         return inquiryPage.getContent();
     }
 
+    // 총 페이지수 계산
     public int getTotalPages() {
         long count = inquiryRepository.count();
         return (int) Math.ceil((double) count / 10);
     }
 
+    // 기존 문의 내용 수정
     public void update(Inquiry inquiry) {
         Inquiry existingInquiry = inquiryRepository.findById(inquiry.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid inquiry ID: " + inquiry.getId()));
 
+        // 기존 문의의 정보를 새 정보로 업데이트
         existingInquiry.setName(inquiry.getName());
         existingInquiry.setEmail(inquiry.getEmail());
         existingInquiry.setContent(inquiry.getContent());
@@ -88,6 +95,7 @@ public class InquiryService {
         inquiryRepository.save(existingInquiry);
     }
 
+    // ID로 문의를 삭제하는 메소드
     public void delete(Long id) {
         if (!inquiryRepository.existsById(id)) {
             throw new IllegalArgumentException("유효하지 않는 문의 ID 입니다. " + id);
@@ -101,10 +109,12 @@ public class InquiryService {
                 .orElseThrow(() -> new IllegalArgumentException("Inquiry not found with id: " + id));
     }
 
+    // 모든 문의 조회
     public List<Inquiry> findAll() {
         return inquiryRepository.findAll();
     }
 
+    // ID로 문의를 조회하고, 없으면 예외를 발생시키는 메소드
     public Inquiry getInquiry(Long id) {
         Inquiry inquiry = inquiryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Inquiry not found"));
