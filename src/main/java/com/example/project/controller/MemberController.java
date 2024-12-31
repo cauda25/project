@@ -23,13 +23,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.MovieDto;
-import com.example.project.dto.ReservationDto;
 import com.example.project.dto.reserve.ReserveDto;
 import com.example.project.service.FavoriteService;
 import com.example.project.service.MemberFavoriteMovieService;
 import com.example.project.service.MemberService;
 import com.example.project.service.MovieService;
-import com.example.project.service.ReservationService;
 import com.example.project.service.reservation.ReserveService;
 
 import jakarta.servlet.http.HttpSession;
@@ -47,7 +45,6 @@ public class MemberController {
     private final MemberService memberService;
     private final FavoriteService favoriteService;
     private final ReserveService reserveService;
-    private final ReservationService reservationService;
     private final MovieService movieService;
 
     @GetMapping("/login")

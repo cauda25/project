@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const selectedSeats = [];
   const maxSeats = 4; // 선택 가능한 최대 좌석 수
 
-  // 좌석 정보를 API로부터 가져오기
   fetch(`/reservation/seats/${screeningId}`)
     .then((response) => {
       if (!response.ok) {
@@ -42,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return response.json();
     })
     .then((seatStatuses) => {
-      seatContainer.innerHTML = ""; // 기존 좌석 초기화
+      seatContainer.innerHTML = "";
       // 컨테이너 중심 계산
       const containerWidth = seatContainer.offsetWidth;
       const containerHeight = seatContainer.offsetHeight;
@@ -51,8 +50,8 @@ document.addEventListener("DOMContentLoaded", () => {
         ...seatStatuses.map((s) => s.rowNum.charCodeAt(0) - 65 + 1)
       );
 
-      const seatWidth = 25; // 좌석 너비
-      const seatHeight = 25; // 좌석 높이
+      const seatWidth = 25;
+      const seatHeight = 25;
       const totalSeatWidth = totalColumns * seatWidth;
       const totalSeatHeight = totalRows * seatHeight;
 
@@ -66,8 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
         seatButton.setAttribute("data-seat-row", seatStatus.rowNum);
         seatButton.setAttribute("data-seat-num", seatStatus.seatNum);
         seatButton.setAttribute("data-seat-price", seatStatus.price);
-        // 좌석 클래스 및 스타일 설정
-        const status = seatStatus.status?.toUpperCase() || "UNKNOWN"; // Enum 값 처리
+
+        const status = seatStatus.status?.toUpperCase() || "UNKNOWN";
         // 기본 클래스
         let seatClass = "seat";
 
@@ -77,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (status === "AVAILABLE") {
           seatClass += " available";
         } else {
-          seatClass += " unknown"; // 알 수 없는 상태
+          seatClass += " unknown";
         }
 
         // 클래스 적용
@@ -85,9 +84,9 @@ document.addEventListener("DOMContentLoaded", () => {
         seatButton.style.position = "absolute"; // 절대 위치 설정
 
         // 좌석 배치 계산
-        const left = offsetX + (seatStatus.seatNum - 1) * seatWidth; // 열 좌표
+        const left = offsetX + (seatStatus.seatNum - 1) * seatWidth;
         const top =
-          offsetY + (seatStatus.rowNum.charCodeAt(0) - 65) * seatHeight; // 행 좌표
+          offsetY + (seatStatus.rowNum.charCodeAt(0) - 65) * seatHeight;
 
         seatButton.style.left = `${left}px`;
         seatButton.style.top = `${top}px`;
@@ -95,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 좌석 크기 및 스타일 설정
         seatButton.style.width = `${seatWidth}px`;
         seatButton.style.height = `${seatHeight}px`;
-        seatButton.style.lineHeight = `${seatHeight}px`; // 텍스트 가운데 정렬
+        seatButton.style.lineHeight = `${seatHeight}px`;
         seatButton.title = `${seatStatus.rowNum}${seatStatus.seatNum} (${
           seatStatus.status || "UNKNOWN"
         })`;
@@ -202,7 +201,7 @@ document
         });
       }
     });
-    console.log("선택된 좌석 정보:", selectedSeats); // 디버깅용
+    console.log("선택된 좌석 정보:", selectedSeats);
     if (selectedSeats.length === 0) {
       alert("선택된 좌석이 없습니다.");
       return;

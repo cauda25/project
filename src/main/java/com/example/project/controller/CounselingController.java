@@ -3,6 +3,8 @@ package com.example.project.controller;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,11 +27,12 @@ public class CounselingController {
         this.inquiryService = inquiryService;
     }
 
-    // 상담 제출
+    // 상담 제출 (회원만 작성 가능)
     @PostMapping("/submit")
-    public String submitCounseling(@RequestParam String content, Principal principal) {
+    public String submitCounseling(@RequestParam String content, Principal principal, Model model) {
         if (principal == null) {
-            return "redirect:/login"; // 로그인하지 않은 경우
+            model.addAttribute("error", "로그인이 필요한 서비스입니다.");
+            return "redirect:/member/login"; // 로그인 페이지로 리다이렉트
         }
 
         String username = principal.getName();
@@ -38,18 +41,30 @@ public class CounselingController {
         return "redirect:/center/counseling/list"; // 상담 목록 페이지로 리디렉션
     }
 
-    // 상담 목록 페이지
+    // 상담 목록 페이지 (회원만 접근 가능)
     @GetMapping("/list")
     public String showCounselingList(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()
+                || "anonymousUser".equals(authentication.getPrincipal())) {
+            return "redirect:/member/login"; // 비로그인 상태일 경우 로그인 페이지로 리디렉트
+        }
+
         List<Inquiry> inquiries = inquiryService.findAll();
         model.addAttribute("inquiries", inquiries);
         return "center/list"; // 상담 목록 페이지로 이동
     }
 
-    // 상담 상세 페이지
+    // 상담 상세 페이지 (회원만 접근 가능)
     @GetMapping("/detail/{id}")
-    public String getInquiryDetail(@PathVariable("id") Long inquiryid, Model model) {
-        Inquiry inquiry = inquiryService.findInquiryById(inquiryid);
+    public String getInquiryDetail(@PathVariable("id") Long inquiryId, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()
+                || "anonymousUser".equals(authentication.getPrincipal())) {
+            return "redirect:/member/login"; // 비로그인 상태일 경우 로그인 페이지로 리디렉트
+        }
+
+        Inquiry inquiry = inquiryService.findInquiryById(inquiryId);
         model.addAttribute("inquiry", inquiry);
         return "center/detail"; // 상세 페이지로 이동
     }

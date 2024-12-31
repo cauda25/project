@@ -13,14 +13,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.project.dto.MovieDto;
 import com.example.project.dto.reserve.ReserveDto;
 import com.example.project.dto.reserve.ScreeningDto;
 import com.example.project.dto.reserve.SeatStatusDto;
 import com.example.project.dto.reserve.TheaterDto;
 import com.example.project.entity.Member;
-import com.example.project.entity.Movie;
-import com.example.project.entity.Reservation;
 import com.example.project.entity.constant.ReserveStatus;
 import com.example.project.entity.constant.SeatStatusEnum;
 import com.example.project.entity.reserve.Reserve;
@@ -253,17 +250,6 @@ public class ReserveServiceImpl implements ReserveService {
 
         return reserveRepository.save(reserve);
 
-    }
-
-    @Override
-    public void addSeatToReserve(Reserve reserve, SeatStatus seatStatus) {
-        if (seatStatus.getSeatStatusEnum() != SeatStatusEnum.AVAILABLE) {
-            throw new IllegalStateException("이미 예약된 좌석입니다.");
-        }
-
-        reserve.addSeatStatus(seatStatus);
-        seatStatus.setSeatStatusEnum(SeatStatusEnum.RESERVED);
-        seatStatusRepository.save(seatStatus);
     }
 
     @Override

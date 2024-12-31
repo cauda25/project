@@ -70,8 +70,8 @@ public class SecurityConfig {
                                                 .requestMatchers("/dormancy").permitAll()
                                                 .requestMatchers("/movie/seat_sell?**").authenticated()
                                                 .requestMatchers("/reservation/seat_sell/**").authenticated()
-                                                .requestMatchers("/cart/main").authenticated()
-                                                .requestMatchers("/dormancy").permitAll()
+                                                .requestMatchers("/center/counseling/**", "/email-board/**")
+                                                .authenticated()
                                                 // 필요
                                                 .anyRequest().permitAll() // 그 외 요청은 모두 허용
                                 )
