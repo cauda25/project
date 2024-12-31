@@ -72,7 +72,7 @@ public class AdminRepositoryTest {
 
     @Test
     public void insertAdmin() {
-        Admin admin = Admin.builder().userId("user2").password(passwordEncoder.encode("1111"))
+        Admin admin = Admin.builder().userId("ADMIN").password(passwordEncoder.encode("1111"))
                 .role(MemberRole.ADMIN).build();
         adminRepository.save(admin);
     }
