@@ -3,6 +3,8 @@ package com.example.project.entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,6 +31,7 @@ import lombok.ToString;
 @Entity
 public class Movie extends BaseEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO) // 데이터 정보 넣을 때 주석 처리
     private Long id;
 
     private String backdropPath;

@@ -58,12 +58,15 @@
                 <li>
                   <a th:href="@{/store/main(category=combo)}">스토어</a>
                   <ul class="dropdown">
-                    <li><a href="./categories.html">이벤트</a></li>
-                    <li><a href="./anime-details.html">스토어</a></li>
                     <li>
-                      <a href="./anime-watching.html">해택</a>
+                      <a th:href="@{/store/main(category=combo)}">콤보</a>
                     </li>
-                    <li><a href="./blog-details.html">Blog Details</a></li>
+                    <li>
+                      <a th:href="@{/store/main(category=popcorn)}">팝콘</a>
+                    </li>
+                    <li>
+                      <a th:href="@{/store/main(category=drink)}">음료</a>
+                    </li>
                   </ul>
                 </li>
                 <li class="select_item">
@@ -75,7 +78,7 @@
         </div>
         <div class="col-lg-2">
           <div class="header__right">
-            <a th:href="@{/cart/main}" class="search-switch"
+            <a th:href="@{/cart/main(purchaseBtn=0)}" class="search-switch"
               ><span class="icon_cart"></span
             ></a>
             <a sec:authorize="!isAuthenticated()" th:href="@{/member/login}"

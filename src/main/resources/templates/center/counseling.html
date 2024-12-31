@@ -32,17 +32,19 @@
               <td>일반상담</td>
               <td>
                 <p th:text="${inquiry.content}"></p>
-                <div id="content-${inquiry.id}" style="display: none">
+                <!-- 상담 상태 렌더링 -->
+              <td
+              th:text="${inquiry.answer != null && !#strings.isEmpty(inquiry.answer) ? '답변' : '미답변'}"
+            ></td>
+                <div id="content-[[${inquiry.id}]]" style="display: none">
                   <p th:text="${inquiry.content}"></p>
                   <p th:text="${inquiry.answer}"></p>
                 </div>
               </td>
-              <td
-                th:text="${inquiry.answered != null ? (inquiry.answered ? '답변' : '미답변') : '미답변'}"
-              ></td>
               <td>
                 <a
                   th:href="@{/center/counseling/detail/{id}(id=${inquiry.id})}"
+                  class="btn btn-primary"
                 >
                   상담 내용 보기
                 </a>
@@ -51,8 +53,6 @@
           </tbody>
         </table>
       </div>
-    </div>
-
     <th:block layout:fragment="js">
       <script th:src="@{/js/counseling.js}"></script>
     </th:block>

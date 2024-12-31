@@ -35,7 +35,9 @@ function getCartItems() {
         str += `<div class="row justify-content-center">`;
         str += `<div class="col-1">`;
         str += `<div class="form-check">`;
-        str += `<input class="form-check-input" type="checkbox" value="" id="productSelect" checked>`;
+        str += `<input class="form-check-input" type="checkbox" value="" id="productSelect" ${
+          pId == 0 ? "checked" : cartItem.productDto.id == pId ? "checked" : ""
+        }>`;
         str += `</div></div>`;
         str += `<div class="col-6">`;
         str += `<div class="row">`;
@@ -59,17 +61,24 @@ function getCartItems() {
         // str += `<button class="btn btn-outline-dark btn-modify-quantity" type="button">수정</button>`;
         str += `</div>`;
         str += `<div class="col-2">`;
-        str += `<p class="itemTotal" value=${cartItem.price * cartItem.quantity}>${
+        str += `<p class="itemTotal" value=${
           cartItem.price * cartItem.quantity
-        }원</p>`;
+        }>${cartItem.price * cartItem.quantity}원</p>`;
         str += `</div></div>`;
         str += `<input type="hidden" name="id" value="${cartItem.id}">`;
         str += `<input type="hidden" name="cartId" value="${cartItem.cartId}">`;
         str += `<input type="hidden" name="productId" value="${cartItem.productDto.id}">`;
         str += `<input type="hidden" name="price" value="${cartItem.price}">`;
         str += `</li>`;
-        cartTotal += cartItem.price * cartItem.quantity;
-        checkedItems.push(cartItem.productDto.id);
+        if (pId == 0) {
+          cartTotal += cartItem.price * cartItem.quantity;
+          checkedItems.push(cartItem.productDto.id);
+        } else {
+          if (pId == cartItem.productDto.id) {
+            cartTotal += cartItem.price * cartItem.quantity;
+            checkedItems.push(cartItem.productDto.id);
+          }
+        }
       });
       str += `<li class="list-group-item cartTotal">`;
       str += `<div class="row">`;
@@ -99,6 +108,9 @@ document.querySelector(".cart-item-list").addEventListener("click", (e) => {
       quantity -= 1;
       li.querySelector(".quantity-count").value = quantity;
       itemTotal = quantity * price;
+      cartTotal -= price;
+      document.querySelector(".cartTotal").innerHTML =
+        "총 결제금액 " + cartTotal + "원";
       li.querySelector(".itemTotal").innerHTML = itemTotal + "원";
       quantityChange();
     }
@@ -109,6 +121,9 @@ document.querySelector(".cart-item-list").addEventListener("click", (e) => {
       quantity += 1;
       li.querySelector(".quantity-count").value = quantity;
       itemTotal = quantity * price;
+      cartTotal += price;
+      document.querySelector(".cartTotal").innerHTML =
+        "총 결제금액 " + cartTotal + "원";
       li.querySelector(".itemTotal").innerHTML = itemTotal + "원";
       quantityChange();
     }
@@ -167,8 +182,7 @@ document.querySelector(".cart-item-list").addEventListener("click", (e) => {
     }
     ischeckedItems();
   }
-  
-})
+});
 
 // document.querySelector("#productSelectAll").addEventListener("change", (e)=>{
 //   console.log("전체 선택 버튼 클릭");
@@ -177,13 +191,13 @@ document.querySelector(".cart-item-list").addEventListener("click", (e) => {
 //             checkbox.checked = e.target.checked; // 다른 체크박스들 상태 변경
 //             checkbox.disabled = !e.target.checked; // 전체 선택이 비활성화되면, 다른 체크박스들 비활성화
 //         });
-  
+
 // });
 
 function ischeckedItems() {
   if (checkedItems.length > 0) {
     document.querySelector(".btn-checkout").removeAttribute("disabled");
-  }else{
+  } else {
     document.querySelector(".btn-checkout").setAttribute("disabled", "");
   }
 }
@@ -193,39 +207,37 @@ document.querySelector(".btn-checkout").addEventListener("click", () => {
   console.log(checkedItems);
 
   fetch("/rest/check-auth", { method: "GET" }) // 예시로 인증 상태 확인 API 호출
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("Not authenticated");
-    }
-    return response.json();
-  })
-  .then((data) => {
-    if (data == true) {
-      // 인증된 사용자일 경우 수행할 동작
-      fetch(`/rest/order`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(checkedItems),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          window.location.href = "/order";
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Not authenticated");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data == true) {
+        // 인증된 사용자일 경우 수행할 동작
+        fetch(`/rest/order`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(checkedItems),
         })
-        .catch((error) => {
-          console.error("Error adding to cart:", error);
-        });
-    }else{
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            window.location.href = "/order";
+          })
+          .catch((error) => {
+            console.error("Error adding to cart:", error);
+          });
+      } else {
         if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
           window.location.href = "/member/login"; // 로그인 페이지로 이동
         }
-    }
-  })
-  .catch((error) => {
-    console.error("Error adding to cart:", error);
-  });
-
-
+      }
+    })
+    .catch((error) => {
+      console.error("Error adding to cart:", error);
+    });
 });

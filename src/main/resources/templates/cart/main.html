@@ -90,7 +90,7 @@
                 <input type="hidden" name="price" value="0">
                 <input type="hidden" name="price" value="0">
               </li> -->
-          <!-- <li class="list-group-item">
+              <!-- <li class="list-group-item">
             <div class="row justify-content-center">
               <div class="col-1">
                 <div class="form-check">
@@ -142,8 +142,12 @@
       </div>
     </section>
     <!-- Product Section End -->
+    <div id="product" th:value="${productId}"></div>
   </div>
   <th:block layout:fragment="js">
+    <script>
+      const pId = "[[${pramProductId}]]";
+    </script>
     <script th:src="@{/js/cart.js}"></script>
   </th:block>
 </html>

@@ -20,7 +20,7 @@
         width: 75%;
         justify-self: center;
       }
-      .product__item__pic{
+      .product__item__pic {
         object-fit: cover;
         width: 100%;
         height: 100%;
@@ -36,36 +36,46 @@
               <a class="nav-link active" th:href="@{/store?category=ticket}">영화관람권</a>
             </li> -->
             <li class="nav-item">
-              <a th:class="'nav-link ' + ${category == 'combo' ? 'active':''}" th:href="@{/store/main(category=combo)}">콤보</a>
+              <a
+                th:class="'nav-link ' + ${category == 'combo' ? 'active':''}"
+                th:href="@{/store/main(category=combo)}"
+                >콤보</a
+              >
             </li>
             <li class="nav-item">
-              <a th:class="'nav-link ' + ${category == 'popcorn' ? 'active':''}" th:href="@{/store/main(category=popcorn)}">팝콘</a>
+              <a
+                th:class="'nav-link ' + ${category == 'popcorn' ? 'active':''}"
+                th:href="@{/store/main(category=popcorn)}"
+                >팝콘</a
+              >
             </li>
             <li class="nav-item">
-              <a th:class="'nav-link ' + ${category == 'drink' ? 'active':''}" th:href="@{/store/main(category=drink)}">음료</a>
+              <a
+                th:class="'nav-link ' + ${category == 'drink' ? 'active':''}"
+                th:href="@{/store/main(category=drink)}"
+                >음료</a
+              >
             </li>
           </ul>
         </div>
         <div class="row mb-5">
           <div class="row row-cols-1 row-cols-md-4 g-4">
-            <div class="col"
-            th:each="product : ${productDtos}"
-            >
-            <a th:href="@{/store/productDetail(id=${product.id})}">
-
-              <div class="card">
-                <img
-                  th:src="'/img/product' + ${product.image}"
-                  class="card-img-top product__item__pic set-bg"
-                />
-                <div class="card-body">
-                  <h5 class="card-title" th:text="${product.name}"></h5>
-                  <p class="card-text" th:text="${product.itemDetails}"></p>
-                  <h4 class="text-end" th:text="${product.price} + '원'"></h4>
+            <div class="col" th:each="product : ${productDtos}">
+              <a
+                th:href="@{/store/productDetail(category=${category}, id=${product.id})}"
+              >
+                <div class="card">
+                  <img
+                    th:src="'/img/product' + ${product.image}"
+                    class="card-img-top product__item__pic set-bg"
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title" th:text="${product.name}"></h5>
+                    <p class="card-text" th:text="${product.itemDetails}"></p>
+                    <h4 class="text-end" th:text="${product.price} + '원'"></h4>
+                  </div>
                 </div>
-              </div>
-
-            </a>
+              </a>
             </div>
           </div>
         </div>

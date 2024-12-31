@@ -33,4 +33,9 @@ public class AuthMemberDto extends User {
     public Long getMemberId() {
         return memberDto.getMid();
     }
+
+    // 회원 이름 가져오기
+    public String getMemberName() {
+        return memberDto.getName();
+    }
 }

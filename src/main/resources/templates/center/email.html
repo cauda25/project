@@ -46,16 +46,9 @@
                 </form>
               </td>
               <td>
-                <form
-                  th:action="@{/center/email/delete/{id}(id=${inquiry.id})}"
-                  method="post"
-                >
+                <form th:action="@{/center/email/delete/{id}(id=${inquiry.id})}" method="post">
                   <th:block th:if="${_csrf != null}">
-                    <input
-                      type="hidden"
-                      name="_csrf"
-                      th:value="${_csrf.token}"
-                    />
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
                   </th:block>
                   <button type="submit" class="delete-btn">삭제</button>
                 </form>
@@ -78,12 +71,7 @@
       <!-- 글 작성/수정 폼 -->
       <div id="form-container" style="display: none">
         <form action="/center/email/save" method="post" id="inquiryForm">
-          <input
-            type="hidden"
-            name="id"
-            id="inquiry-id"
-            value="some_value_here"
-          />
+          <input type="hidden" name="id" id="inquiry-id" value="some_value_here" />
           <th:block th:if="${_csrf != null}">
             <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
           </th:block>
@@ -118,12 +106,7 @@
           <!-- 버튼들 -->
           <div class="form-buttons">
             <button type="submit">저장</button>
-            <button
-              type="button"
-              onclick="window.location.href='/center/email';"
-            >
-              취소
-            </button>
+            <button type="button" onclick="window.location.href='/center/email';">취소</button>
           </div>
         </form>
       </div>
