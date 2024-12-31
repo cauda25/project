@@ -1,5 +1,7 @@
 package com.example.project.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
@@ -68,15 +70,16 @@ public class OrderController {
     }
 
     @GetMapping("/payment-history")
-    public void getHistory() {
+    public void getHistory(Model model) {
         log.info("결제 내역 요청 {}");
-        // SecurityContext context = SecurityContextHolder.getContext();
-        // Authentication authentication = context.getAuthentication();
-        // AuthMemberDto authMemberDto = (AuthMemberDto) authentication.getPrincipal();
-        // MemberDto memberDto = authMemberDto.getMemberDto();
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        AuthMemberDto authMemberDto = (AuthMemberDto) authentication.getPrincipal();
+        MemberDto memberDto = authMemberDto.getMemberDto();
+        List<OrderDto> orderDtos = orderService.getStatusCompleted(memberDto.getMid());
+        Collections.reverse(orderDtos);
 
-        // orderService.setStatusCompleted(orderId);
-        // cartItemService.deleteByOrderId(orderId, memberDto.getMid());
+        model.addAttribute("orderDtos", orderDtos);
     }
 
 }

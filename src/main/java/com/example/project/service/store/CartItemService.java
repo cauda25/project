@@ -18,6 +18,8 @@ public interface CartItemService {
 
     void deleteByOrderId(Long orderId, Long memberId);
 
+    boolean isInCart(Long memberId, Long productId);
+
     public default CartItemDto entityToDto(CartItem cartItem, Product product) {
 
         ProductDto productDto = ProductDto.builder()

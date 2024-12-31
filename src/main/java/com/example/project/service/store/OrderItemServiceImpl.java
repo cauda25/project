@@ -41,11 +41,12 @@ public class OrderItemServiceImpl implements OrderItemService {
         Long totalprice = orderItemDto.getPrice() * orderItemDto.getQuantity();
 
         if (orderRepository.existsByMemberMidAndStatus(memberId, OrderStatus.CART)) {
-            Order cart = orderRepository.findByMemberMidAndStatus(memberId, OrderStatus.CART);
-            cart.setTotalPrice(cart.getTotalPrice() + totalprice);
-            orderItemDto.setOrderId(cart.getId());
-            if (orderItemRepository.existsByOrderIdAndProductId(cart.getId(), orderItemDto.getProductDto().getId())) {
-                OrderItem orderItem = orderItemRepository.findByOrderIdAndProductId(cart.getId(),
+            List<Order> cart = orderRepository.findByMemberMidAndStatus(memberId, OrderStatus.CART);
+            cart.get(0).setTotalPrice(cart.get(0).getTotalPrice() + totalprice);
+            orderItemDto.setOrderId(cart.get(0).getId());
+            if (orderItemRepository.existsByOrderIdAndProductId(cart.get(0).getId(),
+                    orderItemDto.getProductDto().getId())) {
+                OrderItem orderItem = orderItemRepository.findByOrderIdAndProductId(cart.get(0).getId(),
                         orderItemDto.getProductDto().getId());
                 orderItem.setQuantity(orderItemDto.getQuantity() + orderItem.getQuantity());
                 orderItemRepository.save(orderItem);

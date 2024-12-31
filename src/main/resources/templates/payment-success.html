@@ -18,12 +18,13 @@
         <div class="col-lg-6 mx-auto text-white">
           <p class="lead mb-4"></p>
           <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
-            <button type="button" class="btn btn-danger btn-lg px-4 me-sm-3">
+            <a
+              th:href="@{/payment-history}"
+              class="btn btn-danger btn-lg px-4 me-sm-3"
+            >
               결제내역
-            </button>
-            <a 
-            th:href="@{/}"
-            class="btn btn-outline-secondary btn-lg px-4">
+            </a>
+            <a th:href="@{/}" class="btn btn-outline-secondary btn-lg px-4">
               메인화면
             </a>
           </div>

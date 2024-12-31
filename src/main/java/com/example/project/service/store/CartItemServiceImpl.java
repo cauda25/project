@@ -66,4 +66,10 @@ public class CartItemServiceImpl implements CartItemService {
         }
     }
 
+    @Override
+    public boolean isInCart(Long memberId, Long productId) {
+        Long cartId = cartRepository.findByMemberMid(memberId).getId();
+        return cartItemRepository.existsByCartIdAndProductId(cartId, productId);
+    }
+
 }
