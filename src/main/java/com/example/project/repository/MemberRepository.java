@@ -13,7 +13,6 @@ import com.example.project.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByMemberId(String memberId);
 
     boolean existsByMemberId(String memberId);
 
@@ -24,4 +23,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("SELECT u FROM Member u WHERE u.lastLogin = u.lastLogin AND u.mid = :mid")
     List<Member> findByLastLogin(Long mid);
+
+    Optional<Member> findByMemberId(String memberId);
+
+    Optional<Member> findByEmail(String email); // email로 검색
+
 }

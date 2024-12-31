@@ -9,4 +9,5 @@ import com.example.project.entity.Review;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
+    List<Review> findByMovieId(Long movieId);
 }

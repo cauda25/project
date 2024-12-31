@@ -7,7 +7,7 @@
         <div
           class="hero__items set-bg"
           th:if="${iterStat.index < 4}"
-          th:each="dto, iterStat : ${movies.dtoList}"
+          th:each="dto, iterStat : ${movies?.dtoList}"
           th:data-setbg="'https://image.tmdb.org/t/p/w500/' + ${dto.backdropPath}"
         >
           <div class="row">
