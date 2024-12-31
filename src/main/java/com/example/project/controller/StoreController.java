@@ -52,10 +52,12 @@ public class StoreController {
     }
 
     @GetMapping("/productDetail")
-    public void getHome(@RequestParam Long id, Model model) {
-        log.info("home 폼 요청");
+    public void getHome(@RequestParam Long id, @RequestParam String category, Model model) {
+        log.info("상품 상세 정보 폼 요청");
+        log.info("상품 상세 정보 폼 요청: {}", category);
         ProductDto dto = productService.getProduct(id);
         model.addAttribute("dto", dto);
+        model.addAttribute("category", category);
 
     }
 }

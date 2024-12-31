@@ -42,7 +42,9 @@ public class CartServiceImpl implements CartService {
             // 있다면 수량 추가 후 업데이트
             CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart.getId(),
                     cartItemDto.getProductDto().getId());
-            cartItem.setQuantity(cartItem.getQuantity() + cartItemDto.getQuantity());
+            cartItem.setQuantity(cartItem.getQuantity() + cartItemDto.getQuantity() < 10L
+                    ? cartItem.getQuantity() + cartItemDto.getQuantity()
+                    : 10L);
             cartItemRepository.save(cartItem);
         }
 
