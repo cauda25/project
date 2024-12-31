@@ -52,7 +52,7 @@ public interface ReserveService {
 
         Reserve saveReservation(ReserveDto reserveDto);
 
-        void addSeatToReserve(Reserve reserve, SeatStatus seatStatus);
+        // void addSeatToReserve(Reserve reserve, SeatStatus seatStatus);
 
         void cancelReservation(Long reserveId);
 
