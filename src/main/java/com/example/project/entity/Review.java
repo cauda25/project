@@ -48,12 +48,4 @@ public class Review extends BaseEntity {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
-
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
-    public void setMovie(Movie movie) {
-        this.movie = movie;
-    }
 }

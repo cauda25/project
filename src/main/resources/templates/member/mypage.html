@@ -91,10 +91,7 @@
           "
         >
           <div
-<<<<<<< HEAD
-=======
             class="col-lg-3 col-md-4 col-sm-6 mb-3 product"
->>>>>>> main
             th:each="movie : ${favorites}"
             style="
               display: inline-block;
@@ -103,23 +100,6 @@
               text-align: center;
             "
           >
-<<<<<<< HEAD
-            <img
-              th:src="${movie.posterPath}"
-              alt="Movie Poster"
-              style="
-                width: 100px;
-                height: 150px;
-                object-fit: cover;
-                border-radius: 5px;
-                margin-bottom: 5px;
-              "
-            />
-            <span
-              th:text="${movie.title}"
-              style="color: #fff; font-size: 14px"
-            ></span>
-=======
             <div class="product__item mb-2">
               <a th:href="@{/movie/movieDetail(id=${movie.id})}">
                 <img
@@ -142,7 +122,6 @@
                 ></span
               ></a>
             </div>
->>>>>>> main
           </div>
         </div>
 

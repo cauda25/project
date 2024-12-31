@@ -26,27 +26,25 @@ public class ReviewServiceImpl implements ReviewService {
         private final MovieRepository movieRepository; // Movie용 Repository 필요
 
         @Override
-        public Long saveReview(ReviewDto reviewDto) {
-                System.out.println("Received Review DTO: " + reviewDto);
-
-                Member member = memberRepository.findByMemberId(reviewDto.getMemberId())
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "회원 정보를 찾을 수 없습니다: " + reviewDto.getMemberId()));
-                System.out.println("Found Member: " + member);
-
-                Movie movie = movieRepository.findById(reviewDto.getId())
-                                .orElseThrow(() -> new IllegalArgumentException(
-                                                "영화 정보를 찾을 수 없습니다: " + reviewDto.getId()));
-                System.out.println("Found Movie: " + movie);
-
+        public void saveReview(ReviewDto reviewDto) {
+                // 리뷰 엔티티 생성
                 Review review = Review.builder()
                                 .content(reviewDto.getContent())
                                 .rating(reviewDto.getRating())
-                                .member(member)
-                                .movie(movie)
                                 .build();
 
-                return reviewRepository.save(review).getRid();
+                // 영화 ID를 통해 영화 조회 및 설정
+                Movie movie = movieRepository.findById(reviewDto.getId())
+                                .orElseThrow(() -> new IllegalArgumentException("영화 정보를 찾을 수 없습니다."));
+                review.setMovie(movie);
+
+                // 회원 ID를 통해 회원 조회 및 설정
+                Member member = memberRepository.findById(reviewDto.getMid())
+                                .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+                review.setMember(member);
+
+                // 리뷰 저장
+                reviewRepository.save(review);
         }
 
         private Review dtoToEntity(ReviewDto reviewDto, Member member, Movie movie) {
@@ -88,6 +86,24 @@ public class ReviewServiceImpl implements ReviewService {
                                 .build();
         }
 
+        @Override
+        public List<ReviewDto> getAllReviews() {
+                return reviewRepository.findAll()
+                                .stream()
+                                .map(this::entityToDto)
+                                .collect(Collectors.toList());
+        }
+
+        private ReviewDto entityToDto(Review review) {
+                return ReviewDto.builder()
+                                .rid(review.getRid())
+                                .memberId(review.getMember().getMemberId())
+                                .mid(review.getMember().getMid())
+                                .id(review.getMovie().getId())
+                                .content(review.getContent())
+                                .rating(review.getRating())
+                                .build();
+        }
         // @Override
         // public ReviewDto getReview(Long reviewNo) {
         // return entityToDto(reviewRepository.findById(reviewNo).get());

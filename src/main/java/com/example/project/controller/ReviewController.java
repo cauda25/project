@@ -46,15 +46,23 @@ public class ReviewController {
     private final MemberRepository memberRepository;
     private final MemberService memberService;
 
+    @GetMapping
+    public ResponseEntity<List<ReviewDto>> getAllReviews() {
+        // 리뷰 데이터를 가져오는 로직
+        List<ReviewDto> reviews = reviewService.getAllReviews();
+        return ResponseEntity.ok(reviews);
+    }
+
     // 리뷰 생성
     @PostMapping
-    public ResponseEntity<Long> createReview(@RequestBody ReviewDto reviewDto, Principal principal) {
-        // 로그인한 사용자의 아이디 가져오기
-        String memberId = principal.getName(); // Spring Security로 로그인된 사용자 정보 가져오기
-        reviewDto.setMemberId(memberId);
-
-        Long reviewId = reviewService.saveReview(reviewDto);
-        return new ResponseEntity<>(reviewId, HttpStatus.CREATED);
+    public ResponseEntity<?> saveReview(@RequestBody ReviewDto reviewDto) {
+        try {
+            reviewService.saveReview(reviewDto);
+            return ResponseEntity.ok("리뷰가 성공적으로 저장되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("리뷰 저장 중 오류가 발생했습니다.");
+        }
     }
 
     // 특정 영화에 대한 리뷰 조회

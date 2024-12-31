@@ -8,11 +8,13 @@ import com.example.project.entity.Member;
 import com.example.project.entity.Review;
 
 public interface ReviewService {
-    Long saveReview(ReviewDto reviewDto);
+    void saveReview(ReviewDto reviewDto);
 
     // ReviewDto getReview(Long reviewNo);
 
     List<ReviewDto> getReviewsByMovie(Long id);
 
     ReviewDto getReviewById(Long rid);
+
+    List<ReviewDto> getAllReviews();
 }
