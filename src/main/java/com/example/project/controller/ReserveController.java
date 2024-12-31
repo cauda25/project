@@ -1,5 +1,6 @@
 package com.example.project.controller;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.reserve.ReserveDto;
 import com.example.project.dto.reserve.ScreeningDto;
 import com.example.project.dto.reserve.SeatStatusDto;
@@ -142,22 +145,15 @@ public class ReserveController {
     }
 
     @PostMapping("/confirm-payment")
-    public ResponseEntity<?> completePayment(@RequestBody ReserveDto reserveDto) {
+    public ResponseEntity<?> completePayment(@RequestBody ReserveDto reserveDto,
+            @AuthenticationPrincipal AuthMemberDto authMemberDto) {
         log.info("Received ReserveDto: {}", reserveDto);
-        Long dummyMemberId = 1L;
+        Long mid = authMemberDto.getMemberId();
+        // Long dummyMemberId = 1L;
         try {
-            // , HttpSession session
-            // 세션에서 회원 정보 가져오기
-            // Member loggedInMember = (Member) session.getAttribute("loggedInMember");
-            // if (loggedInMember == null) {
-            // throw new IllegalStateException("로그인된 회원이 없습니다.");
-            // }
+            reserveDto.setMid(mid);
+            // reserveDto.setMid(dummyMemberId);
 
-            // 회원 정보를 ReserveDto에 매핑
-            // reserveDto.setMid(loggedInMember.getMid()); // PK 값
-            // reserveDto.setMemberId(loggedInMember.getMemberId()); // 회원가입 시 설정된 ID
-
-            reserveDto.setMid(dummyMemberId);
             // 예약 정보 저장
             Reserve reserve = reserveService.saveReservation(reserveDto);
 
