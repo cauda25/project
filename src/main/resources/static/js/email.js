@@ -68,3 +68,13 @@ document.getElementById("inquiryForm").addEventListener("submit", function (e) {
     location.reload();
   });
 });
+
+function fetchInquiries(page) {
+  fetch(`/inquiries?page=${page}`)
+    .then((response) => response.json())
+    .then((data) => {
+      renderInquiries(data.content); // content: 문의 목록
+      renderPagination(data.totalPages, page); // 페이지 정보
+    })
+    .catch((error) => console.error("Error:", error));
+}

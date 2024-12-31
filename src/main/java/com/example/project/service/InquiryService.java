@@ -124,4 +124,22 @@ public class InquiryService {
         inquiry.setContent(content);
         inquiryRepository.save(inquiry);
     }
+
+    public List<Inquiry> getInquiriesByUsername(String username) {
+        return inquiryRepository.findByUsername(username);
+    }
+
+    // 사용자 이름(username)을 통해 이메일 조회
+    public String getEmailByUsername(String username) {
+        // 도메인 배열 생성
+        String[] domains = { "@naver.com" };
+
+        // 무작위로 도메인 선택
+        int randomIndex = (int) (Math.random() * domains.length);
+        String selectedDomain = domains[randomIndex];
+        // 여기에 사용자 이메일 조회 로직 구현
+        // 예시: username 기반으로 이메일 생성
+        // 실제 구현은 데이터베이스나 사용자 관리 서비스와의 연동 필요
+        return username + selectedDomain; // 예시로 도메인 추가
+    }
 }
