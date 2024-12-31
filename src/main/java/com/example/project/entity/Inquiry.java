@@ -52,9 +52,6 @@ public class Inquiry {
 
     private Boolean answered;
 
-    @Column(length = 500)
-    private String answer;
-
     @Enumerated(EnumType.STRING)
     private InquiryStatus status;
 
