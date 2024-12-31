@@ -70,7 +70,7 @@
     </form>
     <section class="product spad">
       <div class="container">
-        <div class="row">
+        <div class="row mb-5">
           <div class="trending__product">
             <div class="header-title d-flex m-3">
               <!-- 장르 -->
@@ -133,7 +133,9 @@
                 >
               </li>
               <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link text-white" th:href="@{/member/login}">MY</a>
+                <a class="nav-link text-white" th:href="@{/member/login}"
+                  >추천</a
+                >
               </li>
             </ul>
             <!-- 영화 리스트 -->
@@ -201,17 +203,21 @@
               <div class="mt-4"></div>
             </div>
             <!-- MY -->
-            <div class="row" th:if="${recommendMovies.size() == 0}">
+            <!-- <div class="row" th:if="${recommendMovies.size() == 0}">
               <p class="text-white text-center fw-bold fs-3 mt-5 mb-5">
                 찜목록에 영화를 추가해주세요
               </p>
-            </div>
+            </div> -->
             <div
               class="row trending__product-row"
               th:if="${requestDto.movieList == 'my' and recommendMovies.size() != 0}"
             >
-              <div class="d-flex sub-head">
-                <h3 class="text-white">내 찜 목록과 비슷한 영화</h3>
+              <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-8">
+                  <div class="section-title">
+                    <h4>내 찜목록과 비슷한 영화</h4>
+                  </div>
+                </div>
               </div>
               <div
                 class="col-lg-3 col-md-4 col-sm-6 mb-3 product"
@@ -250,10 +256,12 @@
               class="row trending__product-row"
               th:if="${requestDto.movieList == 'my' and recommendMoviesByDirector.size() != 0}"
             >
-              <div class="d-flex sub-head">
-                <h3 class="text-white">
-                  [[${directorDto.name}]] 감독의 다른 영화
-                </h3>
+              <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-8">
+                  <div class="section-title">
+                    <h4>[[${directorDto.name}]] 감독의 다른 영화</h4>
+                  </div>
+                </div>
               </div>
               <div
                 class="col-lg-3 col-md-4 col-sm-6 mb-3 product"

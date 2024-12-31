@@ -215,31 +215,25 @@ document.querySelector("#btnradio4").addEventListener("click", (e) => {
     })
     .then((data) => {
       console.log("장르 영화", data);
-      document.querySelector(".overview").innerHTML = "";
-      document.querySelector(".director_row").innerHTML = "";
-      document.querySelector(".actor_row").innerHTML = "";
-      document.querySelector(".review_row").innerHTML = "";
-      document.getElementById("reviewreview").setAttribute("hidden", "");
+      clearSection();
 
       str = "";
       document.querySelector(".movie_similar_row").innerHTML = str;
       str = `<div class="row trending__product-row actor_row">`;
       str = `<div class="section-title"><h5>비슷한 장르의 영화</h5></div>`;
       data.slice(0, 8).forEach((movie) => {
-        if (movie.id != movieId) {
-          str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
-          str += `<div class="product__item mb-2">`;
-          str += `<a href="movieDetail?id=${movie.id}"><img src=${
-            movie.posterPath != null
-              ? "https://image.tmdb.org/t/p/w500" + movie.posterPath
-              : "https://placehold.co/217x325?text=Movie"
-          } alt="" class="product__item__pic set-bg"></a></div>`;
-          str += `<div class="product__item__text mx-4 pt-0">`;
-          str += `<h5><a href="movieDetail?id=${movie.id}">${movie.title}</a></h5>`;
-          str += `<div class="text-white">${movie.releaseDate}`;
-          str += `</div>`;
-          str += `</div></div>`;
-        }
+        str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
+        str += `<div class="product__item mb-2">`;
+        str += `<a href="movieDetail?id=${movie.id}"><img src=${
+          movie.posterPath != null
+            ? "https://image.tmdb.org/t/p/w500" + movie.posterPath
+            : "https://placehold.co/217x325?text=Movie"
+        } alt="" class="product__item__pic set-bg"></a></div>`;
+        str += `<div class="product__item__text mx-4 pt-0">`;
+        str += `<h5><a href="movieDetail?id=${movie.id}">${movie.title}</a></h5>`;
+        str += `<div class="text-white">${movie.releaseDate}`;
+        str += `</div>`;
+        str += `</div></div>`;
       });
       document.querySelector(".movie_similar_row").innerHTML = str;
     })
@@ -247,8 +241,8 @@ document.querySelector("#btnradio4").addEventListener("click", (e) => {
       alert("Failed to add to favorites: " + error.message); // 오류 메시지
     });
 
-  if (directors > 0) {
-    fetch(`/rest/movieDetail/director/${directors}`)
+  if (directors.length > 0) {
+    fetch(`/rest/movieDetail/director/${directors[0]}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to add to favorites");
@@ -261,27 +255,24 @@ document.querySelector("#btnradio4").addEventListener("click", (e) => {
         document.querySelector(".director_row").innerHTML = "";
         document.querySelector(".actor_row").innerHTML = "";
         document.querySelector(".review_row").innerHTML = "";
-        document.getElementById("reviewreview").setAttribute("hidden", "");
 
         str = "";
         document.querySelector(".movie_director_row").innerHTML = str;
-        str += `<div class="row trending__product-row actor_row">`;
-        str += `<div class="section-title"><h5>${directorName} 감독의 다른 영화</h5></div>`;
-        data.slice(0, 8).forEach((movie) => {
-          if (movie.id != movieId) {
-            str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
-            str += `<div class="product__item mb-2">`;
-            str += `<a href="movieDetail?id=${movie.id}"><img src=${
-              movie.posterPath != null
-                ? "https://image.tmdb.org/t/p/w500" + movie.posterPath
-                : "https://placehold.co/217x325?text=Movie"
-            } alt="" class="product__item__pic set-bg"></a></div>`;
-            str += `<div class="product__item__text mx-4 pt-0">`;
-            str += `<h5><a href="movieDetail?id=${movie.id}">${movie.title}</a></h5>`;
-            str += `<div class="text-white">${movie.releaseDate}`;
-            str += `</div>`;
-            str += `</div></div>`;
-          }
+        str = `<div class="row trending__product-row actor_row">`;
+        str = `<div class="section-title"><h5>${directorName} 감독의 다른 영화</h5></div>`;
+        data.forEach((movie) => {
+          str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
+          str += `<div class="product__item mb-2">`;
+          str += `<a href="movieDetail?id=${movie.id}"><img src=${
+            movie.posterPath != null
+              ? "https://image.tmdb.org/t/p/w500" + movie.posterPath
+              : "https://placehold.co/217x325?text=Movie"
+          } alt="" class="product__item__pic set-bg"></a></div>`;
+          str += `<div class="product__item__text mx-4 pt-0">`;
+          str += `<h5><a href="movieDetail?id=${movie.id}">${movie.title}</a></h5>`;
+          str += `<div class="text-white">${movie.releaseDate}`;
+          str += `</div>`;
+          str += `</div></div>`;
         });
         document.querySelector(".movie_director_row").innerHTML = str;
       })
@@ -291,132 +282,9 @@ document.querySelector("#btnradio4").addEventListener("click", (e) => {
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  const reviewList = document.getElementById("reviewList");
-  const reviewForm = document.getElementById("reviewForm");
-  const reviewSection = document.getElementById("reviewreview"); // 리뷰 섹션
-  const btnRadio3 = document.getElementById("btnradio3"); // 평점/리뷰 버튼
-
-  if (!reviewList || !reviewForm || !reviewSection || !btnRadio3) {
-    console.warn("Review elements not found. Skipping review functionality.");
-    return;
-  }
-
-  // 초기 설정: 리뷰 작성 섹션 숨기기
-  reviewSection.style.display = "none";
-
-  // 버튼 그룹 관련 섹션 DOM 요소
-  const overviewSection = document.querySelector(".overview");
-  const directorSection = document.querySelector(".director_row");
-  const actorSection = document.querySelector(".actor_row");
-  const reviewRow = document.querySelector(".review_row");
-  const similarMoviesSection = document.querySelector(".movie_similar_row");
-  const directorMoviesSection = document.querySelector(".movie_director_row");
-
-  // 모든 섹션 숨기기 함수
-  function clearSections() {
-    reviewSection.style.display = "none";
-    overviewSection.style.display = "none";
-    directorSection.style.display = "none";
-    actorSection.style.display = "none";
-    reviewRow.style.display = "none";
-    similarMoviesSection.style.display = "none";
-    directorMoviesSection.style.display = "none";
-  }
-
-  // "평점/리뷰" 버튼 클릭 시 리뷰 섹션 표시
-  btnRadio3.addEventListener("click", () => {
-    clearSections();
-    reviewSection.style.display = "block"; // 리뷰 섹션 보이기
+document.querySelectorAll(".star-rating input").forEach((star) => {
+  star.addEventListener("change", (event) => {
+    console.log(`Selected rating: ${event.target.value}`);
+    // 추가 작업: 서버에 전송하거나 UI 업데이트
   });
-
-  // 다른 버튼 클릭 처리 (예시: 주요 정보, 감독/출연, 추천 버튼)
-  document.getElementById("btnradio1").addEventListener("click", () => {
-    clearSections();
-    overviewSection.style.display = "block"; // 주요 정보 섹션 보이기
-  });
-
-  document.getElementById("btnradio2").addEventListener("click", () => {
-    clearSections();
-    directorSection.style.display = "block"; // 감독/출연 섹션 보이기
-    actorSection.style.display = "block"; // 출연 섹션도 함께 보이기
-  });
-
-  document.getElementById("btnradio4").addEventListener("click", () => {
-    clearSections();
-    similarMoviesSection.style.display = "block"; // 추천 섹션 보이기
-  });
-
-  // 초기 데이터
-  const reviews = [];
-  let loggedInUserId = null; // 로그인 사용자 ID를 저장할 변수
-
-  // 사용자 정보 가져오기
-  function fetchUserInfo() {
-    return fetch("/member/me")
-      .then((response) => {
-        if (!response.ok) throw new Error("사용자 정보를 가져올 수 없습니다.");
-        return response.json();
-      })
-      .then((userInfo) => {
-        loggedInUserId = userInfo.memberId; // 사용자 memberId 저장
-        console.log("로그인 사용자 ID:", loggedInUserId);
-      })
-      .catch((error) => {
-        console.error("사용자 정보 불러오기 실패:", error);
-        loggedInUserId = null; // 로그인 실패 시 null로 설정
-      });
-  }
-
-  // 리뷰 폼 제출 이벤트
-  reviewForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    if (!loggedInUserId) {
-      alert("로그인 후 댓글을 작성할 수 있습니다.");
-      return;
-    }
-
-    const comment = document.getElementById("comment").value.trim();
-    const rating = document.querySelector(
-      'input[name="rating"]:checked'
-    )?.value;
-
-    if (!comment || !rating) {
-      alert("댓글과 평점을 모두 입력해주세요.");
-      return;
-    }
-
-    // 새 리뷰 추가
-    reviews.push({ author: loggedInUserId, content: comment, rating });
-
-    // 입력 필드 초기화
-    document.getElementById("comment").value = "";
-    renderReviews();
-  });
-
-  // 리뷰 렌더링 함수
-  function renderReviews() {
-    reviewList.innerHTML = ""; // 기존 리뷰 초기화
-    reviews.forEach((review, index) => {
-      const reviewItem = document.createElement("div");
-      reviewItem.className = "anime__review__item";
-
-      reviewItem.innerHTML = `
-        <div class="anime__review__item__pic">
-          <img src="img/anime/review-${index + 1}.jpg" alt="" />
-        </div>
-        <div class="anime__review__item__text">
-          <h6>${review.author}</h6>
-          <p>${review.content}</p>
-          <div  style="color: #ffffff;">평점: ${"★".repeat(review.rating)}</div>
-        </div>
-      `;
-
-      reviewList.appendChild(reviewItem);
-    });
-  }
-
-  // 초기화: 사용자 정보 가져오기
-  fetchUserInfo();
 });

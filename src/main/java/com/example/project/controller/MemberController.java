@@ -27,7 +27,9 @@ import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.MovieDto;
 import com.example.project.dto.reserve.ReserveDto;
+import com.example.project.entity.Movie;
 import com.example.project.service.FavoriteService;
+import com.example.project.service.MemberFavoriteMovieService;
 import com.example.project.service.MemberService;
 import com.example.project.service.MovieService;
 import com.example.project.service.reservation.ReserveService;
@@ -48,6 +50,7 @@ public class MemberController {
     private final FavoriteService favoriteService;
     private final ReserveService reserveService;
     private final MovieService movieService;
+    private final MemberFavoriteMovieService memberFavoriteMovieService;
 
     @GetMapping("/login")
     public void loginRedirect() {
@@ -102,7 +105,7 @@ public class MemberController {
         model.addAttribute("member", memberDto);
 
         // 찜 목록 가져오기
-        List<MovieDto> favorites = favoriteService.getFavorites(memberId);
+        List<Movie> favorites = memberFavoriteMovieService.getFavoriteMoviesByMemberId(memberDto.getMid());
         model.addAttribute("favorites", favorites);
 
         return "member/mypage"; // mypage.html 반환

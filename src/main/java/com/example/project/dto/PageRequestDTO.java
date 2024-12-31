@@ -35,7 +35,7 @@ public class PageRequestDTO {
 
     public PageRequestDTO() {
         this.page = 1;
-        this.size = 10;
+        this.size = 8;
         this.sort = "popularity";
         this.genre = null;
         this.movieList = "nowPlaying";
