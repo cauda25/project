@@ -25,7 +25,6 @@ import com.example.project.dto.MemberDto;
 import com.example.project.dto.MovieDto;
 import com.example.project.dto.reserve.ReserveDto;
 import com.example.project.entity.Movie;
-import com.example.project.service.FavoriteService;
 import com.example.project.service.MemberFavoriteMovieService;
 import com.example.project.service.MemberService;
 import com.example.project.service.MovieService;
@@ -44,7 +43,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MemberController {
 
     private final MemberService memberService;
-    private final FavoriteService favoriteService;
     private final ReserveService reserveService;
     private final MovieService movieService;
     private final MemberFavoriteMovieService memberFavoriteMovieService;

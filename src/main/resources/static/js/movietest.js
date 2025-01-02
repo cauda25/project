@@ -1,3 +1,4 @@
+// 찜한 영화에 있을 시 버튼 텍스트 변경
 function isExistFavorite() {
   if (isExist === "true") {
     document.querySelector(".follow-btn").innerHTML = "찜 제거";
@@ -17,6 +18,7 @@ function clearSection() {
   document.getElementById("reviewreview").setAttribute("hidden", "");
 }
 
+// 해당 영화 상세 정보 가져오기
 fetch(`/rest/movieDetail/${movieId}`)
   .then((response) => {
     if (!response.ok) throw new Error("에러");
@@ -28,12 +30,30 @@ fetch(`/rest/movieDetail/${movieId}`)
     // 주요 정보 실행
     clearSection();
 
+    // 개요 화면 출력
     let str = `<div class="section-title"><h5>개요</h5></div>`;
     if (data.overview != null) {
       str += `<div class="anime__review__item overview">${data.overview}</div>`;
     }
-
     document.querySelector(".overview").innerHTML = str;
+
+    // 감독, 출연자 정보 불러오기
+    const directorList = new Array();
+    const actorList = new Array();
+    data.personDtos.forEach((personDto) => {
+      personDto.moviePersonDtos.forEach((moviePersonDto) => {
+        // Director 역할이 있는 사람은 directorList에 추가
+        if (moviePersonDto.role && moviePersonDto.role === "Director") {
+          directorList.push(personDto);
+        }
+        // Actor 역할이 있는 사람은 actorList에 추가
+        if (moviePersonDto.role && moviePersonDto.role === "Actor") {
+          actorList.push(personDto);
+        }
+      });
+    });
+    console.log(directorList);
+    console.log(actorList);
 
     // 주요 정보 버튼 클릭 시
     document.querySelector("#btnradio1").addEventListener("click", () => {
@@ -53,31 +73,8 @@ fetch(`/rest/movieDetail/${movieId}`)
       console.log("버튼2 클릭");
       clearSection();
 
-      const directorList = new Set();
-      const actorList = new Set();
-
-      data.personDtos.forEach((personDto) => {
-        personDto.moviePersonDtos.forEach((moviePersonDto) => {
-          // Director 역할이 있는 사람은 directorList에 추가
-          if (moviePersonDto.role && moviePersonDto.role === "Director") {
-            directorList.add(personDto);
-          }
-          // role이 null인 사람은 actorList에 추가
-          if (moviePersonDto.role && moviePersonDto.role === "Actor") {
-            actorList.add(personDto);
-          }
-        });
-      });
-
-      // Set을 다시 Array로 변환
-      const directorListArray = Array.from(directorList);
-      const actorListArray = Array.from(actorList);
-
-      console.log(directorListArray);
-      console.log(actorListArray);
-
       let str = `<div class="section-title"><h5>감독</h5></div>`;
-      directorListArray.forEach((director) => {
+      directorList.forEach((director) => {
         str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 product">`;
         str += `<div class="product__item mb-2">`;
         str += `<a href="personDetail?id=${director.id}"><img src=${
@@ -94,7 +91,7 @@ fetch(`/rest/movieDetail/${movieId}`)
       document.querySelector(".director_row").innerHTML = str;
       str = `<div class="row trending__product-row actor_row">`;
       str = `<div class="section-title"><h5>출연</h5></div>`;
-      actorListArray.forEach((actor) => {
+      actorList.forEach((actor) => {
         str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 product">`;
         str += `<div class="product__item mb-2">`;
         str += `<a href="personDetail?id=${actor.id}"><img src=${
@@ -150,8 +147,89 @@ fetch(`/rest/movieDetail/${movieId}`)
 
       // document.querySelector(".review_row").innerHTML = str;
     });
+
+    document.querySelector("#btnradio4").addEventListener("click", (e) => {
+      console.log("클릭");
+
+      fetch(`/rest/movieDetail/genres/${movieId}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed");
+          }
+          return response.json(); // 서버에서 전송된 텍스트 응답
+        })
+        .then((data) => {
+          console.log("장르 영화", data);
+
+          document.querySelector(".overview").innerHTML = "";
+          document.querySelector(".director_row").innerHTML = "";
+          document.querySelector(".actor_row").innerHTML = "";
+          document.querySelector(".review_row").innerHTML = "";
+          document.getElementById("reviewreview").setAttribute("hidden", "");
+
+          str = "";
+          document.querySelector(".movie_similar_row").innerHTML = str;
+          str = `<div class="row trending__product-row actor_row">`;
+          str = `<div class="section-title"><h5>비슷한 장르의 영화</h5></div>`;
+          data.slice(0, 8).forEach((movie) => {
+            str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
+            str += `<div class="product__item mb-2">`;
+            str += `<a href="movieDetail?id=${movie.id}"><img src=${
+              movie.posterPath != null
+                ? "https://image.tmdb.org/t/p/w500" + movie.posterPath
+                : "https://placehold.co/217x325?text=Movie"
+            } alt="" class="product__item__pic set-bg"></a></div>`;
+            str += `<div class="product__item__text mx-4 pt-0">`;
+            str += `<h5><a href="movieDetail?id=${movie.id}">${movie.title}</a></h5>`;
+            str += `<div class="text-white">${movie.releaseDate}`;
+            str += `</div>`;
+            str += `</div></div>`;
+          });
+          document.querySelector(".movie_similar_row").innerHTML = str;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      if (directorList.length > 0) {
+        fetch(`/rest/movieDetail/director/${directorList[0].id}`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to add to favorites");
+            }
+            return response.json(); // 서버에서 전송된 텍스트 응답
+          })
+          .then((data) => {
+            console.log("감독 영화", data);
+
+            str = "";
+            document.querySelector(".movie_director_row").innerHTML = str;
+            str = `<div class="row trending__product-row actor_row">`;
+            str = `<div class="section-title"><h5>${directorName} 감독의 다른 영화</h5></div>`;
+            data.forEach((movie) => {
+              str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
+              str += `<div class="product__item mb-2">`;
+              str += `<a href="movieDetail?id=${movie.id}"><img src=${
+                movie.posterPath != null
+                  ? "https://image.tmdb.org/t/p/w500" + movie.posterPath
+                  : "https://placehold.co/217x325?text=Movie"
+              } alt="" class="product__item__pic set-bg"></a></div>`;
+              str += `<div class="product__item__text mx-4 pt-0">`;
+              str += `<h5><a href="movieDetail?id=${movie.id}">${movie.title}</a></h5>`;
+              str += `<div class="text-white">${movie.releaseDate}`;
+              str += `</div>`;
+              str += `</div></div>`;
+            });
+            document.querySelector(".movie_director_row").innerHTML = str;
+          })
+          .catch((error) => {
+            alert("Failed to add to favorites: " + error.message); // 오류 메시지
+          });
+      }
+    });
   });
 
+// 찜한 영화에 추가
 function addToFavoriteMovie() {
   fetch(`/rest/movieDetail/${movieId}`, {
     method: "POST",
@@ -168,10 +246,11 @@ function addToFavoriteMovie() {
       // button.disabled = true; // 버튼 비활성화
     })
     .catch((error) => {
-      alert("Failed to add to favorites: " + error.message); // 오류 메시지
+      console.log(error);
     });
 }
 
+// 찜하기 버튼 누를 시
 document.querySelector(".follow-btn").addEventListener("click", (e) => {
   console.log("찜하기 버튼 클릭");
   // 서버나 클라이언트 측에서 인증 여부를 확인
@@ -199,89 +278,11 @@ document.querySelector(".follow-btn").addEventListener("click", (e) => {
       }
     })
     .catch((error) => {
-      console.error("Error:", error);
+      console.log(error);
     });
 });
 
-document.querySelector("#btnradio4").addEventListener("click", (e) => {
-  console.log("클릭");
-
-  fetch(`/rest/movieDetail/genres/${movieId}`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to add to favorites");
-      }
-      return response.json(); // 서버에서 전송된 텍스트 응답
-    })
-    .then((data) => {
-      console.log("장르 영화", data);
-      clearSection();
-
-      str = "";
-      document.querySelector(".movie_similar_row").innerHTML = str;
-      str = `<div class="row trending__product-row actor_row">`;
-      str = `<div class="section-title"><h5>비슷한 장르의 영화</h5></div>`;
-      data.slice(0, 8).forEach((movie) => {
-        str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
-        str += `<div class="product__item mb-2">`;
-        str += `<a href="movieDetail?id=${movie.id}"><img src=${
-          movie.posterPath != null
-            ? "https://image.tmdb.org/t/p/w500" + movie.posterPath
-            : "https://placehold.co/217x325?text=Movie"
-        } alt="" class="product__item__pic set-bg"></a></div>`;
-        str += `<div class="product__item__text mx-4 pt-0">`;
-        str += `<h5><a href="movieDetail?id=${movie.id}">${movie.title}</a></h5>`;
-        str += `<div class="text-white">${movie.releaseDate}`;
-        str += `</div>`;
-        str += `</div></div>`;
-      });
-      document.querySelector(".movie_similar_row").innerHTML = str;
-    })
-    .catch((error) => {
-      alert("Failed to add to favorites: " + error.message); // 오류 메시지
-    });
-
-  if (directors.length > 0) {
-    fetch(`/rest/movieDetail/director/${directors[0]}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to add to favorites");
-        }
-        return response.json(); // 서버에서 전송된 텍스트 응답
-      })
-      .then((data) => {
-        console.log("감독 영화", data);
-        document.querySelector(".overview").innerHTML = "";
-        document.querySelector(".director_row").innerHTML = "";
-        document.querySelector(".actor_row").innerHTML = "";
-        document.querySelector(".review_row").innerHTML = "";
-
-        str = "";
-        document.querySelector(".movie_director_row").innerHTML = str;
-        str = `<div class="row trending__product-row actor_row">`;
-        str = `<div class="section-title"><h5>${directorName} 감독의 다른 영화</h5></div>`;
-        data.forEach((movie) => {
-          str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
-          str += `<div class="product__item mb-2">`;
-          str += `<a href="movieDetail?id=${movie.id}"><img src=${
-            movie.posterPath != null
-              ? "https://image.tmdb.org/t/p/w500" + movie.posterPath
-              : "https://placehold.co/217x325?text=Movie"
-          } alt="" class="product__item__pic set-bg"></a></div>`;
-          str += `<div class="product__item__text mx-4 pt-0">`;
-          str += `<h5><a href="movieDetail?id=${movie.id}">${movie.title}</a></h5>`;
-          str += `<div class="text-white">${movie.releaseDate}`;
-          str += `</div>`;
-          str += `</div></div>`;
-        });
-        document.querySelector(".movie_director_row").innerHTML = str;
-      })
-      .catch((error) => {
-        alert("Failed to add to favorites: " + error.message); // 오류 메시지
-      });
-  }
-});
-
+// 평점 클릭 시
 document.querySelectorAll(".star-rating input").forEach((star) => {
   star.addEventListener("change", (event) => {
     console.log(`Selected rating: ${event.target.value}`);
