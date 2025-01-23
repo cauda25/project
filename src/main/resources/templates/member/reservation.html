@@ -69,7 +69,7 @@
             <p style="color: #ddd; margin: 0">
               결제 금액:
               <span
-                th:if="${res.reserveStatus != 'CANCEL'}"
+                th:if="${res.reserveStatus == 'COMPLETE'}"
                 th:text="${res.totalPrice + '원'}"
               ></span>
               <span th:if="${res.reserveStatus == 'CANCEL'}" style="color: red"
@@ -79,7 +79,7 @@
             <button
               type="button"
               class="btn btn-danger"
-              th:if="${res.reserveStatus != 'CANCEL'}"
+              th:if="${res.reserveStatus == 'COMPLETE'}"
               style="
                 position: absolute;
                 bottom: 10px;
