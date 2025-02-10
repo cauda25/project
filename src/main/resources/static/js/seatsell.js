@@ -58,7 +58,29 @@ document.addEventListener("DOMContentLoaded", () => {
       const offsetX = (containerWidth - totalSeatWidth) / 2;
       const offsetY = (containerHeight - totalSeatHeight) / 2;
 
+      const addedRowLabels = new Set(); // 중복 추가 방지
+
       seatStatuses.forEach((seatStatus) => {
+        const rowNum = seatStatus.rowNum; // 행 번호 (A, B, C...)
+        // 열 번호를 왼쪽에 추가 (한 번만 추가되도록)
+        if (!addedRowLabels.has(rowNum)) {
+          const rowLabel = document.createElement("span");
+          rowLabel.textContent = rowNum;
+          rowLabel.classList.add("row-label");
+          rowLabel.style.position = "absolute";
+          rowLabel.style.left = `${offsetX - 20}px`; // 좌석 왼쪽에 배치
+          rowLabel.style.top = `${
+            offsetY + (rowNum.charCodeAt(0) - 65) * seatHeight
+          }px`;
+          rowLabel.style.fontWeight = "bold";
+          rowLabel.style.fontSize = "14px";
+          rowLabel.style.width = "15px";
+          rowLabel.style.textAlign = "center";
+          seatContainer.appendChild(rowLabel);
+
+          addedRowLabels.add(rowNum);
+        }
+
         const seatButton = document.createElement("button");
         seatButton.type = "button";
         seatButton.setAttribute("data-seatstatus-id", seatStatus.seatStatusId);
@@ -100,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })`;
 
         // 좌석 버튼 내부 내용
-        seatButton.textContent = seatStatus.seatNum;
+        // seatButton.textContent = seatStatus.seatNum;
 
         // 좌석 클릭 이벤트 추가
         seatButton.addEventListener("click", () => {
@@ -122,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 selectedSeats.push(seatInfo);
               } else {
                 const index = selectedSeats.findIndex(
-                  (seat) => seat.seatStatusId === seatInfo.seatStatusId
+                  (seat) => seat.seatId === seatInfo.seatId
                 );
                 selectedSeats.splice(index, 1);
               }

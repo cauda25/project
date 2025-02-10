@@ -2,54 +2,54 @@
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <th:block layout:fragment="css">
     <link rel="stylesheet" th:href="@{/css/seatsell.css}">
-  </th:block>   
-    <div layout:fragment="content">      
-      <table class="table table-bordered mt-3">
-        <thead>
-          <tr>
-            <th colspan="3" scope="col" class="bg-dark text-white">좌석선택</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td colspan="2">
-              <div id="seat-container"></div>
-            </td>   
-            <td colspan="1">
-              <div id="price-display"></div>
-            </td>              
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="3" class="text-center">
-              <div class="selection-container">
-                <div class="selection-summary">
-                  <p>
-                    <strong>선택한 극장:</strong> <span id="selected-theater">-</span><br>
-                    <strong>선택한 영화:</strong> <span id="selected-movie">-</span><br>
-                    <strong>선택한 날짜:</strong> <span id="selected-date">-</span><br>
-                    <strong>선택한 상영관:</strong> <span id="selected-auditorium">-</span><br>
-                    <strong>선택한 시간:</strong> <span id="selected-time">-</span>
-                  </p>
-                </div>
-                <a href="#" 
-                   class="select-info" 
-                   id="payment-button" 
-                   data-theater=""
-                   data-movie=""
-                   data-date=""
-                   data-auditorium=""
-                   data-time="">
-                  결제 <i class="fa-solid fa-angles-right"></i>
-                </a>
+  </th:block>
+  <div layout:fragment="content">
+    <table class="table table-bordered mt-3">
+      <thead>
+        <tr>
+          <th colspan="3" scope="col" class="bg-dark text-white">좌석선택</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="2">
+            <div id="seat-container"></div>
+          </td>
+          <td colspan="1">
+            <div id="price-display"></div>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3" class="text-center">
+            <div class="selection-container">
+              <div class="selection-summary">
+                <p>
+                  <span>선택한 극장:</span>
+                  <strong id="selected-theater">-</strong><br>
+                  <span>선택한 영화:</span>
+                  <strong id="selected-movie">-</strong><br>
+                  <span>선택한 날짜:</span>
+                  <strong id="selected-date">-</strong><br>
+                  <span>선택한 상영관:</span>
+                  <strong id="selected-auditorium">-</strong><br>
+                  <span>선택한 시간:</span>
+                  <strong id="selected-time">-</strong>
+                </p>
               </div>
-            </td>
-          </tr>
-        </tfoot>
-      </table>     
-    </div>    
+              <a href="#" class="select-info" id="payment-button" data-theater="" data-movie="" data-date="" data-auditorium="" data-time="">
+                결제하기
+                <i class="fa-solid fa-angles-right"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
   <th:block layout:fragment="js">
     <script th:src="@{/js/seatsell.js}"></script>
-  </th:block>   
+  </th:block>
+
 </html>
