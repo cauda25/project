@@ -16,32 +16,32 @@
               <ul>
                 <li class="select_item">
                   <a
-                    th:href="@{/movie/movieList?movsleieList=nowPlaying&page=1&size=8&type=&keyword=&genre=&sort=popularity}"
+                    th:href="@{/movie/list?movsleieList=nowPlaying&page=1&size=8&type=&keyword=&genre=&sort=popularity}"
                     >영화</a
                   >
 
                   <ul class="dropdown">
                     <li>
                       <a
-                        th:href="@{/movie/movieList?movieList=nowPlaying&page=1&size=8&type=&keyword=&genre=&sort=popularity}"
+                        th:href="@{/movie/list?movieList=nowPlaying&page=1&size=8&type=&keyword=&genre=&sort=popularity}"
                         >현재 상영작</a
                       >
                     </li>
                     <li>
                       <a
-                        th:href="@{/movie/movieList?movieList=upcoming&page=1&size=8&type=&keyword=&genre=&sort=popularity}"
+                        th:href="@{/movie/list?movieList=upcoming&page=1&size=8&type=&keyword=&genre=&sort=popularity}"
                         >상영 예정작</a
                       >
                     </li>
                     <li>
                       <a
-                        th:href="@{/movie/movieList?movieList=popular&page=1&size=8&type=&keyword=&genre=&sort=popularity}"
+                        th:href="@{/movie/list?movieList=popular&page=1&size=8&type=&keyword=&genre=&sort=popularity}"
                         >전체 영화 목록</a
                       >
                     </li>
                     <li>
                       <a
-                        th:href="@{movieList(movieList=my,page=1,size=8,type=,keyword=,genre=,sort=popularity)}"
+                        th:href="@{list(movieList=my,page=1,size=8,type=,keyword=,genre=,sort=popularity)}"
                         >추천</a
                       >
                     </li>

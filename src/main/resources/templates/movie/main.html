@@ -55,7 +55,7 @@
                   th:each="dto, iterStat : ${movies != null ? movies.dtoList : null}"
                 >
                   <div class="product__item mb-2">
-                    <a th:href="@{movieDetail(id=${dto.id})}"
+                    <a th:href="@{detail(id=${dto.id})}"
                       ><img
                         th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
                         alt=""
@@ -65,7 +65,7 @@
                   <div class="product__item__text mx-4">
                     <h5>
                       <a
-                        th:href="@{movieDetail(id=${dto.id})}"
+                        th:href="@{detail(id=${dto.id})}"
                         th:text="${dto.title}"
                         >타이틀</a
                       >

@@ -65,7 +65,7 @@ public class MovieRestController {
         return new ResponseEntity<>(movieDtos, HttpStatus.OK);
     }
 
-    @GetMapping("/personDetail/{id}")
+    @GetMapping("/person/detail/{id}")
     public ResponseEntity<List<MovieDto>> getPersonDetail(@PathVariable Long id,
             @ModelAttribute("requestDto") @RequestBody PageRequestDTO requestDto) {
         log.info("rest 영화 전체 목록 요청 {}", id);

@@ -33,14 +33,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 @Log4j2
 @Controller
-// @RequestMapping("")
+@RequestMapping("/payment")
 public class OrderController {
 
     private final CartItemService cartItemService;
     private final OrderService orderService;
     private final OrderItemService orderItemService;
 
-    @GetMapping("/order")
+    @GetMapping("/payment")
     public void getCart(Model model) {
         log.info("cart 폼 요청");
 
@@ -57,7 +57,7 @@ public class OrderController {
 
     }
 
-    @GetMapping("/payment-success")
+    @GetMapping("/success")
     public void getSuccess(@RequestParam Long orderId) {
         log.info("결제 성공 요청 {}", orderId);
         SecurityContext context = SecurityContextHolder.getContext();
@@ -69,7 +69,7 @@ public class OrderController {
         cartItemService.deleteByOrderId(orderId, memberDto.getMid());
     }
 
-    @GetMapping("/payment-history")
+    @GetMapping("/history")
     public void getHistory(Model model) {
         log.info("결제 내역 요청 {}");
         SecurityContext context = SecurityContextHolder.getContext();

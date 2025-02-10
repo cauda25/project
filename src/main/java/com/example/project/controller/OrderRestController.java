@@ -39,7 +39,7 @@ public class OrderRestController {
     private final OrderService orderService;
     private final OrderItemService orderItemService;
 
-    @PostMapping("/order")
+    @PostMapping("/payment")
     public ResponseEntity<List<OrderItemDto>> postCartItem(
             @RequestBody List<Long> checkedItems) {
         log.info("rest 상품 상세 요청 {}", checkedItems);

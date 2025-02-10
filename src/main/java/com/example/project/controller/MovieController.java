@@ -38,7 +38,7 @@ public class MovieController {
 
     private final MovieService movieService;
     private final GenreService genreService;
-    private final PersonService peopleService;
+    private final PersonService personService;
     private final MemberFavoriteMovieService memberFavoriteMovieService;
 
     @GetMapping("/main")
@@ -50,7 +50,7 @@ public class MovieController {
         model.addAttribute("movies", movies);
     }
 
-    @GetMapping("/movieList")
+    @GetMapping("/list")
     public void getMovieList(@ModelAttribute("requestDto") PageRequestDTO requestDto,
             Model model) {
         log.info("영화 전체 목록 요청 {}", requestDto);
@@ -60,13 +60,23 @@ public class MovieController {
                 model.addAttribute("movies", movies);
             }
             if (requestDto.getType().contains("p")) {
-                PageResultDTO<PersonDto, Person> people = peopleService.getList(requestDto);
+                PageResultDTO<PersonDto, Person> people = personService.getList(requestDto);
                 model.addAttribute("people", people);
-
             }
         } else {
-            PageResultDTO<MovieDto, Movie> movies = movieService.getList(requestDto);
-            model.addAttribute("movies", movies);
+            if (requestDto.getType() != null && requestDto.getType() != "") {
+                if (requestDto.getType().contains("m")) {
+                    PageResultDTO<MovieDto, Movie> movies = movieService.getList(requestDto);
+                    model.addAttribute("movies", movies);
+                }
+                if (requestDto.getType().contains("p")) {
+                    PageResultDTO<PersonDto, Person> people = personService.getList(requestDto);
+                    model.addAttribute("people", people);
+                }
+            } else {
+                PageResultDTO<MovieDto, Movie> movies = movieService.getList(requestDto);
+                model.addAttribute("movies", movies);
+            }
         }
 
         List<GenreDto> genreDtos = genreService.getGenres();
@@ -100,7 +110,7 @@ public class MovieController {
 
             if (mostFrequentDirector != null) {
                 // 감독이 있을 경우만 처리
-                PersonDto directorDto = peopleService.read(mostFrequentDirector);
+                PersonDto directorDto = personService.read(mostFrequentDirector);
                 List<MovieDto> recommendMoviesByDirector = movieService.getMovieListByPersonId(mostFrequentDirector);
 
                 model.addAttribute("directorDto", directorDto);
@@ -120,7 +130,7 @@ public class MovieController {
 
     }
 
-    @GetMapping("/movieDetail")
+    @GetMapping("detail")
     public void getMovieDetail(Long id, @ModelAttribute("requestDto") PageRequestDTO requestDto,
             Model model) {
         log.info("movieDetail 폼 요청 {}", id);
@@ -167,11 +177,11 @@ public class MovieController {
         log.info("로그인 {}", isLogin);
     }
 
-    @GetMapping("/personDetail")
+    @GetMapping("/person/detail")
     public void getPersonDetail(Long id, @ModelAttribute("requestDto") PageRequestDTO requestDto,
             Model model) {
         log.info("personDetail 폼 요청 {}", id);
-        PersonDto peopleDto = peopleService.read(id);
+        PersonDto peopleDto = personService.read(id);
         // List<MovieDto> movieDtoList = movieService.getMovieListByPersonId(id);
         model.addAttribute("peopleDto", peopleDto);
         // model.addAttribute("movieDtoList", movieDtoList);

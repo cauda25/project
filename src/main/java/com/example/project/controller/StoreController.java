@@ -51,7 +51,7 @@ public class StoreController {
 
     }
 
-    @GetMapping("/productDetail")
+    @GetMapping("/detail")
     public void getHome(@RequestParam Long id, @RequestParam String category, Model model) {
         log.info("상품 상세 정보 폼 요청");
         log.info("상품 상세 정보 폼 요청: {}", category);

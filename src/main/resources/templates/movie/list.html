@@ -23,7 +23,7 @@
     </style>
   </th:block>
   <div layout:fragment="content">
-    <form class="" role="search" th:action="@{movieList}" id="searchForm">
+    <form class="" role="search" th:action="@{list}" id="searchForm">
       <input type="hidden" name="page" th:value="1" />
       <input type="hidden" name="size" th:value="${requestDto.size}" />
       <input type="hidden" name="genre" th:value="${requestDto.genre}" />
@@ -87,14 +87,14 @@
                   <li>
                     <a
                       class="dropdown-item"
-                      th:href="@{movieList(movieList=nowPlaying,page=1,size=${requestDto.size},type=,keyword=,genre=,sort=popularity)}"
+                      th:href="@{list(movieList=nowPlaying,page=1,size=${requestDto.size},type=,keyword=,genre=,sort=popularity)}"
                       >전체</a
                     >
                   </li>
                   <li th:each="dto : ${genreDtos}">
                     <a
                       class="dropdown-item"
-                      th:href="@{movieList(movieList=popular,page=1,size=${requestDto.size},type=,keyword=,genre=${dto.id},sort=${requestDto.sort})}"
+                      th:href="@{list(movieList=popular,page=1,size=${requestDto.size},type=,keyword=,genre=${dto.id},sort=${requestDto.sort})}"
                       >[[${dto.name}]]</a
                     >
                   </li>
@@ -106,21 +106,21 @@
             <ul class="nav nav-pills nav-fill mb-4 tab-list">
               <li class="nav-item">
                 <a
-                  th:href="@{movieList(movieList=nowPlaying,page=1,size=${requestDto.size},type=,keyword=,genre=,sort=popularity)}"
+                  th:href="@{list(movieList=nowPlaying,page=1,size=${requestDto.size},type=,keyword=,genre=,sort=popularity)}"
                   th:class="'nav-link text-white nowPlaying ' + ${requestDto.movieList == 'nowPlaying' ? 'active bg-danger' : ''}"
                   >현재 상영작</a
                 >
               </li>
               <li class="nav-item">
                 <a
-                  th:href="@{movieList(movieList=upcoming,page=1,size=${requestDto.size},type=,keyword=,genre=,sort=popularity)}"
+                  th:href="@{list(movieList=upcoming,page=1,size=${requestDto.size},type=,keyword=,genre=,sort=popularity)}"
                   th:class="'nav-link text-white upcoming ' + ${requestDto.movieList == 'upcoming' ? 'active bg-danger' : ''}"
                   >상영 예정작</a
                 >
               </li>
               <li class="nav-item">
                 <a
-                  th:href="@{movieList(movieList=popular,page=1,size=${requestDto.size},type=,keyword=,genre=,sort=popularity)}"
+                  th:href="@{list(movieList=popular,page=1,size=${requestDto.size},type=,keyword=,genre=,sort=popularity)}"
                   th:class="'nav-link text-white popular ' + ${requestDto.movieList == 'popular' ? 'active bg-danger' : ''}"
                   >전체 영화 목록</a
                 >
@@ -128,7 +128,7 @@
               <li class="nav-item" sec:authorize="isAuthenticated()">
                 <a
                   th:class="'nav-link text-white my ' + ${requestDto.movieList == 'my' ? 'active bg-danger' : ''}"
-                  th:href="@{movieList(movieList=my,page=1,size=${requestDto.size},type=,keyword=,genre=,sort=popularity)}"
+                  th:href="@{list(movieList=my,page=1,size=${requestDto.size},type=,keyword=,genre=,sort=popularity)}"
                   >추천</a
                 >
               </li>
@@ -146,7 +146,7 @@
               <!-- <div class="d-flex sub-head">
                 <h3 class="text-white">영화 [[${movies.totalElements}]] 건</h3>
                 <a
-                  th:href="@{movieList(movieList=popular,page=1,size=${requestDto.size},type='m',keyword=${requestDto.keyword},genre='',sort=${requestDto.sort})}"
+                  th:href="@{list(movieList=popular,page=1,size=${requestDto.size},type='m',keyword=${requestDto.keyword},genre='',sort=${requestDto.sort})}"
                   class="btn btn-outline-danger"
                   th:if="${requestDto.type == 'mp'}"
                   >더보기</a
@@ -161,7 +161,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                   <div class="btn__all">
                     <a
-                      th:href="@{movieList(movieList=popular,page=1,size=${requestDto.size},type='m',keyword=${requestDto.keyword},genre='',sort=${requestDto.sort})}"
+                      th:href="@{list(movieList=popular,page=1,size=${requestDto.size},type='m',keyword=${requestDto.keyword},genre='',sort=${requestDto.sort})}"
                       class="primary-btn"
                       th:if="${requestDto.type == 'mp'}"
                       >View All <span class="arrow_right"></span
@@ -175,7 +175,7 @@
                 th:each="dto, iterStat : ${movies != null ? movies.dtoList : null}"
               >
                 <div class="product__item mb-2">
-                  <a th:href="@{movieDetail(id=${dto.id})}"
+                  <a th:href="@{detail(id=${dto.id})}"
                     ><img
                       th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
                       alt=""
@@ -184,9 +184,7 @@
                 </div>
                 <div class="product__item__text mx-4">
                   <h5>
-                    <a
-                      th:href="@{movieDetail(id=${dto.id})}"
-                      th:text="${dto.title}"
+                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}"
                       >타이틀</a
                     >
                   </h5>
@@ -225,7 +223,7 @@
                 th:each="dto, iterStat : ${recommendMovies != null ? recommendMovies : null}"
               >
                 <div class="product__item mb-2">
-                  <a th:href="@{movieDetail(id=${dto.id})}"
+                  <a th:href="@{detail(id=${dto.id})}"
                     ><img
                       th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
                       alt=""
@@ -234,9 +232,7 @@
                 </div>
                 <div class="product__item__text mx-4">
                   <h5>
-                    <a
-                      th:href="@{movieDetail(id=${dto.id})}"
-                      th:text="${dto.title}"
+                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}"
                       >타이틀</a
                     >
                   </h5>
@@ -269,7 +265,7 @@
                 th:each="dto, iterStat : ${recommendMoviesByDirector != null ? recommendMoviesByDirector : null}"
               >
                 <div class="product__item mb-2">
-                  <a th:href="@{movieDetail(id=${dto.id})}"
+                  <a th:href="@{detail(id=${dto.id})}"
                     ><img
                       th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
                       alt=""
@@ -278,9 +274,7 @@
                 </div>
                 <div class="product__item__text mx-4">
                   <h5>
-                    <a
-                      th:href="@{movieDetail(id=${dto.id})}"
-                      th:text="${dto.title}"
+                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}"
                       >타이틀</a
                     >
                   </h5>
@@ -301,15 +295,6 @@
               class="row trending__people-row"
               th:if="${requestDto.type != 'm' and requestDto.type != ''}"
             >
-              <!-- <div class="d-flex sub-head">
-                <h3 class="text-white">인물 [[${people.totalElements}]] 건</h3>
-                <a
-                  th:href="@{movieList(movieList=popular,page=1,size=${requestDto.size},type='p',keyword=${requestDto.keyword},genre='',sort=${requestDto.sort})}"
-                  class="btn btn-outline-danger"
-                  th:if="${requestDto.type == 'mp'}"
-                  >더보기</a
-                >
-              </div> -->
               <div class="row">
                 <div class="col-lg-8 col-md-8 col-sm-8">
                   <div class="section-title">
@@ -319,7 +304,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                   <div class="btn__all">
                     <a
-                      th:href="@{movieList(movieList=popular,page=1,size=${requestDto.size},type='p',keyword=${requestDto.keyword},genre='',sort=${requestDto.sort})}"
+                      th:href="@{list(movieList=popular,page=1,size=${requestDto.size},type='p',keyword=${requestDto.keyword},genre='',sort=${requestDto.sort})}"
                       class="primary-btn"
                       th:if="${requestDto.type == 'mp'}"
                       >View All <span class="arrow_right"></span
@@ -333,7 +318,7 @@
                 th:each="dto, iterStat : ${people != null ? people.dtoList : null}"
               >
                 <div class="product__item mb-2">
-                  <a th:href="@{personDetail(id=${dto.id})}"
+                  <a th:href="@{person/detail(id=${dto.id})}"
                     ><img
                       th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.profilePath}"
                       alt=""
@@ -343,7 +328,7 @@
                 <div class="product__item__text mx-4">
                   <h5>
                     <a
-                      th:href="@{personDetail(id=${dto.id})}"
+                      th:href="@{person/detail(id=${dto.id})}"
                       th:text="${dto.name}"
                     ></a>
                   </h5>
@@ -367,7 +352,7 @@
                 <a
                   class="page-link text-light bg-transparent"
                   th:href="@{
-                      movieList(
+                      list(
                         movieList=${requestDto.movieList},
                         page=${(movies != null and movies.prev) ? movies.start-1 : (people != null and people.prev) ? people.start-1 : 0},
                         size=${(movies != null) ? movies.size : people.size},
@@ -390,7 +375,7 @@
                 <a
                   th:class="'page-link text-light ' + ${movies != null ? (movies.page == page ? 'bg-danger border-light active' : 'bg-transparent') : (people.page == page ? 'bg-danger border-light active' : 'bg-transparent')}"
                   th:href="@{
-                      movieList(
+                      list(
                         movieList=${requestDto.movieList},
                         page=${page},
                         size=${(movies != null) ? movies.size : people.size},
@@ -411,7 +396,7 @@
                 <a
                   class="page-link text-light bg-transparent"
                   th:href="@{
-                      movieList(
+                      list(
                         movieList=${requestDto.movieList},
                         page=${(movies != null and movies.next) ? movies.end+1 : (people != null and people.next) ? people.end+1 : 0},
                         size=${(movies != null) ? movies.size : people.size},
@@ -480,7 +465,5 @@
         }
       }
     </script>
-    <!-- <script th:src="@{/js/movie.js}"></script> -->
-    <!-- <script th:src="@{/js/movietest.js}"></script> -->
   </th:block>
 </html>

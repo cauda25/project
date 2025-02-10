@@ -94,7 +94,7 @@ public class MovieRepositoryTest {
     @Test
     public void insertMovieTest() {
         // 해당 페이지 범위에서 영화 데이터를 가져와서 처리
-        IntStream.rangeClosed(2, 10).forEach(i -> {
+        IntStream.rangeClosed(1, 5).forEach(i -> {
             try {
                 // Popular 영화 목록 데이터를 가져오기
                 JSONObject jsonObject = fetchData(
