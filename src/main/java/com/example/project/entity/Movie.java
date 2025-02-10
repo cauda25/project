@@ -1,18 +1,8 @@
 package com.example.project.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,17 +42,5 @@ public class Movie extends BaseEntity {
     private String title;
     private Double voteAverage;
     private Long voteCount;
-
-    // @OneToMany(mappedBy = "movie")
-    // private Set<MovieGenre> movieGenres;
-
-    // @OneToMany(mappedBy = "movie")
-    // private Set<MoviePerson> moviePeople;
-
-    // @OneToMany(mappedBy = "movie")
-    // private List<Review> reviews;
-
-    // @OneToMany(mappedBy = "movie")
-    // private List<MemberFavoriteMovie> memberFavoriteMovies = new ArrayList<>();
 
 }

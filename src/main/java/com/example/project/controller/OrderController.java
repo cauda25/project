@@ -1,6 +1,5 @@
 package com.example.project.controller;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,18 +9,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
-import com.example.project.dto.store.CartItemDto;
 import com.example.project.dto.store.OrderDto;
 import com.example.project.dto.store.OrderItemDto;
-import com.example.project.dto.store.ProductDto;
 import com.example.project.entity.constant.OrderStatus;
-import com.example.project.entity.store.Order;
-import com.example.project.repository.store.OrderRepository;
 import com.example.project.service.store.CartItemService;
 import com.example.project.service.store.OrderItemService;
 import com.example.project.service.store.OrderService;

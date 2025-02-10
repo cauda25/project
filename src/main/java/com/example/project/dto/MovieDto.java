@@ -1,9 +1,7 @@
 package com.example.project.dto;
 
 import java.util.List;
-import java.util.Set;
 
-import com.example.project.entity.MoviePerson;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +17,6 @@ public class MovieDto {
     private String backdropPath;
     private Long budget;
     private String homepage;
-    // private String origin_country;
     private String originalLanguage;
     private String originalTitle;
 

@@ -7,9 +7,6 @@ import com.example.project.dto.store.OrderItemDto;
 import com.example.project.entity.Member;
 import com.example.project.entity.constant.OrderStatus;
 import com.example.project.entity.store.Order;
-import com.example.project.entity.store.OrderItem;
-
-import jakarta.persistence.Tuple;
 
 public interface OrderService {
 

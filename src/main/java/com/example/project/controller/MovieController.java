@@ -24,7 +24,6 @@ import com.example.project.dto.PageResultDTO;
 import com.example.project.dto.PersonDto;
 import com.example.project.entity.Movie;
 import com.example.project.entity.Person;
-import com.example.project.entity.constant.MemberRole;
 import com.example.project.service.GenreService;
 import com.example.project.service.MemberFavoriteMovieService;
 import com.example.project.service.MovieService;
@@ -182,8 +181,6 @@ public class MovieController {
             Model model) {
         log.info("personDetail 폼 요청 {}", id);
         PersonDto peopleDto = personService.read(id);
-        // List<MovieDto> movieDtoList = movieService.getMovieListByPersonId(id);
         model.addAttribute("peopleDto", peopleDto);
-        // model.addAttribute("movieDtoList", movieDtoList);
     }
 }

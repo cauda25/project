@@ -1,17 +1,13 @@
 package com.example.project.service.store;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.example.project.dto.store.OrderItemDto;
-import com.example.project.dto.store.ProductDto;
 import com.example.project.entity.Member;
-import com.example.project.entity.MemberFavoriteMovie;
 import com.example.project.entity.constant.OrderStatus;
-import com.example.project.entity.store.Cart;
 import com.example.project.entity.store.CartItem;
 import com.example.project.entity.store.Order;
 import com.example.project.entity.store.OrderItem;
@@ -79,12 +75,6 @@ public class OrderItemServiceImpl implements OrderItemService {
     public List<OrderItemDto> findByOrderId(Long orderId) {
         return orderItemRepository.findByOrderId(orderId).stream().map(orderItem -> entityToDto(orderItem))
                 .collect(Collectors.toList());
-        // List<OrderItem> orderItems = orderItemRepository.findByOrderId(orderId);
-        // List<OrderItemDto> orderItemDtos = new ArrayList<>();
-        // for (OrderItem orderItem : orderItems) {
-        // orderItemDtos.add(entityToDto(orderItem));
-        // }
-        // return orderItemDtos;
     }
 
     @Override
