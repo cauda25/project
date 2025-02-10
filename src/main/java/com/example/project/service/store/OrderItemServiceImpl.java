@@ -33,45 +33,6 @@ public class OrderItemServiceImpl implements OrderItemService {
     private final ProductRepository productRepository;
 
     @Override
-    public void addToCart(Long memberId, OrderItemDto orderItemDto) {
-        Long totalprice = orderItemDto.getPrice() * orderItemDto.getQuantity();
-
-        if (orderRepository.existsByMemberMidAndStatus(memberId, OrderStatus.CART)) {
-            List<Order> cart = orderRepository.findByMemberMidAndStatus(memberId, OrderStatus.CART);
-            cart.get(0).setTotalPrice(cart.get(0).getTotalPrice() + totalprice);
-            orderItemDto.setOrderId(cart.get(0).getId());
-            if (orderItemRepository.existsByOrderIdAndProductId(cart.get(0).getId(),
-                    orderItemDto.getProductDto().getId())) {
-                OrderItem orderItem = orderItemRepository.findByOrderIdAndProductId(cart.get(0).getId(),
-                        orderItemDto.getProductDto().getId());
-                orderItem.setQuantity(orderItemDto.getQuantity() + orderItem.getQuantity());
-                orderItemRepository.save(orderItem);
-            } else {
-                orderItemRepository.save(dtoToEntity(orderItemDto));
-
-            }
-        } else {
-            Order cart = Order.builder()
-                    .member(Member.builder().mid(memberId).build())
-                    .totalPrice(totalprice)
-                    .status(OrderStatus.CART)
-                    .build();
-            orderRepository.save(cart);
-            orderItemDto.setOrderId(cart.getId());
-            if (orderItemRepository.existsByOrderIdAndProductId(cart.getId(), orderItemDto.getProductDto().getId())) {
-                OrderItem orderItem = orderItemRepository.findByOrderIdAndProductId(cart.getId(),
-                        orderItemDto.getProductDto().getId());
-                orderItem.setQuantity(orderItemDto.getQuantity() + orderItem.getQuantity());
-                orderItemRepository.save(orderItem);
-            } else {
-                orderItemRepository.save(dtoToEntity(orderItemDto));
-
-            }
-        }
-
-    }
-
-    @Override
     public List<OrderItemDto> findByOrderId(Long orderId) {
         return orderItemRepository.findByOrderId(orderId).stream().map(orderItem -> entityToDto(orderItem))
                 .collect(Collectors.toList());

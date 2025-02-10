@@ -53,7 +53,8 @@ public class MovieController {
     public void getMovieList(@ModelAttribute("requestDto") PageRequestDTO requestDto,
             Model model) {
         log.info("영화 전체 목록 요청 {}", requestDto);
-        if (requestDto.getKeyword() != null && requestDto.getKeyword() != "") {
+        if ((requestDto.getKeyword() != null && !requestDto.getKeyword().isEmpty())
+                || (requestDto.getType() != null && !requestDto.getType().isEmpty())) {
             if (requestDto.getType().contains("m")) {
                 PageResultDTO<MovieDto, Movie> movies = movieService.getList(requestDto);
                 model.addAttribute("movies", movies);
@@ -63,19 +64,9 @@ public class MovieController {
                 model.addAttribute("people", people);
             }
         } else {
-            if (requestDto.getType() != null && requestDto.getType() != "") {
-                if (requestDto.getType().contains("m")) {
-                    PageResultDTO<MovieDto, Movie> movies = movieService.getList(requestDto);
-                    model.addAttribute("movies", movies);
-                }
-                if (requestDto.getType().contains("p")) {
-                    PageResultDTO<PersonDto, Person> people = personService.getList(requestDto);
-                    model.addAttribute("people", people);
-                }
-            } else {
-                PageResultDTO<MovieDto, Movie> movies = movieService.getList(requestDto);
-                model.addAttribute("movies", movies);
-            }
+            // 'keyword'가 없고 'type'이 없으면 기본적으로 영화 목록만 추가
+            PageResultDTO<MovieDto, Movie> movies = movieService.getList(requestDto);
+            model.addAttribute("movies", movies);
         }
 
         List<GenreDto> genreDtos = genreService.getGenres();

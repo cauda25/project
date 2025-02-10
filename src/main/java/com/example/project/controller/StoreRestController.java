@@ -71,7 +71,7 @@ public class StoreRestController {
         log.info("rest 상품 상세 요청");
 
         String memberId = principal.getName();
-        log.info("멤버 아이디", memberId);
+        log.info("멤버 아이디 {}", memberId);
         MemberDto memberDto = memberService.getMemberById(memberId);
         List<CartItemDto> cartItemDtos = cartItemService.findByMemberMid(memberDto.getMid());
 

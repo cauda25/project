@@ -10,8 +10,6 @@ import com.example.project.entity.store.Product;
 
 public interface OrderItemService {
 
-        void addToCart(Long memberId, OrderItemDto orderItemDto);
-
         List<OrderItemDto> findByOrderId(Long orderId);
 
         void insertOrderItems(Long memberId, Long orderId, List<Long> checkedItems);

@@ -1,8 +1,10 @@
 package com.example.project.service.store;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.example.project.dto.store.OrderDto;
@@ -16,6 +18,7 @@ import com.example.project.repository.store.OrderItemRepository;
 import com.example.project.repository.store.OrderRepository;
 import com.example.project.repository.store.ProductRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -41,7 +44,25 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Long createOrder(Long memberId) {
+        // OrderStatus가 PENDING 상태인 Order가 존재할 경우 CANCELLED로 변경
+        List<Order> orders = orderRepository.findByMemberMidAndStatus(memberId, OrderStatus.PENDING);
+        orders.forEach(order -> {
+            if (order.getStatus() == OrderStatus.PENDING) {
+                order.setStatus(OrderStatus.CANCELLED);
+                orderRepository.save(order);
+            }
+        });
+        // OrderStatus가 CANCELLED 상태인 Order를 가지고 있는 OrderItems가 존재할 경우 삭제
+        orders = orderRepository.findByMemberMidAndStatus(memberId, OrderStatus.CANCELLED);
+        orders.forEach(order -> {
+            if (order.getStatus() == OrderStatus.CANCELLED) {
+                orderItemRepository.deleteByOrderId(order.getId());
+            }
+        });
+
+        // 새로운 Order 생성
         Order order = Order.builder()
                 .status(OrderStatus.PENDING)
                 .member(Member.builder().mid(memberId).build())
@@ -89,13 +110,26 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
-    // @Override
-    // public List<> getStatusCompleted(Long memberId) {
-    // List<Tuple> results = orderRepository.getOrderDetails(memberId);
-    // for (Tuple tuple : results) {
-    // tuple.get()
-    // }
+    @Override
+    @Transactional
+    @Scheduled(fixedRate = 60000) // 1분마다 실행
+    public void deleteUnCompletedOrder() {
+        LocalDateTime tenMinutesAgo = LocalDateTime.now().minusMinutes(1);
 
-    // }
+        // 1분 이상 경과한 데이터를 찾기
+        List<Order> orders = orderRepository.findByUpdateDateBefore(tenMinutesAgo);
+
+        for (Order order : orders) {
+            if (order.getStatus() == OrderStatus.PENDING) {
+                orderItemRepository.deleteByOrderId(order.getId());
+                orderRepository.deleteById(order.getId());
+            }
+        }
+    }
+
+    @Override
+    public Boolean isStatusPending(Long orderId) {
+        return orderRepository.existsByIdAndStatus(orderId, OrderStatus.PENDING);
+    }
 
 }

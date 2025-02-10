@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.store.OrderItemDto;
-import com.example.project.service.store.CartService;
 import com.example.project.service.store.OrderItemService;
 import com.example.project.service.store.OrderService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RequestMapping("/rest")
 @RequiredArgsConstructor
@@ -44,6 +44,15 @@ public class OrderRestController {
         List<OrderItemDto> orderItemDtos = orderItemService.findByOrderId(orderId);
 
         return new ResponseEntity<>(orderItemDtos, HttpStatus.OK);
+    }
+
+    @GetMapping("/payment")
+    public ResponseEntity<String> getIsPending(@RequestParam Long orderId) {
+        log.info("아이디: {}", orderId);
+        if (!orderService.isStatusPending(orderId)) {
+            return ResponseEntity.ok("false");
+        }
+        return ResponseEntity.ok("true");
     }
 
     @PostMapping("/exit")

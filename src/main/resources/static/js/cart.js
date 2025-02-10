@@ -226,7 +226,8 @@ document.querySelector(".btn-checkout").addEventListener("click", () => {
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
-            window.location.href = "/payment/payment";
+            orderId = data[0].orderId;
+            window.location.href = `/payment/payment?orderId=${orderId}`;
           })
           .catch((error) => {
             console.error("Error adding to cart:", error);

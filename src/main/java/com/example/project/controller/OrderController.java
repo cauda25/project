@@ -3,6 +3,7 @@ package com.example.project.controller;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,8 +35,9 @@ public class OrderController {
     private final OrderService orderService;
     private final OrderItemService orderItemService;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/payment")
-    public void getCart(Model model) {
+    public void getCart(@RequestParam(name = "orderId") long orderId, Model model) {
         log.info("cart 폼 요청");
 
         SecurityContext context = SecurityContextHolder.getContext();
@@ -51,8 +53,9 @@ public class OrderController {
 
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/success")
-    public void getSuccess(@RequestParam Long orderId) {
+    public void getSuccess(@RequestParam(name = "orderId") Long orderId, Model model) {
         log.info("결제 성공 요청 {}", orderId);
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
@@ -61,8 +64,10 @@ public class OrderController {
 
         orderService.setStatusCompleted(orderId);
         cartItemService.deleteByOrderId(orderId, memberDto.getMid());
+        model.addAttribute("orderId", orderId);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/history")
     public void getHistory(Model model) {
         log.info("결제 내역 요청 {}");

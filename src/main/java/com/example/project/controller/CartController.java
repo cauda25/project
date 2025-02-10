@@ -1,5 +1,6 @@
 package com.example.project.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import lombok.extern.log4j.Log4j2;
 @RequestMapping("/cart")
 public class CartController {
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/main")
     public void getCart(@RequestParam(name = "purchaseBtn") Long productId, Model model) {
         log.info("cart 폼 요청: {}", productId);
