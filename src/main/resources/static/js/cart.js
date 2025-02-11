@@ -216,7 +216,7 @@ document.querySelector(".btn-checkout").addEventListener("click", () => {
     .then((data) => {
       if (data == true) {
         // 인증된 사용자일 경우 수행할 동작
-        fetch(`/rest/order`, {
+        fetch(`/rest/payment`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -226,7 +226,8 @@ document.querySelector(".btn-checkout").addEventListener("click", () => {
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
-            window.location.href = "/order";
+            orderId = data[0].orderId;
+            window.location.href = `/payment/payment?orderId=${orderId}`;
           })
           .catch((error) => {
             console.error("Error adding to cart:", error);

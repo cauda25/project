@@ -24,7 +24,6 @@ import com.example.project.dto.PageResultDTO;
 import com.example.project.dto.PersonDto;
 import com.example.project.entity.Movie;
 import com.example.project.entity.Person;
-import com.example.project.entity.constant.MemberRole;
 import com.example.project.service.GenreService;
 import com.example.project.service.MemberFavoriteMovieService;
 import com.example.project.service.MovieService;
@@ -38,7 +37,7 @@ public class MovieController {
 
     private final MovieService movieService;
     private final GenreService genreService;
-    private final PersonService peopleService;
+    private final PersonService personService;
     private final MemberFavoriteMovieService memberFavoriteMovieService;
 
     @GetMapping("/main")
@@ -50,21 +49,22 @@ public class MovieController {
         model.addAttribute("movies", movies);
     }
 
-    @GetMapping("/movieList")
+    @GetMapping("/list")
     public void getMovieList(@ModelAttribute("requestDto") PageRequestDTO requestDto,
             Model model) {
         log.info("영화 전체 목록 요청 {}", requestDto);
-        if (requestDto.getKeyword() != null && requestDto.getKeyword() != "") {
+        if ((requestDto.getKeyword() != null && !requestDto.getKeyword().isEmpty())
+                || (requestDto.getType() != null && !requestDto.getType().isEmpty())) {
             if (requestDto.getType().contains("m")) {
                 PageResultDTO<MovieDto, Movie> movies = movieService.getList(requestDto);
                 model.addAttribute("movies", movies);
             }
             if (requestDto.getType().contains("p")) {
-                PageResultDTO<PersonDto, Person> people = peopleService.getList(requestDto);
+                PageResultDTO<PersonDto, Person> people = personService.getList(requestDto);
                 model.addAttribute("people", people);
-
             }
         } else {
+            // 'keyword'가 없고 'type'이 없으면 기본적으로 영화 목록만 추가
             PageResultDTO<MovieDto, Movie> movies = movieService.getList(requestDto);
             model.addAttribute("movies", movies);
         }
@@ -100,7 +100,7 @@ public class MovieController {
 
             if (mostFrequentDirector != null) {
                 // 감독이 있을 경우만 처리
-                PersonDto directorDto = peopleService.read(mostFrequentDirector);
+                PersonDto directorDto = personService.read(mostFrequentDirector);
                 List<MovieDto> recommendMoviesByDirector = movieService.getMovieListByPersonId(mostFrequentDirector);
 
                 model.addAttribute("directorDto", directorDto);
@@ -120,7 +120,7 @@ public class MovieController {
 
     }
 
-    @GetMapping("/movieDetail")
+    @GetMapping("detail")
     public void getMovieDetail(Long id, @ModelAttribute("requestDto") PageRequestDTO requestDto,
             Model model) {
         log.info("movieDetail 폼 요청 {}", id);
@@ -167,13 +167,11 @@ public class MovieController {
         log.info("로그인 {}", isLogin);
     }
 
-    @GetMapping("/personDetail")
+    @GetMapping("/person/detail")
     public void getPersonDetail(Long id, @ModelAttribute("requestDto") PageRequestDTO requestDto,
             Model model) {
         log.info("personDetail 폼 요청 {}", id);
-        PersonDto peopleDto = peopleService.read(id);
-        // List<MovieDto> movieDtoList = movieService.getMovieListByPersonId(id);
+        PersonDto peopleDto = personService.read(id);
         model.addAttribute("peopleDto", peopleDto);
-        // model.addAttribute("movieDtoList", movieDtoList);
     }
 }

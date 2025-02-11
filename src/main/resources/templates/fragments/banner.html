@@ -8,15 +8,15 @@
           class="hero__items set-bg"
           th:if="${iterStat.index < 4}"
           th:each="dto, iterStat : ${movies?.dtoList}"
-          th:data-setbg="'https://image.tmdb.org/t/p/w500/' + ${dto.backdropPath}"
+          th:data-setbg="'https://image.tmdb.org/t/p/original/' + ${dto.backdropPath}"
         >
           <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
               <div class="hero__text color_black">
                 <!-- <div class="label">메인 배너</div> -->
                 <h2>[[${dto.title}]]</h2>
                 <p>[[${dto.tagline}]]</p>
-                <a th:href="@{movieDetail(id=${dto.id})}">
+                <a th:href="@{detail(id=${dto.id})}">
                   <span>자세히</span>
                 </a>
                 <a href="#"

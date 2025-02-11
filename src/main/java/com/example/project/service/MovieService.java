@@ -36,11 +36,7 @@ public interface MovieService {
     // 해당 영화와 같은 장르의 영화 리스트
     List<MovieDto> similarMovies(Long id);
 
-    // List<String> getDirectorList(Long id);
-
-    // List<String> getActorList(Long id);
-
-    // List<String> getGenreList(Long id);
+    void insertAndUpdateMovies();
 
     public default MovieDto entityToDto(Movie movie, List<MoviePerson> moviepeople, List<Person> people,
             List<Genre> genres) {
@@ -90,14 +86,8 @@ public interface MovieService {
                             .moviePersonDtos(moviePersonDtos.stream()
                                     .filter(moviePeopleDto -> moviePeopleDto
                                             .getPersonId()
-                                            .equals(person.getId())) // 해당
-                                                                     // peopleId에
-                                                                     // 맞는
-                                                                     // moviePeopleDto만
-                                                                     // 필터링
-                                    .collect(Collectors.toList())) // 필터링된
-                                                                   // moviePersonDtos
-                                                                   // 설정
+                                            .equals(person.getId())) // 해당 peopleId에 맞는 moviePeopleDto만 필터링
+                                    .collect(Collectors.toList())) // 필터링된 moviePersonDtos 설정
                             .build();
                 }).collect(Collectors.toList());
 

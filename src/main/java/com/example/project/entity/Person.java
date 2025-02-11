@@ -1,13 +1,7 @@
 package com.example.project.entity;
 
-import java.util.Set;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +21,7 @@ import lombok.ToString;
 public class Person extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // 데이터 정보 넣을 때 주석 처리
+    // @GeneratedValue(strategy = GenerationType.AUTO) // 데이터 정보 넣을 때 주석 처리
     private Long id;
 
     private Long gender;
@@ -35,8 +29,4 @@ public class Person extends BaseEntity {
     private String name;
     private Double popularity;
     private String profilePath;
-
-    // @OneToMany(mappedBy = "person")
-    // private Set<MoviePerson> moviePeople;
-
 }

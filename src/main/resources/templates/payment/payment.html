@@ -331,7 +331,10 @@
   <th:block layout:fragment="js">
     <script>
       const orderId = "[[${orderDto.id}]]";
+      let productName = "[[${orderItemDtos[0].productDto.name}]]";
+      const totalPrice = "[[${orderDto.totalPrice}]]";
     </script>
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
     <script th:src="@{/js/checkout.js}"></script>
     <script th:src="@{/js/order.js}"></script>
   </th:block>

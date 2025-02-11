@@ -31,6 +31,7 @@ import com.example.project.entity.Inquiry;
 import com.example.project.entity.Member;
 import com.example.project.entity.Movie;
 import com.example.project.entity.MovieGenre;
+import com.example.project.entity.MovieGenreId;
 import com.example.project.entity.MoviePerson;
 import com.example.project.entity.Person;
 import com.example.project.entity.reserve.Theater;
@@ -243,8 +244,7 @@ public class UserServiecImpl implements UserService {
             Genre genre = genreRepository.findById(genreId)
                     .orElseThrow(() -> new IllegalArgumentException("선택하신 장르를 찾을 수 없습니다. : " + genreId));
             MovieGenre movieGenre = MovieGenre.builder()
-                    .movie(movie)
-                    .genre(genre)
+                    .id(MovieGenreId.builder().movie(movie).genre(genre).build())
                     .build();
             movieGenreRepository.save(movieGenre);
             log.info("Saved MovieGenre: {}" + movieGenre);

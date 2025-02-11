@@ -15,11 +15,14 @@
         <h1 class="display-4 fw-bold text-body-emphasis text-white">
           결제 완료
         </h1>
+        <h4 class="text-body-emphasis text-white mt-3">
+          주문번호 [[${orderId}]]
+        </h4>
         <div class="col-lg-6 mx-auto text-white">
           <p class="lead mb-4"></p>
           <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
             <a
-              th:href="@{/payment-history}"
+              th:href="@{/payment/history}"
               class="btn btn-danger btn-lg px-4 me-sm-3"
             >
               결제내역

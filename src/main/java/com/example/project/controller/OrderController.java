@@ -1,27 +1,22 @@
 package com.example.project.controller;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
-import com.example.project.dto.store.CartItemDto;
 import com.example.project.dto.store.OrderDto;
 import com.example.project.dto.store.OrderItemDto;
-import com.example.project.dto.store.ProductDto;
 import com.example.project.entity.constant.OrderStatus;
-import com.example.project.entity.store.Order;
-import com.example.project.repository.store.OrderRepository;
 import com.example.project.service.store.CartItemService;
 import com.example.project.service.store.OrderItemService;
 import com.example.project.service.store.OrderService;
@@ -33,15 +28,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 @Log4j2
 @Controller
-// @RequestMapping("")
+@RequestMapping("/payment")
 public class OrderController {
 
     private final CartItemService cartItemService;
     private final OrderService orderService;
     private final OrderItemService orderItemService;
 
-    @GetMapping("/order")
-    public void getCart(Model model) {
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/payment")
+    public void getCart(@RequestParam(name = "orderId") long orderId, Model model) {
         log.info("cart 폼 요청");
 
         SecurityContext context = SecurityContextHolder.getContext();
@@ -57,8 +53,9 @@ public class OrderController {
 
     }
 
-    @GetMapping("/payment-success")
-    public void getSuccess(@RequestParam Long orderId) {
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/success")
+    public void getSuccess(@RequestParam(name = "orderId") Long orderId, Model model) {
         log.info("결제 성공 요청 {}", orderId);
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
@@ -67,9 +64,11 @@ public class OrderController {
 
         orderService.setStatusCompleted(orderId);
         cartItemService.deleteByOrderId(orderId, memberDto.getMid());
+        model.addAttribute("orderId", orderId);
     }
 
-    @GetMapping("/payment-history")
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/history")
     public void getHistory(Model model) {
         log.info("결제 내역 요청 {}");
         SecurityContext context = SecurityContextHolder.getContext();
