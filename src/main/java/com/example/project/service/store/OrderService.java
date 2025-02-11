@@ -7,13 +7,8 @@ import com.example.project.dto.store.OrderItemDto;
 import com.example.project.entity.Member;
 import com.example.project.entity.constant.OrderStatus;
 import com.example.project.entity.store.Order;
-import com.example.project.entity.store.OrderItem;
-
-import jakarta.persistence.Tuple;
 
 public interface OrderService {
-
-    // void addToCart(Long memberId, Long productId, int quantity);
 
     OrderDto getOrderDto(Long memberId, OrderStatus orderStatus);
 
@@ -23,9 +18,11 @@ public interface OrderService {
 
     void setStatusCompleted(Long id);
 
-    // List<Tuple> getStatusCompleted(Long memberId);
-
     List<OrderDto> getStatusCompleted(Long memberId);
+
+    void deleteUnCompletedOrder();
+
+    Boolean isStatusPending(Long orderId);
 
     public default OrderDto entityToDto(Order order, List<OrderItemDto> orderItem) {
 

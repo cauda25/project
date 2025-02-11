@@ -9,7 +9,6 @@ import com.example.project.dto.store.CartItemDto;
 import com.example.project.entity.store.Cart;
 import com.example.project.entity.store.CartItem;
 import com.example.project.entity.store.OrderItem;
-import com.example.project.entity.store.Product;
 import com.example.project.repository.store.CartItemRepository;
 import com.example.project.repository.store.CartRepository;
 import com.example.project.repository.store.OrderItemRepository;

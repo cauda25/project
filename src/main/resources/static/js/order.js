@@ -31,7 +31,7 @@ document.querySelector(".checkout-btn").addEventListener("click", () => {
     return;
   }
 
-  // 카드 번호 유효성 검사 (예시로 간단히 체크)
+  // 카드 번호 유효성 검사
   const cardNumberPattern = /^[0-9]{16}$/;
   if (!cardNumberPattern.test(cardNumber)) {
     alert("카드 번호가 유효하지 않습니다.");
@@ -52,6 +52,9 @@ document.querySelector(".checkout-btn").addEventListener("click", () => {
     return;
   }
 
+  const IMP = window.IMP; // 생략 가능
+  IMP.init("imp56626883"); // 예: imp00000000a
+
   preventExit = true; // 페이지 이동을 막기 위해 `beforeunload` 이벤트가 작동하지 않도록 flag 설정
   // 서버나 클라이언트 측에서 인증 여부를 확인
   fetch("/rest/check-auth", { method: "GET" }) // 예시로 인증 상태 확인 API 호출
@@ -64,7 +67,44 @@ document.querySelector(".checkout-btn").addEventListener("click", () => {
     .then((data) => {
       if (data == true) {
         // 인증된 사용자일 경우 수행할 동작
-        window.location.href = `/payment-success?orderId=${orderId}`;
+        // 결제 진행
+        // IMP.request_pay(
+        //   {
+        //     pg: "html5_inicis.INIpayTest",
+        //     pay_method: "card",
+        //     merchant_uid: "57008833-33004",
+        //     name: productName,
+        //     amount: totalPrice,
+        //     buyer_email: "Iamport@chai.finance",
+        //     buyer_name: "포트원 기술지원팀",
+        //     buyer_tel: "010-1234-5678",
+        //     buyer_addr: "서울특별시 강남구 삼성동",
+        //     buyer_postcode: "123-456",
+        //   },
+        //   function (rsp) {
+        //     // callback
+        //     //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
+        //     console.log(data);
+
+        //     // window.location.href = `/payment/success?orderId=${orderId}`;
+        //   }
+        // );
+        fetch(`/rest/payment?orderId=${orderId}`, { method: "GET" })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("error");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+            if (data == true) {
+              window.location.href = `/payment/success?orderId=${orderId}`;
+            } else if (data == false) {
+              alert("결제 오류가 발생하였습니다. 다시 시도해주세요.");
+              window.location.href = `/movie/main`;
+            }
+          });
       } else {
         window.location.href = "/member/login"; // 로그인 페이지로 이동
       }

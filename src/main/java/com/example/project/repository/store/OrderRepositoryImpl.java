@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-import com.example.project.entity.Movie;
-import com.example.project.entity.QMember;
 import com.example.project.entity.constant.OrderStatus;
 import com.example.project.entity.store.Order;
 import com.example.project.entity.store.QOrder;

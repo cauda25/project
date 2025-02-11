@@ -37,21 +37,21 @@
             </li> -->
             <li class="nav-item">
               <a
-                th:class="'nav-link ' + ${category == 'combo' ? 'active':''}"
+                th:class="'nav-link ' + ${category == 'combo' ? 'active':'text-white'}"
                 th:href="@{/store/main(category=combo)}"
                 >콤보</a
               >
             </li>
             <li class="nav-item">
               <a
-                th:class="'nav-link ' + ${category == 'popcorn' ? 'active':''}"
+                th:class="'nav-link ' + ${category == 'popcorn' ? 'active':'text-white'}"
                 th:href="@{/store/main(category=popcorn)}"
                 >팝콘</a
               >
             </li>
             <li class="nav-item">
               <a
-                th:class="'nav-link ' + ${category == 'drink' ? 'active':''}"
+                th:class="'nav-link ' + ${category == 'drink' ? 'active':'text-white'}"
                 th:href="@{/store/main(category=drink)}"
                 >음료</a
               >
@@ -62,7 +62,7 @@
           <div class="row row-cols-1 row-cols-md-4 g-4">
             <div class="col" th:each="product : ${productDtos}">
               <a
-                th:href="@{/store/productDetail(category=${category}, id=${product.id})}"
+                th:href="@{/store/detail(category=${category}, id=${product.id})}"
               >
                 <div class="card">
                   <img

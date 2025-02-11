@@ -312,14 +312,9 @@
       const memberId = "[[${memberId}]]";
       const isLogin = "[[${isLogin}]]";
       let isExist = "[[${isExist}]]";
-      const directorId = "[[${directorList[0].id}]]";
+      const directors = "[[${directorList[0].id}]]";
       const directorName = "[[${directorList[0].name}]]";
-
-      console.log("movieId:", movieId);
-      console.log("memberId:", memberId);
-      console.log("isLogin:", isLogin);
-      console.log("isExist:", Boolean(isExist));
     </script>
-    <script th:src="@{/js/movietest.js}"></script>
+    <script th:src="@{/js/movieDetail.js}"></script>
   </th:block>
 </html>

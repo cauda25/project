@@ -19,9 +19,9 @@ function getCartItems() {
       // str += `<input class="form-check-input" type="checkbox" value="" id="productSelectAll">`;
       // str += `</div>`;
       str += `</div>`;
-      str += `<div class="col-7 text-center">상품정보</div>`;
-      str += `<div class="col-2 text-center">수량</div>`;
-      str += `<div class="col-2 text-center">주문금액</div>`;
+      str += `<div class="col-7 text-center fw-bold">상품정보</div>`;
+      str += `<div class="col-2 text-center fw-bold">수량</div>`;
+      str += `<div class="col-2 text-center fw-bold">주문금액</div>`;
       str += `</div>`;
       // str += `<input type="hidden" class="quantity-count" name="" value="0">`;
       // str += `<input type="hidden" name="id" value="0">`;
@@ -33,7 +33,7 @@ function getCartItems() {
       data.forEach((cartItem) => {
         str += `<li class="list-group-item">`;
         str += `<div class="row justify-content-center">`;
-        str += `<div class="col-1">`;
+        str += `<div class="col-1 d-flex align-items-center justify-content-center">`;
         str += `<div class="form-check">`;
         str += `<input class="form-check-input" type="checkbox" value="" id="productSelect" ${
           pId == 0 ? "checked" : cartItem.productDto.id == pId ? "checked" : ""
@@ -45,22 +45,22 @@ function getCartItems() {
         str += `<img src="/img/product${cartItem.productDto.image}" class="img-thumbnail item-pic">`;
         str += `</div>`;
         str += `<div class="col-6">`;
-        str += `<p>${cartItem.productDto.name}</p>`;
-        str += `<p>${cartItem.productDto.itemDetails}</p>`;
-        str += `<p>${cartItem.productDto.price}</p>`;
+        str += `<div class="row"><span class="fs-2 fw-bold">${cartItem.productDto.name}</span></div>`;
+        str += `<div class="row"><span class="fw-semibold text-secondary">${cartItem.productDto.itemDetails}</span></div>`;
+        str += `<div class="row"><span class="text-secondary">${cartItem.productDto.price}</span></div>`;
         str += `</div></div></div>`;
-        str += `<div class="col-1">`;
-        str += `<button type="button" class="btn btn-outline-dark delete-cart-item">X</button>`;
+        str += `<div class="col-1 d-flex justify-content-end">`;
+        str += `<div><button type="button" class="btn btn-outline-dark delete-cart-item">X</button></div>`;
         str += `</div>`;
-        str += `<div class="col-2">`;
+        str += `<div class="col-2 text-center d-flex align-items-center justify-content-center"><div>`;
         str += `<div class="input-group col-4 quantity">`;
         str += `<button class="btn btn-outline-danger" type="button" id="quantity-minus-btn"><i class="fa-solid fa-minus"></i></button>`;
         str += `<input type="text" class="form-control border-danger bg-transparent text-center quantity-count" value="${cartItem.quantity}" readonly>`;
         str += `<button class="btn btn-outline-danger" type="button" id="quantity-plus-btn"><i class="fa-solid fa-plus"></i></button>`;
         str += `</div>`;
-        // str += `<button class="btn btn-outline-dark btn-modify-quantity" type="button">수정</button>`;
-        str += `</div>`;
-        str += `<div class="col-2">`;
+        str += `<p class="text-center text-secondary">최대 10개</p>`;
+        str += `</div></div>`;
+        str += `<div class="col-2 text-center d-flex align-items-center justify-content-center">`;
         str += `<p class="itemTotal" value=${
           cartItem.price * cartItem.quantity
         }>${cartItem.price * cartItem.quantity}원</p>`;
@@ -216,7 +216,7 @@ document.querySelector(".btn-checkout").addEventListener("click", () => {
     .then((data) => {
       if (data == true) {
         // 인증된 사용자일 경우 수행할 동작
-        fetch(`/rest/order`, {
+        fetch(`/rest/payment`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -226,7 +226,8 @@ document.querySelector(".btn-checkout").addEventListener("click", () => {
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
-            window.location.href = "/order";
+            orderId = data[0].orderId;
+            window.location.href = `/payment/payment?orderId=${orderId}`;
           })
           .catch((error) => {
             console.error("Error adding to cart:", error);

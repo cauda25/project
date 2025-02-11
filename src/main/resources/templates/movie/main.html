@@ -42,13 +42,20 @@
                 </div>
               </div> -->
               <div class="row trending__product-row">
+                <div class="row">
+                  <div class="col-lg-8 col-md-8 col-sm-8">
+                    <div class="section-title">
+                      <h4>인기 상영작</h4>
+                    </div>
+                  </div>
+                </div>
                 <div
                   class="col-lg-3 col-md-4 col-sm-6 mb-3 product"
                   th:if="${iterStat.index < 8}"
                   th:each="dto, iterStat : ${movies != null ? movies.dtoList : null}"
                 >
                   <div class="product__item mb-2">
-                    <a th:href="@{movieDetail(id=${dto.id})}"
+                    <a th:href="@{detail(id=${dto.id})}"
                       ><img
                         th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
                         alt=""
@@ -58,7 +65,7 @@
                   <div class="product__item__text mx-4">
                     <h5>
                       <a
-                        th:href="@{movieDetail(id=${dto.id})}"
+                        th:href="@{detail(id=${dto.id})}"
                         th:text="${dto.title}"
                         >타이틀</a
                       >

@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-// http://localhost:8080/book/list?page=2&size=20&type=c$keyword=소년
 @Builder
 @AllArgsConstructor
 @ToString
@@ -35,7 +34,7 @@ public class PageRequestDTO {
 
     public PageRequestDTO() {
         this.page = 1;
-        this.size = 10;
+        this.size = 8;
         this.sort = "popularity";
         this.genre = null;
         this.movieList = "nowPlaying";

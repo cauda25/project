@@ -101,7 +101,7 @@
             "
           >
             <div class="product__item mb-2">
-              <a th:href="@{/movie/movieDetail(id=${movie.id})}">
+              <a th:href="@{/movie/detail(id=${movie.id})}">
                 <img
                   th:src="'https://image.tmdb.org/t/p/w500/' + ${movie.posterPath}"
                   alt="Movie Poster"
@@ -115,7 +115,7 @@
               /></a>
             </div>
             <div class="">
-              <a th:href="@{/movie/movieDetail(id=${movie.id})}">
+              <a th:href="@{/movie/detail(id=${movie.id})}">
                 <span
                   th:text="${movie.title}"
                   style="color: #fff; font-size: 14px"
@@ -164,7 +164,7 @@
             예매내역
           </a>
           <a
-            th:href="@{/payment-history}"
+            th:href="@{/payment/history}"
             style="
               background-color: skyblue;
               color: #fff;

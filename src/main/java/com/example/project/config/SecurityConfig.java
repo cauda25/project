@@ -71,12 +71,17 @@ public class SecurityConfig {
                                                 .requestMatchers("/reservation/seat_sell/**").authenticated()
                                                 .requestMatchers("/center/counseling/**", "/email-board/**")
                                                 .authenticated()
+<<<<<<< HEAD
 
                                                 .requestMatchers(HttpMethod.DELETE, "/member/**").authenticated()
                                                 .requestMatchers("/payment-success").authenticated()
                                                 .requestMatchers("/payment-history").authenticated()
                                                 .requestMatchers("/cart/main").authenticated()
                                                 .requestMatchers("/order").authenticated()
+=======
+                                                .requestMatchers("/payment/**").authenticated()
+                                                .requestMatchers("/cart/**").authenticated()
+>>>>>>> main
                                                 .requestMatchers("/dormancy").permitAll()
 
                                                 // 🔹 추가: 현재 로그인된 사용자 정보 조회 요청은 인증 필요
