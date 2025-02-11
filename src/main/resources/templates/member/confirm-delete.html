@@ -45,53 +45,35 @@
   </head>
 
   <body>
-
     <div class="container">
       <h2>정말로 탈퇴하시겠습니까?</h2>
-      <button id="confirmDelete">네</button>
+      <button id="confirmDelete" th:data-member-id="${memberId}">네</button>
       <button id="cancelDelete">아니오</button>
     </div>
 
     <script>
-      document.addEventListener("DOMContentLoaded", async function () {
+      document.addEventListener("DOMContentLoaded", function () {
         const confirmButton = document.getElementById("confirmDelete");
         const cancelButton = document.getElementById("cancelDelete");
 
-        let memberId;
+        // ✅ Thymeleaf에서 JavaScript로 memberId 가져오기
+        const memberId = confirmButton.getAttribute("data-member-id");
 
-        try {
-          // ✅ 로그인된 사용자의 ID 가져오기
-          const response = await fetch("/api/member/current", {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json"
-            }
-          });
+        console.log("회원 탈퇴 진행... ID:", memberId); // ✅ 콘솔에서 값 확인
 
-          if (!response.ok) {
-            throw new Error("로그인된 사용자 정보를 가져올 수 없습니다.");
-          }
-
-          const user = await response.json();
-          memberId = user.mid; // 서버에서 받아온 ID
-          console.log("현재 로그인된 사용자 ID:", memberId);
-
-          if (!memberId) {
-            alert("회원 정보를 가져올 수 없습니다. 다시 로그인해주세요.");
-            window.location.href = "/member/login";
-            return;
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-          alert("로그인 정보를 가져올 수 없습니다. 다시 로그인해주세요.");
+        if (!memberId || memberId === "null") {
+          alert("회원 정보를 찾을 수 없습니다. 다시 로그인해주세요.");
           window.location.href = "/member/login";
           return;
         }
 
         if (confirmButton) {
           confirmButton.addEventListener("click", function () {
-            console.log("회원 탈퇴 진행...", memberId);
+            if (!memberId) {
+              alert("회원 정보를 찾을 수 없습니다. 다시 로그인해주세요.");
+              window.location.href = "/member/login";
+              return;
+            }
 
             fetch(`/member/${memberId}`, {
               method: "DELETE",
@@ -103,25 +85,16 @@
               .then(response => {
                 if (response.ok) {
                   alert("회원 탈퇴가 완료되었습니다.");
-                  // 🔹 탈퇴 후 로그아웃 처리 & 로그인 페이지 이동
-                  return fetch("/logout", {
-                    method: "POST",
-                    credentials: "include"
-                  });
+                  window.location.href = "/member/login"; // ✅ 탈퇴 후 로그인 페이지로 이동
                 } else {
                   throw new Error("회원 탈퇴에 실패했습니다.");
                 }
-              })
-              .then(() => {
-                window.location.href = "/member/login"; // ✅ 로그인 페이지로 이동
               })
               .catch(error => {
                 console.error("Error:", error);
                 alert("오류가 발생했습니다.");
               });
           });
-        } else {
-          console.error("❌ 'confirmDelete' 버튼을 찾을 수 없습니다.");
         }
 
         if (cancelButton) {

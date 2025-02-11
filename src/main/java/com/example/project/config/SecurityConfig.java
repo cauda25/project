@@ -67,21 +67,13 @@ public class SecurityConfig {
                                                 .requestMatchers("/member/mypage").authenticated() // 마이페이지 접근은 인증 필요
                                                 .requestMatchers("/mypage/reservations").authenticated() // 예매 내역 접근은 인증
                                                                                                          // 필요
+                                                .requestMatchers("/api/member/current").authenticated()
                                                 .requestMatchers("/movie/seat_sell?**").authenticated()
                                                 .requestMatchers("/reservation/seat_sell/**").authenticated()
                                                 .requestMatchers("/center/counseling/**", "/email-board/**")
                                                 .authenticated()
-<<<<<<< HEAD
-
-                                                .requestMatchers(HttpMethod.DELETE, "/member/**").authenticated()
-                                                .requestMatchers("/payment-success").authenticated()
-                                                .requestMatchers("/payment-history").authenticated()
-                                                .requestMatchers("/cart/main").authenticated()
-                                                .requestMatchers("/order").authenticated()
-=======
                                                 .requestMatchers("/payment/**").authenticated()
                                                 .requestMatchers("/cart/**").authenticated()
->>>>>>> main
                                                 .requestMatchers("/dormancy").permitAll()
 
                                                 // 🔹 추가: 현재 로그인된 사용자 정보 조회 요청은 인증 필요
@@ -89,7 +81,6 @@ public class SecurityConfig {
 
                                                 // 🔹 그 외 요청은 모두 허용
                                                 .anyRequest().permitAll())
-
                                 // 로그인 설정
                                 .formLogin(login -> login
                                                 .loginPage("/member/login") // 사용자 정의 로그인 페이지

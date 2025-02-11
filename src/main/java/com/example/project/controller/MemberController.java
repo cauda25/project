@@ -3,12 +3,10 @@ package com.example.project.controller;
 import java.security.Principal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-<<<<<<< HEAD
-import java.util.Map;
 import java.util.Optional;
-=======
->>>>>>> main
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,13 +31,10 @@ import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.MovieDto;
 import com.example.project.dto.reserve.ReserveDto;
-<<<<<<< HEAD
 import com.example.project.entity.Member;
-import com.example.project.service.FavoriteService;
-=======
 import com.example.project.entity.Movie;
+import com.example.project.repository.MemberRepository;
 import com.example.project.service.MemberFavoriteMovieService;
->>>>>>> main
 import com.example.project.service.MemberService;
 import com.example.project.service.MovieService;
 import com.example.project.service.reservation.ReserveService;
@@ -60,6 +55,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final ReserveService reserveService;
+    private final MemberRepository memberRepository;
     private final MovieService movieService;
     private final MemberFavoriteMovieService memberFavoriteMovieService;
 
@@ -219,20 +215,36 @@ public class MemberController {
     }
 
     @GetMapping("/confirm-delete")
-    public void confirmDeletePage() {
-
-    }
-
-    @DeleteMapping("/{mid}")
-    public ResponseEntity<?> deleteMember(@PathVariable Long mid) {
-        Optional<Member> member = memberService.findByMid(mid);
-
-        if (member.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found");
+    public String confirmDeletePage(Model model, @AuthenticationPrincipal AuthMemberDto authMember) {
+        if (authMember == null) {
+            return "redirect:/member/login"; // 로그인되지 않은 경우 로그인 페이지로 리디렉트
         }
 
-        memberService.deleteMember(mid);
-        return ResponseEntity.ok("User deleted successfully");
+        model.addAttribute("memberId", authMember.getMemberId()); // 사용자 ID를 Thymeleaf에서 사용 가능하도록 전달
+        return "member/confirm-delete"; // 회원 탈퇴 확인 페이지
+    }
+
+    @DeleteMapping("/{memberId}")
+    public ResponseEntity<?> deleteMember(@PathVariable Long memberId) {
+        try {
+            log.info("회원 탈퇴 요청: " + memberId);
+
+            // 존재하는 회원인지 확인
+            Optional<Member> member = memberRepository.findById(memberId);
+            if (!member.isPresent()) {
+                log.warn("회원 없음: " + memberId);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("회원 정보를 찾을 수 없습니다.");
+            }
+
+            // 회원 삭제
+            memberService.deleteMember(memberId);
+            return ResponseEntity.ok("회원 탈퇴 성공");
+        } catch (Exception e) {
+            log.error("회원 탈퇴 오류:", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("회원 탈퇴 중 오류 발생");
+        }
     }
 
     // 개발자용 - Authentication 확인용

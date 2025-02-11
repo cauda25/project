@@ -15,7 +15,9 @@ import com.example.project.entity.Member;
 import com.example.project.entity.constant.MemberRole;
 import com.example.project.entity.store.Cart;
 import com.example.project.repository.MemberRepository;
+import com.example.project.repository.ReviewRepository;
 import com.example.project.repository.store.CartRepository;
+import com.example.project.repository.store.OrderRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,8 @@ import lombok.extern.log4j.Log4j2;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final OrderRepository orderRepository;
+    private final ReviewRepository reviewRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final CartRepository cartRepository;
@@ -117,7 +121,17 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     public void deleteMember(Long memberId) {
-        memberRepository.deleteById(memberId);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
+
+        // 1️⃣ 회원이 작성한 리뷰 삭제
+        reviewRepository.deleteByMemberId(memberId);
+
+        // 2️⃣ 회원이 한 주문 삭제
+        orderRepository.deleteByMemberId(memberId);
+
+        // 3️⃣ 회원 삭제
+        memberRepository.delete(member);
     }
 
     public Optional<Member> findByMid(Long mid) { // ✅ mid 기반 검색
