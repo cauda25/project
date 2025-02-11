@@ -18,6 +18,8 @@ import com.example.project.admin.dto.test.MovieStateDto;
 import com.example.project.admin.service.test.UserService;
 import com.example.project.dto.GenreDto;
 import com.example.project.dto.MemberDto;
+import com.example.project.dto.PageRequestDTO;
+import com.example.project.dto.PageResultDTO;
 import com.example.project.dto.reserve.TheaterDto;
 import com.example.project.entity.Inquiry;
 import com.example.project.entity.Member;
@@ -64,13 +66,20 @@ public class AdminController {
     }
 
     @GetMapping("/create")
-    public void getCreate(Model model) {
+    public void getCreate(Model model, @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO,
+            @RequestParam(value = "size", required = false) Integer newSize) {
         log.info("create 폼 요청");
-        List<MovieDetailsDTO> movieDetails = userServie.getMovieDetails();
+
+        if (newSize != null) {
+            pageRequestDTO.updateSize(15);
+        }
+        // List<MovieDetailsDTO> movieDetails = userServie.getMovieDetails();
+        PageResultDTO<MovieDetailsDTO, Object[]> movieDetails = userServie.getMovieDetails(pageRequestDTO);
         List<MovieDetailsDTO> movieActers = userServie.movieActers();
         List<MovieDetailsDTO> movieDirector = userServie.movieDirector();
 
         model.addAttribute("movieList", movieDetails);
+        model.addAttribute("size", pageRequestDTO.getSize());
         model.addAttribute("movieActers", movieActers);
         model.addAttribute("movieDirector", movieDirector);
     }

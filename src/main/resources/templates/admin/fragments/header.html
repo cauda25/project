@@ -8,8 +8,8 @@
         <i class="fa-solid fa-screwdriver-wrench"></i>
       </a>
       <nav class="navbar-menu-wrapper d-flex align-items-center justify-content-end bg-dark">
-        <div class="container-fluid">
-          <h5 class="navbar-brand color_white">환영합니다</h5>
+        <div class="container-fluid" th:each="admin : ${adminDto}">
+          <h5 class="color_white">[[${admin.userId}]] 환영합니다</h5>
           <form class="d-flex" role="search">
             <a th:href="@{/admin/logout}" class="btn btn-outline-primary"> 나가기 </a>
           </form>

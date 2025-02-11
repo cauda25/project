@@ -25,7 +25,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr th:each="list : ${movieList}">
+                      <tr th:each="list : ${movieList.dtoList}">
                         <td th:text="${list.title}"></td>
                         <td><span th:each="direc : ${movieDirector}" th:text="${direc.name}" th:if="${direc.title} == ${list.title}"></span></td>
                         <td><span th:each="actor : ${movieActers}" th:text="${actor.name}" th:if="${actor.title} == ${list.title}"></span></td>
@@ -35,6 +35,50 @@
                     </tbody>
                   </table>
                 </div>
+                <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+                  <nav aria-label="Table navigation">
+                    <ul class="inline-flex items-center">
+                      <li th:if="${movieList.prev}">
+                        <a
+                          th:href="@{create(page=${movieList.start-1},size=${movieList.size},type=${requestDto.type},keyword=${requestDto.keyword})}"
+                          class="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple"
+                          aria-label="Previous"
+                        >
+                          <svg aria-hidden="true" class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                            <path
+                              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                              clip-rule="evenodd"
+                              fill-rule="evenodd"
+                            ></path>
+                          </svg>
+                        </a>
+                      </li>
+                      <li th:each="page : ${movieList.pageList}">
+                        <a
+                          th:href="@{create(page=${page},size=${movieList.size},type=${requestDto.type},keyword=${requestDto.keyword})}"
+                          class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+                          th:text="${page}"
+                        >
+                        </a>
+                      </li>
+                      <li th:if="${movieList.next}">
+                        <a
+                          th:href="@{create(page=${movieList.end+1},size=${movieList.size},type=${requestDto.type},keyword=${requestDto.keyword})}"
+                          class="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple"
+                          aria-label="Next"
+                        >
+                          <svg class="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">
+                            <path
+                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                              clip-rule="evenodd"
+                              fill-rule="evenodd"
+                            ></path>
+                          </svg>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </span>
               </div>
             </div>
           </div>

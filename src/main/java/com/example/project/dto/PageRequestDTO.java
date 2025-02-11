@@ -41,6 +41,10 @@ public class PageRequestDTO {
         this.movieList = "nowPlaying";
     }
 
+    public void updateSize(int newSize) {
+        this.size = newSize;
+    }
+
     public Pageable getPageable(Sort sort) {
         return PageRequest.of(page - 1, size, sort);
     }

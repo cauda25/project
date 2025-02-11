@@ -4,9 +4,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +29,8 @@ import com.example.project.admin.repository.MovieAddRepository;
 import com.example.project.admin.repository.MovieStateRepository;
 import com.example.project.dto.GenreDto;
 import com.example.project.dto.MemberDto;
+import com.example.project.dto.PageRequestDTO;
+import com.example.project.dto.PageResultDTO;
 import com.example.project.dto.reserve.TheaterDto;
 import com.example.project.entity.Genre;
 import com.example.project.entity.Inquiry;
@@ -86,25 +92,40 @@ public class UserServiecImpl implements UserService {
     // 영화 리스트 출력
     @Transactional
     @Override
-    public List<MovieDetailsDTO> getMovieDetails() {
-        List<Object[]> results = adminMovieRepository.getMovieDetails();
-        List<MovieDetailsDTO> movieDetailsList = new ArrayList<>();
+    public PageResultDTO<MovieDetailsDTO, Object[]> getMovieDetails(PageRequestDTO requestDto) {
+        Pageable pageable = requestDto.getPageable(Sort.by("release_date").descending()); // 기본 정렬 추가 가능
 
-        for (Object[] result : results) {
-            Long mid = (Long) result[0];
-            String title = (String) result[1];
-            String genres = (String) result[2];
-            String releaseDate = (String) result[3];
+        Page<Object[]> results = adminMovieRepository.getMovieDetails(pageable);
 
-            movieDetailsList.add(new MovieDetailsDTO(mid, title, releaseDate, genres));
-        }
+        Function<Object[], MovieDetailsDTO> function = (result -> new MovieDetailsDTO(
+                (Long) result[0], // mid
+                (String) result[1], // title
+                (String) result[3], // releaseDate
+                (String) result[2] // genres
+        ));
 
-        return movieDetailsList;
+        return new PageResultDTO<>(results, function);
     }
+    // public List<MovieDetailsDTO> getMovieDetails() {
+    // List<Object[]> results = adminMovieRepository.getMovieDetails();
+    // List<MovieDetailsDTO> movieDetailsList = new ArrayList<>();
+
+    // for (Object[] result : results) {
+    // Long mid = (Long) result[0];
+    // String title = (String) result[1];
+    // String genres = (String) result[2];
+    // String releaseDate = (String) result[3];
+
+    // movieDetailsList.add(new MovieDetailsDTO(mid, title, releaseDate, genres));
+    // }
+
+    // return movieDetailsList;
+    // }
 
     // 영화 배우리스트 출력
     @Override
     public List<MovieDetailsDTO> movieActers() {
+
         List<Object[]> results = adminMovieRepository.movieActers();
         List<MovieDetailsDTO> movieActorsList = new ArrayList<>();
 
@@ -122,6 +143,7 @@ public class UserServiecImpl implements UserService {
     // 영화 감독리스트 출력
     @Override
     public List<MovieDetailsDTO> movieDirector() {
+
         List<Object[]> results = adminMovieRepository.movieDirector();
         List<MovieDetailsDTO> movieDirectorList = new ArrayList<>();
 
@@ -134,6 +156,7 @@ public class UserServiecImpl implements UserService {
         }
 
         return movieDirectorList;
+
     }
 
     // 영화관 지역 또는 관명으로 검색
