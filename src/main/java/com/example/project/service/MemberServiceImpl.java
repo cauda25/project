@@ -17,6 +17,7 @@ import com.example.project.entity.store.Cart;
 import com.example.project.repository.MemberRepository;
 import com.example.project.repository.store.CartRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -112,5 +113,14 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean isEmailDuplicate(String email) {
         return memberRepository.existsByEmail(email);
+    }
+
+    @Transactional
+    public void deleteMember(Long memberId) {
+        memberRepository.deleteById(memberId);
+    }
+
+    public Optional<Member> findByMid(Long mid) { // ✅ mid 기반 검색
+        return memberRepository.findByMid(mid);
     }
 }

@@ -85,4 +85,8 @@ public class Member extends BaseEntity {
     public Long getMid() {
         return mid;
     }
+
+    public void deactivateMember() {
+        this.statusRole = StatusRole.INACTIVE;
+    }
 }

@@ -4,21 +4,26 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -27,11 +32,14 @@ import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.MovieDto;
 import com.example.project.dto.reserve.ReserveDto;
+import com.example.project.entity.Member;
 import com.example.project.service.FavoriteService;
 import com.example.project.service.MemberService;
 import com.example.project.service.MovieService;
 import com.example.project.service.reservation.ReserveService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -200,6 +208,23 @@ public class MemberController {
         Map<String, String> response = new HashMap<>();
         response.put("memberId", authMember.getUsername()); // 로그인된 사용자 ID 반환
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/confirm-delete")
+    public void confirmDeletePage() {
+
+    }
+
+    @DeleteMapping("/{mid}")
+    public ResponseEntity<?> deleteMember(@PathVariable Long mid) {
+        Optional<Member> member = memberService.findByMid(mid);
+
+        if (member.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found");
+        }
+
+        memberService.deleteMember(mid);
+        return ResponseEntity.ok("User deleted successfully");
     }
 
     // 개발자용 - Authentication 확인용
