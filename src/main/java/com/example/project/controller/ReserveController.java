@@ -86,31 +86,88 @@ public class ReserveController {
         return ResponseEntity.ok(screeningDtos);
     }
 
-    @GetMapping("/seat_sell")
-    public String getSeatSellPage(@RequestParam Long screeningId, Model model) {
-        log.info("Seat sell page requested for screening ID: " + screeningId);
+    @PostMapping("/save")
+    @ResponseBody
+    public ResponseEntity<String> saveReservationInfo(@RequestBody Map<String, String> request, HttpSession session) {
+        session.setAttribute("theater", request.get("theater"));
+        session.setAttribute("movie", request.get("movie"));
+        session.setAttribute("date", request.get("date"));
+        session.setAttribute("auditorium", request.get("auditorium"));
+        session.setAttribute("time", request.get("time"));
+        session.setAttribute("screeningId", request.get("screeningId"));
 
-        // 상영 정보 확인 및 전달
-        ScreeningDto screening = reserveService.getScreeningById(screeningId);
-        if (screening == null) {
-            log.error("Invalid screening ID: " + screeningId);
-            return "error/404"; // 존재하지 않는 경우 404 페이지로 리다이렉트
+        return ResponseEntity.ok("예약 정보 저장 완료");
+    }
+
+    @PostMapping("/info")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> getReservationInfo(HttpSession session) {
+        Map<String, String> response = new HashMap<>();
+
+        String theater = (String) session.getAttribute("theater");
+        String movie = (String) session.getAttribute("movie");
+        String date = (String) session.getAttribute("date");
+        String auditorium = (String) session.getAttribute("auditorium");
+        String time = (String) session.getAttribute("time");
+        String screeningId = (String) session.getAttribute("screeningId");
+
+        if (theater == null || movie == null || date == null || auditorium == null || time == null
+                || screeningId == null) {
+            response.put("error", "전달된 정보가 부족합니다.");
+            return ResponseEntity.badRequest().body(response);
         }
 
-        model.addAttribute("screening", screening);
+        response.put("theater", theater);
+        response.put("movie", movie);
+        response.put("date", date);
+        response.put("auditorium", auditorium);
+        response.put("time", time);
+        response.put("screeningId", screeningId);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/seat_sell")
+    public String getSeatSellPage(HttpSession session, Model model) {
+        String screeningId = (String) session.getAttribute("screeningId");
+        if (screeningId == null) {
+            log.error("screeningId가 세션에 없습니다.");
+            return "error/404";
+        }
+        String theater = (String) session.getAttribute("theater");
+        String movie = (String) session.getAttribute("movie");
+        String date = (String) session.getAttribute("date");
+        String auditorium = (String) session.getAttribute("auditorium");
+        String time = (String) session.getAttribute("time");
+
+        if (theater == null || movie == null || date == null || auditorium == null || time == null) {
+            log.error("예약 정보가 세션에 없습니다.");
+            return "error/404";
+        }
+        model.addAttribute("theater", theater);
+        model.addAttribute("movie", movie);
+        model.addAttribute("date", date);
+        model.addAttribute("auditorium", auditorium);
+        model.addAttribute("time", time);
         model.addAttribute("screeningId", screeningId);
 
         return "movie/seat_sell";
     }
 
-    @GetMapping("/seats/{screeningId}")
+    @GetMapping("/seats")
     @ResponseBody
-    public ResponseEntity<List<SeatStatusDto>> getSeatsByScreeningId(@PathVariable Long screeningId) {
+    public ResponseEntity<List<SeatStatusDto>> getSeatsByScreeningId(HttpSession session) {
+        String screeningIdStr = (String) session.getAttribute("screeningId");
+        if (screeningIdStr == null) {
+            log.error("Screening ID가 세션에 없습니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.emptyList());
+        }
         try {
+            Long screeningId = Long.parseLong(screeningIdStr);
             List<SeatStatusDto> seatStatuses = reserveService.getSeatStatusesByScreening(screeningId);
             return ResponseEntity.ok(seatStatuses);
         } catch (Exception e) {
-            log.error("Error fetching seats for screening ID: " + screeningId, e);
+            log.error("Error fetching seats for screening ID: " + screeningIdStr, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
@@ -145,23 +202,29 @@ public class ReserveController {
     }
 
     @PostMapping("/confirm-payment")
-    public ResponseEntity<?> completePayment(@RequestBody ReserveDto reserveDto,
+    public ResponseEntity<Map<String, Object>> completePayment(@RequestBody ReserveDto reserveDto,
             @AuthenticationPrincipal AuthMemberDto authMemberDto) {
-        log.info("Received ReserveDto: {}", reserveDto);
+        log.info("결제 요청: {}", reserveDto);
         Long mid = authMemberDto.getMemberId();
         // Long dummyMemberId = 1L;
+        Map<String, Object> response = new HashMap<>();
         try {
+            if (reserveDto.getSeatStatuses() == null || reserveDto.getSeatStatuses().isEmpty()) {
+                log.error("[오류] 예약 좌석 정보가 없습니다.");
+                response.put("success", false);
+                response.put("error", "예약 좌석 정보가 없습니다.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
             reserveDto.setMid(mid);
             // reserveDto.setMid(dummyMemberId);
 
             // 예약 정보 저장
             Reserve reserve = reserveService.saveReservation(reserveDto);
-
+            log.info(" [예매 저장 성공] 예약 ID: {}, 예약 번호: {}", reserve.getReserveId(), reserve.getReserveNo());
             for (Long seatStatusId : reserveDto.getSeatStatuses()) {
                 reserveService.updateSeatStatus(seatStatusId, SeatStatusEnum.SOLD);
             }
             // 응답 데이터 구성
-            Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("reserveId", reserve.getReserveId());
             response.put("reserveNo", reserve.getReserveNo());
@@ -170,8 +233,7 @@ public class ReserveController {
 
         } catch (Exception e) {
             // 에러 처리
-            e.printStackTrace();
-            Map<String, Object> response = new HashMap<>();
+            log.error(" [결제 처리 중 오류 발생]", e);
             response.put("success", false);
             response.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
