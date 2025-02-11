@@ -48,8 +48,8 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
         JPQLQuery<Movie> query = from(movie)
                 .leftJoin(moviePerson).on(movie.id.eq(moviePerson.movie.id))
                 .leftJoin(person).on(moviePerson.person.id.eq(person.id))
-                .leftJoin(movieGenre).on(movie.id.eq(movieGenre.movie.id))
-                .leftJoin(genre).on(movieGenre.genre.id.eq(genre.id));
+                .leftJoin(movieGenre).on(movie.id.eq(movieGenre.id.movie.id))
+                .leftJoin(genre).on(movieGenre.id.genre.id.eq(genre.id));
 
         // 조건 설정
         BooleanBuilder builder = new BooleanBuilder();
@@ -57,7 +57,7 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
 
         // 장르 필터 추가
         if (genreId != null) {
-            builder.and(movieGenre.genre.id.eq(genreId));
+            builder.and(movieGenre.id.genre.id.eq(genreId));
         }
 
         // 제목 키워드 필터 추가
@@ -115,8 +115,8 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
                     .fetch();
 
             List<Genre> genreList = from(genre)
-                    .join(movieGenre).on(movieGenre.genre.id.eq(genre.id))
-                    .where(movieGenre.movie.id.eq(movieId))
+                    .join(movieGenre).on(movieGenre.id.genre.id.eq(genre.id))
+                    .where(movieGenre.id.movie.id.eq(movieId))
                     .fetch();
 
             // Object[]에 담기
@@ -177,8 +177,8 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
 
         // Fetch Genres
         List<Genre> genreList = from(genre)
-                .join(movieGenre).on(movieGenre.genre.id.eq(genre.id))
-                .where(movieGenre.movie.id.eq(id))
+                .join(movieGenre).on(movieGenre.id.genre.id.eq(genre.id))
+                .where(movieGenre.id.movie.id.eq(id))
                 .fetch();
 
         // Combine results into Object[]
@@ -214,8 +214,8 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
         QMovieGenre movieGenre = QMovieGenre.movieGenre;
         QGenre genre = QGenre.genre;
 
-        JPQLQuery<Movie> query = from(movie).leftJoin(movieGenre).on(movie.id.eq(movieGenre.movie.id))
-                .leftJoin(movieGenre).on(movieGenre.genre.id.eq(genre.id));
+        JPQLQuery<Movie> query = from(movie).leftJoin(movieGenre).on(movie.id.eq(movieGenre.id.movie.id))
+                .leftJoin(genre).on(movieGenre.id.genre.id.eq(genre.id));
 
         // 기본 조건: movie.id > 0
         BooleanBuilder builder = new BooleanBuilder();

@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import com.example.project.entity.Genre;
 import com.example.project.entity.Movie;
 import com.example.project.entity.MovieGenre;
+import com.example.project.entity.MovieGenreId;
 import com.example.project.entity.MoviePerson;
 import com.example.project.entity.Person;
 import com.example.project.repository.movie.GenreRepository;
@@ -91,10 +92,11 @@ public class MovieRepositoryTest {
 
     // 영화와 그 영화의 장르와 그 영화의 인물들을 한번에 테이블에 담기(가져오는 수 많으면 오래 걸림 + 렉 주의)
     // rangeClosed() 안의 값 조정해서 가져올 데이터 양 결정
+    // 오류 발생 시 MOVIES, PEOPLE, MOVIE_PERSON, MOVIE_GENRE 테이블 삭제 후 재시도
     @Test
     public void insertMovieTest() {
         // 해당 페이지 범위에서 영화 데이터를 가져와서 처리
-        IntStream.rangeClosed(1, 5).forEach(i -> {
+        IntStream.rangeClosed(1, 10).forEach(i -> {
             try {
                 // Popular 영화 목록 데이터를 가져오기
                 JSONObject jsonObject = fetchData(
@@ -174,8 +176,10 @@ public class MovieRepositoryTest {
             JSONArray genres = (JSONArray) discoverMovie.get("genre_ids");
             genres.forEach(genreId -> {
                 MovieGenre movieGenre = MovieGenre.builder()
-                        .movie(Movie.builder().id(movie.getId()).build())
-                        .genre(Genre.builder().id((Long) genreId).build())
+                        .id(MovieGenreId.builder()
+                                .movie(movie)
+                                .genre(Genre.builder().id((Long) genreId).build())
+                                .build())
                         .build();
                 movieGenreRepository.save(movieGenre);
             });
@@ -214,6 +218,7 @@ public class MovieRepositoryTest {
                 String profilePath = (String) p.get("profile_path");
                 String role = isCast ? (String) p.get("character") : (String) p.get(roleKey);
                 String knownForDepartment = (String) p.get("known_for_department");
+                String creditId = (String) p.get("credit_id");
 
                 // Person 데이터 저장
                 if (knownForDepartment.equals("Acting") || knownForDepartment.equals("Directing")) {
@@ -229,6 +234,7 @@ public class MovieRepositoryTest {
 
                     // 저장
                     MoviePerson moviePerson = MoviePerson.builder()
+                            .id(creditId)
                             .movie(Movie.builder().id(movie.getId()).build())
                             .person(Person.builder().id(id).build())
                             .build();
@@ -333,8 +339,10 @@ public class MovieRepositoryTest {
                     // MovieGenre 객체에 담기
                     for (Object genreId : genres) {
                         MovieGenre movieGenre = MovieGenre.builder()
-                                .movie(Movie.builder().id(movie.getId()).build())
-                                .genre(Genre.builder().id((Long) genreId).build())
+                                .id(MovieGenreId.builder()
+                                        .movie(movie)
+                                        .genre(Genre.builder().id((Long) genreId).build())
+                                        .build())
                                 .build();
                         movieGenreRepository.save(movieGenre);
                     }

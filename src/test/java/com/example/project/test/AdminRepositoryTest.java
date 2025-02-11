@@ -22,6 +22,7 @@ import com.example.project.entity.Genre;
 import com.example.project.entity.Inquiry;
 import com.example.project.entity.Movie;
 import com.example.project.entity.MovieGenre;
+import com.example.project.entity.MovieGenreId;
 import com.example.project.entity.MoviePerson;
 import com.example.project.entity.Person;
 import com.example.project.entity.constant.MemberRole;
@@ -228,8 +229,10 @@ public class AdminRepositoryTest {
             System.out.println(genre);
 
             MovieGenre movieGenre = MovieGenre.builder()
-                    .movie(movie)
-                    .genre(genre)
+                    .id(MovieGenreId.builder()
+                            .movie(movie)
+                            .genre(genre)
+                            .build())
                     .build();
 
             movieGenreRepository.save(movieGenre);

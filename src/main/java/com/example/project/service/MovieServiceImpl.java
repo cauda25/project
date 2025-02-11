@@ -28,6 +28,7 @@ import com.example.project.entity.Genre;
 import com.example.project.entity.MemberFavoriteMovie;
 import com.example.project.entity.Movie;
 import com.example.project.entity.MovieGenre;
+import com.example.project.entity.MovieGenreId;
 import com.example.project.entity.MoviePerson;
 import com.example.project.entity.Person;
 import com.example.project.repository.MemberFavoriteMovieRepository;
@@ -108,9 +109,9 @@ public class MovieServiceImpl implements MovieService {
         List<Genre> genres = new ArrayList<>();
         for (MemberFavoriteMovie favoriteMovie : favoriteMovies) {
             Movie movie = favoriteMovie.getMovie();
-            List<MovieGenre> movieGenres = movieGenreRepository.findByMovieId(movie.getId());
+            List<MovieGenre> movieGenres = movieGenreRepository.findByIdMovieId(movie.getId());
             for (MovieGenre movieGenre : movieGenres) {
-                genres.add(movieGenre.getGenre());
+                genres.add(movieGenre.getId().getGenre());
             }
             // 영화에 관련된 장르들을 모두 추출
         }
@@ -157,9 +158,9 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieDto> similarMovies(Long id) {
         Movie movie = movieRepository.findById(id).get();
         List<Genre> genres = new ArrayList<>();
-        List<MovieGenre> movieGenres = movieGenreRepository.findByMovieId(movie.getId());
+        List<MovieGenre> movieGenres = movieGenreRepository.findByIdMovieId(movie.getId());
         for (MovieGenre movieGenre : movieGenres) {
-            genres.add(movieGenre.getGenre());
+            genres.add(movieGenre.getId().getGenre());
         }
         // 장르에 기반하여 추천 영화 리스트 가져오기
         List<Movie> recommendedMovies = movieRepository.findMoviesByGenres(genres);
@@ -259,8 +260,10 @@ public class MovieServiceImpl implements MovieService {
             JSONArray genres = (JSONArray) discoverMovie.get("genre_ids");
             genres.forEach(genreId -> {
                 MovieGenre movieGenre = MovieGenre.builder()
-                        .movie(Movie.builder().id(movie.getId()).build())
-                        .genre(Genre.builder().id((Long) genreId).build())
+                        .id(MovieGenreId.builder()
+                                .movie(movie)
+                                .genre(Genre.builder().id((Long) genreId).build())
+                                .build())
                         .build();
                 movieGenreRepository.save(movieGenre);
             });
@@ -299,6 +302,7 @@ public class MovieServiceImpl implements MovieService {
                 String profilePath = (String) p.get("profile_path");
                 String role = isCast ? (String) p.get("character") : (String) p.get(roleKey);
                 String knownForDepartment = (String) p.get("known_for_department");
+                String creditId = (String) p.get("credit_id");
 
                 // Person 데이터 저장
                 if (knownForDepartment.equals("Acting") || knownForDepartment.equals("Directing")) {
@@ -314,6 +318,7 @@ public class MovieServiceImpl implements MovieService {
 
                     // 저장
                     MoviePerson moviePerson = MoviePerson.builder()
+                            .id(creditId)
                             .movie(Movie.builder().id(movie.getId()).build())
                             .person(Person.builder().id(id).build())
                             .build();

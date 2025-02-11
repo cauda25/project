@@ -174,13 +174,13 @@ fetch(`/rest/movieDetail/${movieId}`)
           data.slice(0, 8).forEach((movie) => {
             str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
             str += `<div class="product__item mb-2">`;
-            str += `<a href="movieDetail?id=${movie.id}"><img src=${
+            str += `<a href="detail?id=${movie.id}"><img src=${
               movie.posterPath != null
                 ? "https://image.tmdb.org/t/p/w500" + movie.posterPath
                 : "https://placehold.co/217x325?text=Movie"
             } alt="" class="product__item__pic set-bg"></a></div>`;
             str += `<div class="product__item__text mx-4 pt-0">`;
-            str += `<h5><a href="movieDetail?id=${movie.id}">${movie.title}</a></h5>`;
+            str += `<h5><a href="detail?id=${movie.id}">${movie.title}</a></h5>`;
             str += `<div class="text-white">${movie.releaseDate}`;
             str += `</div>`;
             str += `</div></div>`;
@@ -209,13 +209,13 @@ fetch(`/rest/movieDetail/${movieId}`)
             data.forEach((movie) => {
               str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
               str += `<div class="product__item mb-2">`;
-              str += `<a href="movieDetail?id=${movie.id}"><img src=${
+              str += `<a href="detail?id=${movie.id}"><img src=${
                 movie.posterPath != null
                   ? "https://image.tmdb.org/t/p/w500" + movie.posterPath
                   : "https://placehold.co/217x325?text=Movie"
               } alt="" class="product__item__pic set-bg"></a></div>`;
               str += `<div class="product__item__text mx-4 pt-0">`;
-              str += `<h5><a href="movieDetail?id=${movie.id}">${movie.title}</a></h5>`;
+              str += `<h5><a href="detail?id=${movie.id}">${movie.title}</a></h5>`;
               str += `<div class="text-white">${movie.releaseDate}`;
               str += `</div>`;
               str += `</div></div>`;
