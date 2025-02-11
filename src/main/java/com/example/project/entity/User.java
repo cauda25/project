@@ -18,6 +18,8 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    private String mobile;
+
     // cascade = CascadeType.ALL: User 엔티티가 저장/삭제될 때 관련된 UserInquiry 엔티티에도 동일 작업이
     // 적용됨
     // orphanRemoval = true: UserInquiry 엔티티가 User 엔티티에서 분리될 때 해당 UserInquiry도 자동
@@ -77,5 +79,13 @@ public class User {
     public void removeUserInquiry(UserInquiry inquiry) {
         this.userInquiries.remove(inquiry);
         inquiry.setUser(null);
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }

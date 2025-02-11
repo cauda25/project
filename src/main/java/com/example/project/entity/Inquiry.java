@@ -1,34 +1,18 @@
 package com.example.project.entity;
 
 import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Setter
 @Getter
+@Builder
 @Entity
 @Table(name = "inquiry")
 public class Inquiry {
-
-    private String counselingType;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,50 +21,60 @@ public class Inquiry {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String username;
 
     @Column(nullable = false)
     private String email;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "mobile")
+    private String mobile;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Column(length = 500)
     private String answer;
 
-    private Boolean answered;
+    @Builder.Default
+    private Boolean answered = false; // 기본값 설정
 
     @Enumerated(EnumType.STRING)
     private InquiryStatus status;
 
+    @Builder.Default
     @Column(updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name = "inquiry_type")
+    @Column(name = "inquiry_type", nullable = false)
     private String inquiryType;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public String getCounselingType() {
-        return counselingType;
+    public Inquiry(String username, String email, String content, String mobile) {
+        this.username = username;
+        this.email = email;
+        this.mobile = mobile;
+        this.content = content;
     }
 
-    public Boolean getAnswered() {
-        return answered;
-    }
-
-    public void setAnswered(Boolean answered) {
-        this.answered = answered;
-    }
-
+    // Getter와 Setter
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getContent() {
@@ -91,17 +85,11 @@ public class Inquiry {
         this.content = content;
     }
 
-    public String getAnswer() {
-        return answer;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    // 매개변수가 있는 생성자 (편의용)
-    public Inquiry(String content, String answer) {
-        this.content = content;
-        this.answer = answer;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }
