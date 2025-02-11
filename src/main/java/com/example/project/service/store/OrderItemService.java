@@ -8,11 +8,7 @@ import com.example.project.entity.store.Order;
 import com.example.project.entity.store.OrderItem;
 import com.example.project.entity.store.Product;
 
-import jakarta.transaction.Transactional;
-
 public interface OrderItemService {
-
-        void addToCart(Long memberId, OrderItemDto orderItemDto);
 
         List<OrderItemDto> findByOrderId(Long orderId);
 

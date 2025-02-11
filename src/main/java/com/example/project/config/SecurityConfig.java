@@ -72,10 +72,8 @@ public class SecurityConfig {
                                                 .requestMatchers("/reservation/seat_sell/**").authenticated()
                                                 .requestMatchers("/center/counseling/**", "/email-board/**")
                                                 .authenticated()
-                                                .requestMatchers("/payment-success").authenticated()
-                                                .requestMatchers("/payment-history").authenticated()
-                                                .requestMatchers("/cart/main").authenticated()
-                                                .requestMatchers("/order").authenticated()
+                                                .requestMatchers("/payment/**").authenticated()
+                                                .requestMatchers("/cart/**").authenticated()
                                                 .requestMatchers("/dormancy").permitAll()
                                                 // 필요
                                                 .anyRequest().permitAll() // 그 외 요청은 모두 허용

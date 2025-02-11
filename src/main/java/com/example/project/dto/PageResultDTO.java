@@ -10,9 +10,6 @@ import org.springframework.data.domain.Pageable;
 
 import lombok.Data;
 
-// Page<Book> result 결과를 담는 dto
-// Entity ==> DTO : result.getContent() ==> List<BookDTO> 변경
-
 @Data
 public class PageResultDTO<DTO, EN> {
 
@@ -41,11 +38,6 @@ public class PageResultDTO<DTO, EN> {
     private long totalElements;
 
     public PageResultDTO(Page<EN> result, Function<EN, DTO> fn) {
-
-        // List<Book> books = result.getContent();
-        // List<Book> list = books.stream().map(b ->
-        // entityToDto(b)).collect(Collectors.toList());
-
         dtoList = result.stream().map(fn).collect(Collectors.toList());
         totalPage = result.getTotalPages();
         totalElements = result.getTotalElements();

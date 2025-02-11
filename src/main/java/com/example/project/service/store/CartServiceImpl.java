@@ -1,11 +1,8 @@
 package com.example.project.service.store;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.example.project.dto.store.CartItemDto;
-import com.example.project.dto.store.ProductDto;
 import com.example.project.entity.store.Cart;
 import com.example.project.entity.store.CartItem;
 import com.example.project.entity.store.Product;

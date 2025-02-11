@@ -26,8 +26,7 @@ import lombok.ToString;
 public class MoviePerson extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "movie_id")

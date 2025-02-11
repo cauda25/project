@@ -3,8 +3,6 @@ package com.example.project.dto.store;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.example.project.dto.MemberDto;
-import com.example.project.entity.Member;
 import com.example.project.entity.constant.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

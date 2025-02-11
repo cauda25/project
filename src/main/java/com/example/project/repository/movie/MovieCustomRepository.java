@@ -22,10 +22,4 @@ public interface MovieCustomRepository {
     List<Movie> findMoviesByDirectorId(Long directorId);
 
     List<Movie> findMoviesByGenres(List<Genre> genres);
-
-    // List<String> getDirectorList(Long id);
-
-    // List<String> getActorList(Long id);
-
-    // List<String> getGenreList(Long id);
 }

@@ -5,9 +5,10 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.project.entity.MovieGenre;
+import com.example.project.entity.MovieGenreId;
 
-public interface MovieGenreRepository extends JpaRepository<MovieGenre, Long> {
+public interface MovieGenreRepository extends JpaRepository<MovieGenre, MovieGenreId> {
 
-    List<MovieGenre> findByMovieId(Long movieId);
+    List<MovieGenre> findByIdMovieId(Long movieId);
 
 }

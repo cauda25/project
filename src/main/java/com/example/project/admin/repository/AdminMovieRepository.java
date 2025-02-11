@@ -13,8 +13,8 @@ import com.example.project.entity.Movie;
 public interface AdminMovieRepository extends JpaRepository<Movie, Long> {
 
         @Query("SELECT m, g, mg FROM MovieGenre mg " +
-                        "JOIN mg.genre g " +
-                        "JOIN mg.movie m " +
+                        "JOIN mg.id.genre g " +
+                        "JOIN mg.id.movie m " +
                         "WHERE m.id = :id")
         List<Object[]> getMovieDetailsWithGenres(Long id);
 
@@ -27,9 +27,9 @@ public interface AdminMovieRepository extends JpaRepository<Movie, Long> {
                         FROM
                         Movies m
                         JOIN
-                        MOVIE_GENRE mg ON m.ID = mg.MOVIE_ID
+                        MOVIE_GENRE mg ON m.ID = mg.id.movie.id
                         JOIN
-                        Genres g ON g.ID = mg.GENRE_ID
+                        Genres g ON g.ID = mg.id.genre.id
                         GROUP BY
                         m.id,m.TITLE, m.RELEASE_DATE, m.ID
                         ORDER BY

@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-import com.example.project.entity.Movie;
 import com.example.project.entity.Person;
 import com.example.project.entity.QMovie;
 import com.example.project.entity.QMoviePerson;
@@ -31,9 +30,8 @@ public class PersonRepositoryImpl extends QuerydslRepositorySupport implements P
     @Override
     public Page<Person> getTotalList(String type, String keyword, Pageable pageable) {
         QPerson person = QPerson.person;
-        QMoviePerson movieperson = QMoviePerson.moviePerson;
 
-        JPQLQuery<Person> query = from(person).leftJoin(movieperson).on(person.id.eq(movieperson.movie.id));
+        JPQLQuery<Person> query = from(person);
 
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(person.id.gt(0L));

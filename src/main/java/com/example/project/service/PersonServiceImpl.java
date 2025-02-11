@@ -34,7 +34,6 @@ public class PersonServiceImpl implements PersonService {
         Function<Person, PersonDto> function = (en -> entityToDto(en));
 
         return new PageResultDTO<>(people, function);
-        // return null;
     }
 
     @Override
