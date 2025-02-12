@@ -103,20 +103,36 @@ public class MemberController {
     }
 
     @GetMapping("/mypage")
-    public String getMypage(Model model, Principal principal) {
-        // 현재 로그인한 사용자 ID 가져오기
+    public String getMypage(Model model, Principal principal, HttpServletRequest request,
+            RedirectAttributes redirectAttributes) {
+        if (principal == null) {
+            redirectAttributes.addFlashAttribute("error", "로그인이 필요합니다.");
+            return "redirect:/member/login";
+        }
+
         String memberId = principal.getName();
 
-        // 회원정보 가져오기
-        MemberDto memberDto = memberService.getMemberById(memberId);
-        model.addAttribute("member", memberDto);
+        try {
+            // 회원 정보 가져오기
+            MemberDto memberDto = memberService.getMemberById(memberId);
+            model.addAttribute("member", memberDto);
 
-        // 찜 목록 가져오기
-        List<MovieDto> favorites = movieService.getFavoriteMoviesByMemberId(memberDto.getMid());
-        model.addAttribute("favorites", favorites);
+            // 찜 목록 가져오기
+            List<MovieDto> favorites = movieService.getFavoriteMoviesByMemberId(memberDto.getMid());
+            model.addAttribute("favorites", favorites);
 
-        return "member/mypage"; // mypage.html 반환
+            return "member/mypage"; // 정상적으로 마이페이지 반환
+
+        } catch (RuntimeException e) {
+            // 예외 발생 시 강제 로그아웃 (회원 정보 없음)
+            SecurityContextHolder.clearContext();
+            request.getSession().invalidate();
+
+            redirectAttributes.addFlashAttribute("error", "회원 정보를 찾을 수 없습니다. 다시 로그인해주세요.");
+            return "redirect:/member/login";
+        }
     }
+
     // @GetMapping("/logout")
     // public String logout(HttpSession session) {
     // // 세션 무효화 (로그아웃 처리)
