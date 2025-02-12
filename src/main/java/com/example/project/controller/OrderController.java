@@ -17,6 +17,8 @@ import com.example.project.dto.MemberDto;
 import com.example.project.dto.store.OrderDto;
 import com.example.project.dto.store.OrderItemDto;
 import com.example.project.entity.constant.OrderStatus;
+import com.example.project.service.ImageService;
+import com.example.project.service.MailService;
 import com.example.project.service.store.CartItemService;
 import com.example.project.service.store.OrderItemService;
 import com.example.project.service.store.OrderService;
@@ -34,6 +36,8 @@ public class OrderController {
     private final CartItemService cartItemService;
     private final OrderService orderService;
     private final OrderItemService orderItemService;
+    private final ImageService imageService;
+    private final MailService mailService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/payment")
@@ -64,6 +68,15 @@ public class OrderController {
 
         orderService.setStatusCompleted(orderId);
         cartItemService.deleteByOrderId(orderId, memberDto.getMid());
+        List<OrderItemDto> orderItemDtos = orderItemService.findByOrderId(orderId);
+        orderItemDtos.forEach(dto -> {
+            for (int i = 0; i < dto.getQuantity(); i++) {
+                imageService.createGifticon(dto);
+            }
+        });
+
+        String m = mailService.mailSend(orderId, memberDto.getEmail());
+        log.info(m);
         model.addAttribute("orderId", orderId);
     }
 

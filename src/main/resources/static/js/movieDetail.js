@@ -103,7 +103,9 @@ fetch(`/rest/movieDetail/${movieId}`)
         str += `<h5><a href="person/detail?id=${actor.id}">${actor.name}</a></h5>`;
         str += `<div class="text-white">`;
         actor.moviePersonDtos.forEach((moviePersonDto) => {
-          str += `${moviePersonDto.character} 역`;
+          if (moviePersonDto.character != null) {
+            str += `${moviePersonDto.character} 역`;
+          }
         });
         str += `</div>`;
         str += `</div></div>`;

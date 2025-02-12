@@ -20,7 +20,7 @@ public interface OrderService {
 
     List<OrderDto> getStatusCompleted(Long memberId);
 
-    void deleteUnCompletedOrder();
+    // void deleteUnCompletedOrder();
 
     Boolean isStatusPending(Long orderId);
 
