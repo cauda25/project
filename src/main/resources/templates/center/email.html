@@ -12,22 +12,19 @@
       <h2>이메일 문의 게시판</h2>
       <div class="board-container">
         <!-- 로그인 여부에 따라 글쓰기 버튼 표시 -->
-        <div th:if="${user != null}">
-          <a href="/center/email/new" class="btn btn-primary"></a>
+        <div th:if="${userName != null}">
+          <a href="/center/inquiry/new" class="btn btn-primary">문의 작성</a>
         </div>
-        <div th:if="${user == null}">
+        <div th:if="${userName == null}">
           <p>로그인 후 문의글을 작성할 수 있습니다.</p>
         </div>
         <form
-          th:action="@{/center/email}"
+          th:action="@{/center/inquiry/save}"
           id="form1"
           name="form1"
           method="post"
-          novalidate="novalidate"
           enctype="multipart/form-data"
         >
-          <input type="hidden" id="hIsTemp" name="hIsTemp" value="N" />
-          <input type="hidden" id="hIdx" name="hIdx" value="" />
           <fieldset>
             <div class="tbl_area">
               <p class="tbl_info_txt">
@@ -44,56 +41,55 @@
               >
                 <colgroup>
                   <col style="width: 96px" />
-                  <col style="width: 96px" />
-                  <col style="width: 96px" />
-                  <col style="width: 96px" />
+                  <col />
                 </colgroup>
                 <tbody>
-                  <!-- 이름 (로그인된 계정의 정보로 자동 채워짐) -->
+                  <!-- 이름 -->
                   <tr>
                     <th scope="row"><label for="inp_name">이름</label></th>
-                    <td colspan="3">
+                    <td>
                       <input
                         type="text"
                         id="inp_name"
-                        name="user_name"
+                        name="username"
                         class="inp01"
-                        th:value="${user != null ? user.username : ''}"
+                        th:value="${userName}"
                         readonly
                       />
                     </td>
                   </tr>
 
-                  <!-- 휴대전화 (로그인된 계정의 정보로 자동 채워짐) -->
+                  <!-- 휴대전화 -->
                   <tr>
-                    <th scope="row">휴대전화</th>
-                    <td colspan="3">
+                    <th scope="row">
+                      <label for="inp_mobile">휴대전화</label>
+                    </th>
+                    <td>
                       <input
                         type="text"
                         id="inp_mobile"
-                        name="user_mobile"
+                        name="mobile"
                         class="inp01"
-                        th:value="${user != null ? user.usermobile : ''}"
+                        th:value="${userMobile}"
                         readonly
                       />
                     </td>
                   </tr>
 
-                  <!-- 이메일 (로그인된 계정의 정보로 자동 채워짐) -->
+                  <!-- 이메일 -->
                   <tr>
-                    <th scope="row">이메일</th>
-                    <td colspan="3">
+                    <th scope="row"><label for="inp_email">이메일</label></th>
+                    <td>
                       <input
                         type="text"
                         id="inp_email"
-                        name="user_email"
+                        name="email"
                         class="inp01"
-                        th:value="${user != null ? user.useremail : ''}"
+                        th:value="${userEmail}"
                         readonly
                       />
                     </td>
                   </tr>
-
                   <tr class="check_info">
                     <td colspan="4">
                       <div>
@@ -112,8 +108,8 @@
                       </div>
                       <div class="desc_miso">
                         <p class="desc_txt1">
-                          고객님의 문의에 답변하는 직원은
-                          <em>고객 여러분의 가족 중 한 사람</em>일 수 있습니다.
+                          고객님의 문의에 답변하는 직원은 고객 여러분의 가족 중
+                          한 사람일 수 있습니다.
                         </p>
                         <p class="desc_txt2">
                           씨네플레닛은 고객의 언어폭력(비하, 욕설, 반말, 성희롱
@@ -124,51 +120,53 @@
                       </div>
                     </td>
                   </tr>
-
-                  <!-- 문의유형 선택 -->
+                  <!-- 문의 유형 -->
                   <tr>
                     <th scope="row">
-                      문의유형
-                      <em
+                      문의유형<em
                         ><img
                           src="http://img.cgv.co.kr/R2014/images/common/ico/ico_redstar.png"
                           alt="필수"
                       /></em>
                     </th>
-                    <td colspan="3">
+                    <td>
                       <ul class="type_list">
-                        <li id="li_ra_1">
+                        <li>
                           <input
                             type="radio"
-                            checked="checked"
                             id="inp_type01"
-                            name="sel_qnatype"
+                            name="type"
                             value="1249"
-                          /><label for="inp_type01">문의</label>
+                            checked
+                          />
+                          <label for="inp_type01">문의</label>
                         </li>
-                        <li id="li_ra_2">
+                        <li>
                           <input
                             type="radio"
                             id="inp_type02"
-                            name="sel_qnatype"
+                            name="type"
                             value="1250"
-                          /><label for="inp_type02">불만</label>
+                          />
+                          <label for="inp_type02">불만</label>
                         </li>
-                        <li id="li_ra_3">
+                        <li>
                           <input
                             type="radio"
                             id="inp_type03"
-                            name="sel_qnatype"
+                            name="type"
                             value="1251"
-                          /><label for="inp_type03">건의</label>
+                          />
+                          <label for="inp_type03">건의</label>
                         </li>
-                        <li id="li_ra_4">
+                        <li>
                           <input
                             type="radio"
                             id="inp_type04"
-                            name="sel_qnatype"
+                            name="type"
                             value="1252"
-                          /><label for="inp_type04">기타</label>
+                          />
+                          <label for="inp_type04">기타</label>
                         </li>
                       </ul>
                     </td>
@@ -177,19 +175,17 @@
                   <!-- 제목 -->
                   <tr>
                     <th scope="row">
-                      제목
-                      <em
+                      제목<em
                         ><img
                           src="http://img.cgv.co.kr/R2014/images/common/ico/ico_redstar.png"
                           alt="필수"
                       /></em>
                     </th>
-                    <td colspan="3">
+                    <td>
                       <input
                         type="text"
-                        class="inp01"
                         name="title"
-                        id="title"
+                        class="inp01"
                         placeholder="제목을 입력해주세요."
                         maxlength="100"
                       />
@@ -199,34 +195,27 @@
                   <!-- 내용 -->
                   <tr>
                     <th scope="row">
-                      내용
-                      <em
+                      내용<em
                         ><img
                           src="http://img.cgv.co.kr/R2014/images/common/ico/ico_redstar.png"
                           alt="필수"
                       /></em>
                     </th>
-                    <td colspan="3">
+                    <td>
                       <textarea
+                        name="content"
                         class="inp01"
-                        name="contents"
-                        id="contents"
                         placeholder="내용을 입력해주세요."
                         maxlength="1000"
                       ></textarea>
                     </td>
                   </tr>
 
+                  <!-- 파일 업로드 -->
                   <tr>
                     <th scope="row">첨부파일</th>
-                    <td colspan="3">
-                      <input
-                        type="file"
-                        class="inp01"
-                        name="file"
-                        id="file"
-                        multiple="multiple"
-                      />
+                    <td>
+                      <input type="file" name="file" class="inp01" multiple />
                       <p>
                         *첨부가능 확장자: 이미지(jpg, gif, bmp, png, jpeg)
                         ,워드문서(hwp, ppt, pptx, xls, xlsx, doc, docx, zip,
@@ -236,33 +225,18 @@
                   </tr>
 
                   <tr>
-                    <th scope="row">비밀번호</th>
-                    <td colspan="3">
-                      <input
-                        type="password"
-                        class="inp01"
-                        name="password"
-                        id="password"
-                        maxlength="20"
-                      />
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td colspan="4">
+                    <td colspan="2">
                       <div class="btn_wrap">
                         <input
                           type="submit"
                           value="등록"
                           class="btn btn-primary"
-                          id="btn_submit"
                         />
                         <input
                           type="button"
                           value="취소"
                           class="btn btn-default"
-                          id="btn_cancel"
-                          onclick="location.href='/center/email'"
+                          onclick="location.href='/center/inquiry'"
                         />
                       </div>
                     </td>

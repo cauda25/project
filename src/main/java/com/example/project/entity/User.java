@@ -20,6 +20,9 @@ public class User {
 
     private String mobile;
 
+    @Column(nullable = true) // 이름 필드 추가 (nullable 설정은 상황에 맞게 변경 가능)
+    private String name;
+
     // cascade = CascadeType.ALL: User 엔티티가 저장/삭제될 때 관련된 UserInquiry 엔티티에도 동일 작업이
     // 적용됨
     // orphanRemoval = true: UserInquiry 엔티티가 User 엔티티에서 분리될 때 해당 UserInquiry도 자동
@@ -69,6 +72,23 @@ public class User {
         this.userInquiries = userInquiries;
     }
 
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    // 새로 추가된 name 필드의 Getter와 Setter
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     // 사용자와 사용자 문의 간의 관계 결정하는 메소드(양방향 연관관계 설정)
     public void addUserInquiry(UserInquiry inquiry) {
         this.userInquiries.add(inquiry);
@@ -79,13 +99,5 @@ public class User {
     public void removeUserInquiry(UserInquiry inquiry) {
         this.userInquiries.remove(inquiry);
         inquiry.setUser(null);
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 }

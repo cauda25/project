@@ -101,3 +101,43 @@ function closeDetails() {
   // 상담 상세 정보 패널 숨기기
   document.getElementById("inquiry-details").style.display = "none";
 }
+
+<script type="text/javascript">
+  [CDATA[ (function ($){" "}
+  {$(function () {
+    $("#chkAllItem").checkboxGroup({
+      parent: function () {
+        return $("#items");
+      },
+      selector: "input[name=chkItem]",
+    });
+
+    $("#searchtext").on("keypress", function (e) {
+      if (e.keyCode == 13) {
+        Search();
+        return false;
+      }
+    });
+
+    $("#btnSearch").on("click", function () {
+      Search();
+    });
+
+    $("#btnDelete").on("click", function () {
+      if ($("input[name=chkItem]:checked").length < 1) {
+        alert("삭제할 문의건을 먼저 선택해 주세요.");
+        return false;
+      }
+
+      if (!confirm("선택하신 문의건을 삭제하시겠습니까?")) return false;
+
+      $("form").submit();
+    });
+
+    function Search() {
+      location.href =
+        "./list.aspx?searchtext=" + escape($("#searchtext").val());
+    }
+  })}
+  )(jQuery); //]]
+</script>;

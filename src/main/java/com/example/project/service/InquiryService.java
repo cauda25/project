@@ -77,9 +77,13 @@ public class InquiryService {
         this.inquiryRepository = inquiryRepository;
     }
 
+    public List<Inquiry> getUserInquiries(String username) {
+        return inquiryRepository.findByUsername(username);
+    }
+
     // 페이지별 문의 조회
     public List<Inquiry> getInquiries(int page) {
-        Pageable pageable = PageRequest.of(page - 1, 10);
+        Pageable pageable = PageRequest.of(page - 1, 5);
         Page<Inquiry> inquiryPage = inquiryRepository.findAll(pageable);
         return inquiryPage.getContent();
     }
@@ -87,7 +91,7 @@ public class InquiryService {
     // 총 페이지 수 계산
     public int getTotalPages() {
         long count = inquiryRepository.count();
-        return (int) Math.ceil((double) count / 10);
+        return (int) Math.ceil((double) count / 5);
     }
 
     // 기존 문의 수정
@@ -117,18 +121,31 @@ public class InquiryService {
         return inquiryRepository.findByUser_Username(username);
     }
 
-    // 사용자 이메일 조회 (더미 도메인 추가)
+    // 이메일 조회
     public String getEmailByUsername(String username) {
-        String[] domains = { "@naver.com" };
-        int randomIndex = (int) (Math.random() * domains.length);
-        String selectedDomain = domains[randomIndex];
-
-        return username + selectedDomain;
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("사용자를 찾을 수 없습니다: " + username);
+        }
+        return user.getEmail(); // 실제 이메일 반환
     }
 
+    // 휴대전화 조회
     public String getMobileByUsername(String username) {
         User user = userRepository.findByUsername(username);
-        return (user != null) ? user.getMobile() : null;
+        if (user == null) {
+            throw new RuntimeException("사용자를 찾을 수 없습니다: " + username);
+        }
+        return user.getMobile(); // 실제 휴대전화 반환
+    }
+
+    // 이름 조회 (추가)
+    public String getNameByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("사용자를 찾을 수 없습니다: " + username);
+        }
+        return user.getName(); // 실제 이름 반환
     }
 
     // 상담 내용 저장 (수정된 부분)
