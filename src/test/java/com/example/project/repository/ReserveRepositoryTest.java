@@ -1,16 +1,12 @@
 package com.example.project.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,18 +59,20 @@ public class ReserveRepositoryTest {
 
     }
 
+    // 상영시간과 좌석정보 업데이트
     @Test
     @Transactional
     @Rollback(false)
     public void testManageScreenings() {
         LocalDate today = LocalDate.now();
-        // LocalDateTime dateStart = today.atStartOfDay();
 
         // 오늘 이전 Screening과 관련된 SeatStatus 삭제 후 Screening 삭제
         int deletedSeatStatuses = seatStatusRepository.deleteSeatStatusByPastScreenings(today);
         int deletedScreenings = screeningRepository.deletePastScreenings(today);
         System.out.println("지난 SeatStatus 삭제 완료: " + deletedSeatStatuses + "개");
         System.out.println("지난 Screening 삭제 완료: " + deletedScreenings + "개");
+
+        LocalDate earliestDate = screeningRepository.findEarliestScreeningDate();
 
         // 오늘부터 7일 동안 빈 날짜 확인 후 Screening 복사 및 SeatStatus 생성
         for (int i = 0; i < 7; i++) {
@@ -83,7 +81,7 @@ public class ReserveRepositoryTest {
 
             if (existingCount == 0) {
                 // Screening 복사
-                int copiedScreenings = screeningRepository.copyTodayScreeningsToDate(targetDate, today);
+                int copiedScreenings = screeningRepository.copyTodayScreeningsToDate(targetDate, earliestDate);
                 System.out.println(targetDate + "에 " + copiedScreenings + "개 Screening 추가됨");
 
                 // SeatStatus 생성 (해당 Screening의 Auditorium에 맞는 Seat 데이터 추가)

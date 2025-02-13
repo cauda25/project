@@ -70,7 +70,8 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public List<String> getMoviesByTheaterId(Long theaterId) {
-        List<Screening> screenings = screeningRepository.findScreeningsByTheaterId(theaterId);
+        List<Screening> screenings = screeningRepository
+                .findByAuditorium_Theater_TheaterIdOrderByScreeningIdAsc(theaterId);
         return screenings.stream()
                 .map(Screening::getMovieTitle)
                 .distinct()
@@ -83,7 +84,7 @@ public class ReserveServiceImpl implements ReserveService {
         movieTitle = movieTitle.trim();
         System.out.println("Service - movieTitle: " + movieTitle);
         System.out.println("Service - date: " + date);
-        List<Screening> screenings = screeningRepository.findScreeningsByMovieAndDate(movieTitle, date);
+        List<Screening> screenings = screeningRepository.findByMovieTitleAndScreeningDate(movieTitle, date);
         return screenings.stream()
                 .map(screening -> ScreeningDto.builder()
                         .screeningId(screening.getScreeningId())
