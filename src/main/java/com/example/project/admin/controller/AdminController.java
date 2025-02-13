@@ -18,13 +18,17 @@ import com.example.project.admin.dto.test.MovieStateDto;
 import com.example.project.admin.service.test.UserService;
 import com.example.project.dto.GenreDto;
 import com.example.project.dto.MemberDto;
+import com.example.project.dto.PageRequestDTO;
+import com.example.project.dto.PageResultDTO;
 import com.example.project.dto.reserve.TheaterDto;
+import com.example.project.entity.Genre;
 import com.example.project.entity.Inquiry;
 import com.example.project.entity.Member;
 import com.example.project.entity.Movie;
 
 import groovyjarjarpicocli.CommandLine.Parameters;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,19 +68,26 @@ public class AdminController {
     }
 
     @GetMapping("/create")
-    public void getCreate(Model model) {
+    public void getCreate(Model model, @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO,
+            @RequestParam(value = "size", required = false) Integer newSize) {
         log.info("create 폼 요청");
-        List<MovieDetailsDTO> movieDetails = userServie.getMovieDetails();
+
+        if (newSize != null) {
+            pageRequestDTO.updateSize(15);
+        }
+        // List<MovieDetailsDTO> movieDetails = userServie.getMovieDetails();
+        PageResultDTO<MovieDetailsDTO, Object[]> movieDetails = userServie.getMovieDetails(pageRequestDTO);
         List<MovieDetailsDTO> movieActers = userServie.movieActers();
         List<MovieDetailsDTO> movieDirector = userServie.movieDirector();
 
         model.addAttribute("movieList", movieDetails);
+        model.addAttribute("size", pageRequestDTO.getSize());
         model.addAttribute("movieActers", movieActers);
         model.addAttribute("movieDirector", movieDirector);
     }
 
     @GetMapping("/join")
-    public void getJoin(Model model) {
+    public void getJoin(Model model, @ModelAttribute AdminCreateDto adminCreateDto) {
         log.info("join 폼 요청");
         List<GenreDto> genre = userServie.getAllGenres();
 
@@ -84,8 +95,16 @@ public class AdminController {
     }
 
     @PostMapping("/join")
-    public String postMethodName(@ModelAttribute AdminCreateDto adminCreateDto) {
+    public String postMethodName(@Valid @ModelAttribute AdminCreateDto adminCreateDto,
+            BindingResult bindingResult,
+            Model model) {
         log.info("어드민 등록 폼 요청 {}", adminCreateDto);
+        if (bindingResult.hasErrors()) {
+            List<GenreDto> genreList = userServie.getAllGenres(); // 기존 장르 목록 가져오기
+            model.addAttribute("genres", genreList);
+            return "/admin/page/join";
+        }
+
         Movie movie = Movie.builder()
                 .title(adminCreateDto.getTitle())
                 .overview(adminCreateDto.getOverview())
@@ -99,7 +118,7 @@ public class AdminController {
                 adminCreateDto.getActors(),
                 adminCreateDto.getDirectorName());
 
-        return "redirect:/admin/page/create";
+        return "redirect:/admin/page/create?page=1&size=15";
     }
 
     @GetMapping({ "/movie", "/movieAdd" })

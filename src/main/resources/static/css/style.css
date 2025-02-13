@@ -338,7 +338,7 @@ ol {
 }
 
 .header__logo {
-  padding: 20px 0 17px;
+  padding: 50px 0 17px 0;
 }
 
 .header__logo a {
@@ -355,6 +355,16 @@ ol {
   position: relative;
   margin-right: 16px;
 }
+/* 로고 스타일 */
+.header__menu ul li.header__logo {
+  margin: 0; /* 기본 마진 제거 */
+  padding: 0; /* 기본 패딩 제거 */
+}
+
+.header__menu ul li.header__logo img {
+  height: 60px; /* 로고 이미지 높이 조정 */
+  vertical-align: middle; /* 이미지를 세로 중앙 정렬 */
+}
 
 .header__menu ul li.active a {
   background: #e53637;
@@ -366,7 +376,7 @@ ol {
 }
 
 .header__menu ul li:hover .dropdown {
-  top: 62px;
+  top: auto;
   opacity: 1;
   visibility: visible;
 }
@@ -408,7 +418,7 @@ ol {
 }
 
 .header__menu ul li a {
-  font-size: 15px;
+  font-size: 20px;
   color: #b7b7b7;
   display: block;
   font-weight: 700;
@@ -426,7 +436,17 @@ ol {
 
 .header__right {
   text-align: right;
-  padding: 20px 0 15px;
+  padding: 30px 0 10px;
+}
+.header__left {
+  text-align: left;
+  padding: 10px 0 30px;
+  display: inline-block;
+  margin-left: 30px;
+}
+.header__left a i {
+  font-size: 20px;
+  color: #ffffff;
 }
 
 .header__right a {
@@ -662,7 +682,6 @@ ol {
   margin-bottom: 30px;
   text-align: center;
 }
-
 
 .product__item__pic {
   height: 325px;
@@ -1232,9 +1251,7 @@ ol {
   color: #ffffff;
 }
 
-.anime__video__player
-  .plyr__controls
-  .plyr__controls__item.plyr__progress__container {
+.anime__video__player .plyr__controls .plyr__controls__item.plyr__progress__container {
   position: absolute;
   left: 26px;
   bottom: 45px;
@@ -1272,10 +1289,7 @@ ol {
 
 .anime__video__player .plyr__control--overlaid {
   background: transparent;
-  background: var(
-    --plyr-video-control-background-hover,
-    var(--plyr-color-main, var(--plyr-color-main, transparent))
-  );
+  background: var(--plyr-video-control-background-hover, var(--plyr-color-main, var(--plyr-color-main, transparent)));
 }
 
 .anime__video__player .plyr__control--overlaid svg {
@@ -2169,6 +2183,9 @@ ol {
     padding: 0;
   }
   .header__menu {
+    display: none;
+  }
+  .header__menu ul li.header__logo {
     display: none;
   }
   .slicknav_menu {

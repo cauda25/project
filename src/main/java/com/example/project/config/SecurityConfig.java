@@ -64,7 +64,10 @@ public class SecurityConfig {
                                                 .permitAll() // 정적 리소스 허용
                                                 .requestMatchers("/review/submit").authenticated() // 리뷰 작성 요청은 인증 필요
                                                 .requestMatchers("/review/**").authenticated() // 리뷰 관련 기타 요청 인증 필요
-                                                .requestMatchers("/member/mypage").authenticated() // 마이페이지 접근은 인증 필요
+                                                // .requestMatchers("/member/mypage").authenticated() // 마이페이지
+                                                // 접근은
+                                                // 인증
+                                                // 필요
                                                 .requestMatchers("/mypage/reservations").authenticated() // 예매 내역 접근은 인증
                                                                                                          // 필요
                                                 .requestMatchers("/api/member/current").authenticated()
@@ -131,6 +134,7 @@ public class SecurityConfig {
                                                                 "/admin/js/**", "/admin/fonts/**")
                                                 .permitAll()
                                                 .requestMatchers("/admin/page/**").hasAnyRole("ADMIN")
+                                                .requestMatchers("/member/adminpage").hasAnyRole("ADMIN")
                                                 .anyRequest().authenticated());
 
                 // http.sessionManagement(session ->

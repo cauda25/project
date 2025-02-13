@@ -7,6 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
+import com.example.project.dto.AuthUserDto;
+import com.example.project.dto.MemberDto;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,4 +30,5 @@ public class AuthAdminDto extends User {
                 List.of(new SimpleGrantedAuthority("ROLE_" + adminDto.getRole())));
         this.adminDto = adminDto;
     }
+
 }

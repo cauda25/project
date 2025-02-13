@@ -133,6 +133,11 @@ public class MemberController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/adminpage")
+    public void getAdminPage() {
+        log.info("adminpage 폼 요청");
+    }
     // @GetMapping("/logout")
     // public String logout(HttpSession session) {
     // // 세션 무효화 (로그아웃 처리)

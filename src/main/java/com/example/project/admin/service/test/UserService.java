@@ -33,7 +33,8 @@ public interface UserService {
     List<Member> allList(MemberDto memberDto);
 
     // 영화 정보(제목,장르,개봉일) 리스트
-    List<MovieDetailsDTO> getMovieDetails();
+    // List<MovieDetailsDTO> getMovieDetails();
+    PageResultDTO<MovieDetailsDTO, Object[]> getMovieDetails(PageRequestDTO requestDto);
 
     // 영화 정보(배우) 리스트
     List<MovieDetailsDTO> movieActers();

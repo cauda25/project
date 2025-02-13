@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.example.project.entity.Genre;
 import com.example.project.entity.Movie;
 
 public interface AdminMovieRepository extends JpaRepository<Movie, Long> {
@@ -98,5 +99,18 @@ public interface AdminMovieRepository extends JpaRepository<Movie, Long> {
                                 PPPP.id,PPPP.TITLE
                                             """, nativeQuery = true)
         List<Object[]> movieDirector();
+
+        @Query(value = """
+                            SELECT
+                                m.id,
+                                m.TITLE AS movie_title,
+                                LISTAGG(g.name, ', ') WITHIN GROUP (ORDER BY g.name) AS genres,
+                                m.RELEASE_DATE AS release_date
+                            FROM Movies m
+                            JOIN MOVIE_GENRE mg ON m.ID = mg.MOVIE_ID
+                            JOIN Genre g ON g.ID = mg.GENRE_ID
+                            GROUP BY m.id, m.TITLE, m.RELEASE_DATE
+                        """, nativeQuery = true)
+        Page<Object[]> getMovieDetails(Pageable pageable);
 
 }
