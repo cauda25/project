@@ -76,7 +76,7 @@
         </div>
         <div class="col-md-7 col-lg-8">
           <h4 class="mb-3 text-white">Shipping information</h4>
-          <form class="needs-validation" novalidate>
+          <form class="needs-validation" id="shippingInfoForm" novalidate>
             <div class="row g-3">
               <div class="col-12">
                 <label for="name" class="form-label">Name</label>
@@ -107,16 +107,14 @@
               </div> -->
 
               <div class="col-12">
-                <label for="email" class="form-label"
-                  >Email
-                  <span class="text-body-secondary">(Optional)</span></label
-                >
+                <label for="email" class="form-label">Email</label>
                 <input
                   type="email"
                   class="form-control"
                   id="email"
                   placeholder="you@example.com"
                   th:value="${memberDto.email}"
+                  required
                 />
                 <div class="invalid-feedback">
                   Please enter a valid email address for shipping updates.
@@ -124,20 +122,19 @@
               </div>
 
               <div class="col-12">
-                <label for="phoneNumber" class="form-label"
-                  >Phone number
-                  <span class="text-body-secondary">(Optional)</span></label
-                >
+                <label for="phoneNumber" class="form-label">Phone number</label>
                 <input
                   type="text"
                   class="form-control"
                   id="phoneNumber"
                   placeholder="010-0000-0000"
                   th:value="${memberDto.phone}"
+                  required
                 />
+                <div class="invalid-feedback">Phone number required.</div>
               </div>
 
-              <div class="col-12">
+              <!-- <div class="col-12">
                 <label for="address" class="form-label">Address</label>
                 <input
                   type="text"
@@ -164,7 +161,7 @@
                   placeholder="Apartment or suite"
                   th:value="${memberDto.district}"
                 />
-              </div>
+              </div> -->
 
               <!-- 
               <div class="col-md-5">
@@ -331,11 +328,14 @@
   <th:block layout:fragment="js">
     <script>
       const orderId = "[[${orderDto.id}]]";
-      let productName = "[[${orderItemDtos[0].productDto.name}]]";
+      const productName = "[[${orderItemDtos[0].productDto.name}]]";
       const totalPrice = "[[${orderDto.totalPrice}]]";
+      let isValidated = false;
     </script>
     <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+    <script th:src="@{/js/checkAuth.js}"></script>
     <script th:src="@{/js/checkout.js}"></script>
+    <script th:src="@{/js/payment.js}"></script>
     <script th:src="@{/js/order.js}"></script>
   </th:block>
 </html>

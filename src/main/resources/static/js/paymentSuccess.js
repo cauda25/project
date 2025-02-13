@@ -16,7 +16,6 @@ fetch(`/rest/success/${orderId}`, {
   .then((response) => response.json())
   .then((data) => {
     console.log(data);
-    // window.location.href = `/payment/success?orderId=${orderId}`;
   })
   .catch((error) => {
     console.error(error);

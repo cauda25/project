@@ -206,7 +206,7 @@ ischeckedItems();
 document.querySelector(".btn-checkout").addEventListener("click", async () => {
   console.log(checkedItems);
   const isAuth = await checkAuth(); // checkAuth()가 완료될 때까지 기다림
-  console.log(isAuth);
+  console.log("로그인 여부: ", isAuth);
 
   if (isAuth) {
     // 인증된 사용자일 경우 수행할 동작

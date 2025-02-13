@@ -1,6 +1,6 @@
 fetch(`/rest/person/detail/${personId}`)
   .then((response) => {
-    if (!response.ok) throw new Error("에러");
+    if (!response.ok) throw new Error("failed");
 
     return response.json();
   })
