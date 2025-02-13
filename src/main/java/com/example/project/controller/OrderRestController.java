@@ -14,13 +14,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project.dto.AuthMemberDto;
+import com.example.project.dto.MemberDto;
 import com.example.project.dto.store.OrderItemDto;
+import com.example.project.service.MailService;
 import com.example.project.service.store.OrderItemService;
 import com.example.project.service.store.OrderService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RequestMapping("/rest")
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class OrderRestController {
 
     private final OrderService orderService;
     private final OrderItemService orderItemService;
+    private final MailService mailService;
 
     @PostMapping("/payment")
     public ResponseEntity<List<OrderItemDto>> postCartItem(
@@ -53,6 +57,21 @@ public class OrderRestController {
             return ResponseEntity.ok("false");
         }
         return ResponseEntity.ok("true");
+    }
+
+    @PostMapping("/success/{orderId}")
+    public ResponseEntity<String> postSuccess(
+            @RequestBody MemberDto memberDto, @PathVariable Long orderId) {
+        log.info("이메일: {}", memberDto.getEmail());
+        log.info("주문Id: {}", orderId);
+
+        // 기프티콘 메일 전송
+        String m = mailService.mailSend(orderId, memberDto.getEmail());
+        log.info(m);
+        if (m == "성공") {
+            return ResponseEntity.ok("true");
+        }
+        return ResponseEntity.ok("false");
     }
 
     @PostMapping("/exit")

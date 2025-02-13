@@ -137,4 +137,4 @@ image.save(
 )
 
 # 이미지를 화면에 표시
-image.show()
+# image.show()

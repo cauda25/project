@@ -18,7 +18,7 @@ window.addEventListener("beforeunload", function () {
     });
 });
 
-document.querySelector(".checkout-btn").addEventListener("click", () => {
+document.querySelector(".checkout-btn").addEventListener("click", async () => {
   // // 카드 정보 추출
   // const cardNumber = document.getElementById("cc-number").value;
   // const expiryDate = document.getElementById("cc-expiration").value;
@@ -56,72 +56,65 @@ document.querySelector(".checkout-btn").addEventListener("click", () => {
   const name = document.getElementById("name").value;
   const email = document.getElementById("email").value;
   const phoneNumber = document.getElementById("phoneNumber").value;
-  const address = document.getElementById("address").value;
-  const address2 = document.getElementById("address2").value;
+  // const address = document.getElementById("address").value;
+  // const address2 = document.getElementById("address2").value;
 
   const IMP = window.IMP; // 생략 가능
   IMP.init("imp56626883"); // 예: imp00000000a
 
   preventExit = true; // 페이지 이동을 막기 위해 `beforeunload` 이벤트가 작동하지 않도록 flag 설정
   // 서버나 클라이언트 측에서 인증 여부를 확인
-  fetch("/rest/check-auth", { method: "GET" }) // 예시로 인증 상태 확인 API 호출
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Not authenticated");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-      if (data == true) {
-        // 인증된 사용자일 경우 수행할 동작
-        // 결제 진행
-        // IMP.request_pay(
-        //   {
-        //     pg: "html5_inicis.INIpayTest",
-        //     pay_method: "card",
-        //     merchant_uid: orderId,
-        //     name: productName,
-        //     amount: totalPrice,
-        //     buyer_email: email,
-        //     buyer_name: name,
-        //     buyer_tel: phoneNumber,
-        //     buyer_addr: address + " " + address2,
-        //     // buyer_postcode: "123-456",
-        //   },
-        //   function (rsp) {
-        //     // callback
-        //     //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
-        //     console.log(rsp);
-        //     if (rsp.success == true) {
-        //       window.location.href = `/payment/success?orderId=${orderId}`;
-        //     } else {
-        //       alert(rsp.error_msg);
-        //     }
-        //   }
-        // );
-        window.location.href = `/payment/success?orderId=${orderId}`;
-        // fetch(`/rest/payment?orderId=${orderId}`, { method: "GET" })
-        //   .then((response) => {
-        //     if (!response.ok) {
-        //       throw new Error("error");
-        //     }
-        //     return response.json();
-        //   })
-        //   .then((data) => {
-        //     console.log(data);
-        //     if (data == true) {
-        //       window.location.href = `/payment/success?orderId=${orderId}`;
-        //     } else if (data == false) {
-        //       alert("결제 오류가 발생하였습니다. 다시 시도해주세요.");
-        //       window.location.href = `/movie/main`;
-        //     }
-        //   });
-      } else {
-        window.location.href = "/member/login"; // 로그인 페이지로 이동
-      }
-    })
-    .catch((error) => {
-      console.error("Error adding to cart:", error);
-    });
+  const isAuth = await checkAuth(); // checkAuth()가 완료될 때까지 기다림
+  console.log(isAuth);
+  if (isAuth) {
+    // 인증된 사용자일 경우 수행할 동작
+    // 결제 진행
+    // IMP.request_pay(
+    //   {
+    //     pg: "html5_inicis.INIpayTest",
+    //     pay_method: "card",
+    //     merchant_uid: orderId,
+    //     name: productName,
+    //     amount: totalPrice,
+    //     buyer_email: email,
+    //     buyer_name: name,
+    //     buyer_tel: phoneNumber,
+    //     buyer_addr: address + " " + address2,
+    //     // buyer_postcode: "123-456",
+    //   },
+    //   function (rsp) {
+    //     // callback
+    //     //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
+    //     console.log(rsp);
+    //     if (rsp.success == true) {
+    //       window.location.href = `/payment/success?orderId=${orderId}`;
+    //     } else {
+    //       alert(rsp.error_msg);
+    //     }
+    //   }
+    // );
+
+    sessionStorage.setItem("name", name);
+    sessionStorage.setItem("email", email);
+    sessionStorage.setItem("phone", phoneNumber);
+    window.location.href = `/payment/success?orderId=${orderId}`;
+    // fetch(`/rest/payment?orderId=${orderId}`, { method: "GET" })
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw new Error("error");
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((data) => {
+    //     console.log(data);
+    //     if (data == true) {
+    //       window.location.href = `/payment/success?orderId=${orderId}`;
+    //     } else if (data == false) {
+    //       alert("결제 오류가 발생하였습니다. 다시 시도해주세요.");
+    //       window.location.href = `/movie/main`;
+    //     }
+    //   });
+  } else {
+    window.location.href = "/member/login"; // 로그인 페이지로 이동
+  }
 });

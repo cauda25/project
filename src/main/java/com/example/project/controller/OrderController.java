@@ -18,7 +18,6 @@ import com.example.project.dto.store.OrderDto;
 import com.example.project.dto.store.OrderItemDto;
 import com.example.project.entity.constant.OrderStatus;
 import com.example.project.service.ImageService;
-import com.example.project.service.MailService;
 import com.example.project.service.store.CartItemService;
 import com.example.project.service.store.OrderItemService;
 import com.example.project.service.store.OrderService;
@@ -37,7 +36,6 @@ public class OrderController {
     private final OrderService orderService;
     private final OrderItemService orderItemService;
     private final ImageService imageService;
-    private final MailService mailService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/payment")
@@ -66,8 +64,13 @@ public class OrderController {
         AuthMemberDto authMemberDto = (AuthMemberDto) authentication.getPrincipal();
         MemberDto memberDto = authMemberDto.getMemberDto();
 
+        // 주문 상태를 COMPLETED로 변경
         orderService.setStatusCompleted(orderId);
+
+        // 장바구니에 구매완료된 상품 제거
         cartItemService.deleteByOrderId(orderId, memberDto.getMid());
+
+        // 구매한 상품 기프티콘 생성
         List<OrderItemDto> orderItemDtos = orderItemService.findByOrderId(orderId);
         orderItemDtos.forEach(dto -> {
             for (int i = 0; i < dto.getQuantity(); i++) {
@@ -75,8 +78,6 @@ public class OrderController {
             }
         });
 
-        String m = mailService.mailSend(orderId, memberDto.getEmail());
-        log.info(m);
         model.addAttribute("orderId", orderId);
     }
 

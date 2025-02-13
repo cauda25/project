@@ -28,28 +28,17 @@ console.log(price);
 
 const orderForm = document.querySelector("#orderForm");
 
-document.querySelector(".btn-cart").addEventListener("click", () => {
-  // 서버나 클라이언트 측에서 인증 여부를 확인
-  fetch("/rest/check-auth", { method: "GET" }) // 예시로 인증 상태 확인 API 호출
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Not authenticated");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (data == true) {
-        // 인증된 사용자일 경우 수행할 동작
-        addToCart();
-      } else {
-        if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
-          window.location.href = "/member/login"; // 로그인 페이지로 이동
-        }
-      }
-    })
-    .catch((error) => {
-      console.error("Error adding to cart:", error);
-    });
+document.querySelector(".btn-cart").addEventListener("click", async () => {
+  const isAuth = await checkAuth(); // checkAuth()가 완료될 때까지 기다림
+  console.log(isAuth);
+  if (isAuth) {
+    // 인증된 사용자일 경우 수행할 동작
+    addToCart();
+  } else {
+    if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
+      window.location.href = "/member/login"; // 로그인 페이지로 이동
+    }
+  }
 });
 
 function addToCart() {
@@ -76,67 +65,56 @@ function addToCart() {
       }
     })
     .catch((error) => {
-      console.error("Error adding to cart:", error);
+      console.error(error);
     });
 }
 
-document.querySelector(".btn-purchase").addEventListener("click", () => {
-  // 서버나 클라이언트 측에서 인증 여부를 확인
-  fetch("/rest/check-auth", { method: "GET" }) // 예시로 인증 상태 확인 API 호출
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Not authenticated");
+document.querySelector(".btn-purchase").addEventListener("click", async () => {
+  const isAuth = await checkAuth(); // checkAuth()가 완료될 때까지 기다림
+  console.log(isAuth);
+  // 인증된 사용자일 경우 수행할 동작
+  if (isAuth) {
+    if (inCart) {
+      if (
+        confirm(
+          "이미 장바구니에 존재합니다. 장바구니 페이지로 이동하시겠습니까?"
+        )
+      ) {
+        window.location.href = `/cart/main?purchaseBtn=${productId}`; // 장바구니 페이지로 이동
       }
-      return response.json();
-    })
-    .then((data) => {
-      // 인증된 사용자일 경우 수행할 동작
-      if (data == true) {
-        if (inCart) {
-          if (
-            confirm(
-              "이미 장바구니에 존재합니다. 장바구니 페이지로 이동하시겠습니까?"
-            )
-          ) {
-            window.location.href = `/cart/main?purchaseBtn=${productId}`; // 장바구니 페이지로 이동
-          }
-        } else {
-          fetch(`/rest/cart/add/${productId}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              quantity: count,
-              price: price,
-            }),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log(data);
+    } else {
+      fetch(`/rest/cart/add/${productId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          quantity: count,
+          price: price,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
 
-              window.location.href = `/cart/main?purchaseBtn=${productId}`; // 장바구니 페이지로 이동
-            })
-            .catch((error) => {
-              console.error("Error adding to cart:", error);
-            });
-        }
-      } else {
-        if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
-          window.location.href = "/member/login"; // 로그인 페이지로 이동
-        }
-      }
-    })
-    .catch((error) => {
-      console.error("Error adding to cart:", error);
-    });
+          window.location.href = `/cart/main?purchaseBtn=${productId}`; // 장바구니 페이지로 이동
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  } else {
+    if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
+      window.location.href = "/member/login"; // 로그인 페이지로 이동
+    }
+  }
 });
 
 function isInCart() {
-  fetch(`/rest/cart/${productId}`, { method: "GET" }) // 예시로 인증 상태 확인 API 호출
+  fetch(`/rest/cart/${productId}`, { method: "GET" })
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Not authenticated");
+        throw new Error("Failed");
       }
       return response.json();
     })
@@ -147,7 +125,7 @@ function isInCart() {
       return data;
     })
     .catch((error) => {
-      console.error("Error adding to cart:", error);
+      console.error(error);
     });
 }
 isInCart();

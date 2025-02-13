@@ -253,35 +253,21 @@ function addToFavoriteMovie() {
 }
 
 // 찜하기 버튼 누를 시
-document.querySelector(".follow-btn").addEventListener("click", (e) => {
+document.querySelector(".follow-btn").addEventListener("click", async (e) => {
   console.log("찜하기 버튼 클릭");
-  // 서버나 클라이언트 측에서 인증 여부를 확인
-  fetch("/rest/check-auth", { method: "GET" }) // 예시로 인증 상태 확인 API 호출
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Not authenticated");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (data == true) {
-        // 인증된 사용자일 경우 수행할 동작
-        addToFavoriteMovie();
-        if (isExist === "true") {
-          isExist = "false";
-        } else {
-          isExist = "true";
-        }
-        isExistFavorite();
-      } else {
-        if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
-          window.location.href = "/member/login"; // 로그인 페이지로 이동
-        }
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+
+  const isAuth = await checkAuth(); // checkAuth()가 완료될 때까지 기다림
+  console.log(isAuth);
+
+  if (isAuth) {
+    addToFavoriteMovie();
+    isExist = isExist === "true" ? "false" : "true";
+    isExistFavorite();
+  } else {
+    if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
+      window.location.href = "/member/login";
+    }
+  }
 });
 
 // 평점 클릭 시
