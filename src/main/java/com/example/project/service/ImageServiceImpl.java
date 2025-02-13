@@ -20,7 +20,7 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @Component
 public class ImageServiceImpl implements ImageService {
-    @Value("classpath:static/python/test.py")
+    @Value("classpath:python/gifticon.py")
     private Resource pythonFile;
 
     @Override

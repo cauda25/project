@@ -50,15 +50,15 @@ document.querySelector(".checkout-btn").addEventListener("click", async () => {
   console.log("로그인 여부: ", isAuth);
   if (isAuth) {
     // 인증된 사용자일 경우 수행할 동작
-    rsp = await payment(paymentInfo);
-    if (rsp.success == true) {
+    // rsp = await payment(paymentInfo);
+    // if (rsp.success == true) {
       sessionStorage.setItem("name", name);
       sessionStorage.setItem("email", email);
       sessionStorage.setItem("phone", phoneNumber);
       window.location.href = `/payment/success?orderId=${orderId}`;
-    } else {
-      alert(rsp.error_msg);
-    }
+    // } else {
+      // alert(rsp.error_msg);
+    // }
     // window.location.href = `/payment/success?orderId=${orderId}`;
     // fetch(`/rest/payment?orderId=${orderId}`, { method: "GET" })
     //   .then((response) => {

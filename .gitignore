@@ -37,3 +37,6 @@ mvnw
 mvnw.cmd
 .mvn/wrapper/maven-wrapper.properties
 src/main/resources/static/js/chat.js
+
+
+venv/
