@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.example.project.admin.Entity.constant.StatusRole;
 import com.example.project.entity.constant.MemberRole;
+import com.example.project.entity.store.Cart;
+import com.example.project.entity.store.Order;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,6 +20,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -82,7 +85,21 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private StatusRole statusRole; // 필요해서 추가합니다.
 
+    // Member.java
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
+
     public Long getMid() {
         return mid;
+    }
+
+    public void deactivateMember() {
+        this.statusRole = StatusRole.INACTIVE;
     }
 }

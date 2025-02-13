@@ -2,90 +2,84 @@
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <th:block layout:fragment="css">
     <link rel="stylesheet" th:href="@{/css/reservation.css}">
-  </th:block>   
-    <div layout:fragment="content">      
-      <table class="table table-bordered mt-3">
-        <thead>
-          <tr>
-            <th scope="col" class="bg-dark text-white">극장</th>
-            <th scope="col" class="bg-dark text-white">영화</th>
-            <th scope="col" class="bg-dark text-white">시간</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <div class="row">
-                <div class="col-6 theater-scroll">
-                  <nav id="theaternav" class="h-100 flex-column align-items-stretch border-end bg-light p-0">                       
-                    <nav class="nav flex-column p-0">
-                      <th:block th:each="region : ${regions}">
-                        <a class="nav-link text-dark fw-bold region-list" th:href="@{/reservation/theaters(region=${region})}" th:attr="data-region=${region}">
-                          <span class="statetitle" th:text="${region}"></span>                         
-                        </a>
-                      </th:block>                    
-                    </nav>
+  </th:block>
+  <div layout:fragment="content">
+    <table class="table table-bordered mt-3">
+      <thead>
+        <tr>
+          <th scope="col" class="bg-dark text-white">극장</th>
+          <th scope="col" class="bg-dark text-white">영화</th>
+          <th scope="col" class="bg-dark text-white">시간</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="row">
+              <div class="col-6 theater-scroll">
+                <nav id="theaternav" class="h-100 flex-column align-items-stretch border-end bg-light p-0">
+                  <nav class="nav flex-column p-0">
+                    <th:block th:each="region : ${regions}">
+                      <a class="nav-link text-dark fw-bold region-list" th:href="@{/reservation/theaters(region=${region})}" th:attr="data-region=${region}">
+                        <span class="statetitle" th:text="${region}"></span>
+                      </a>
+                    </th:block>
                   </nav>
-                </div>
-                <div class="col-6">
-                  <div data-bs-spy="scroll" data-bs-target="#theaternav" data-bs-smooth-scroll="true" class="theater-scroll p-0" tabindex="0">
-                    <div id="theater-list" class="nav flex-column p-0">
-                    </div>
-                  </div>
-                </div> 
-              </div>      
-            </td>
-            <td>
-              <div>
-                <div id="movie-list" class="custom-movie-list">
+                </nav>
+              </div>
+              <div class="col-6">
+                <div data-bs-spy="scroll" data-bs-target="#theaternav" data-bs-smooth-scroll="true" class="theater-scroll p-0" tabindex="0">
+                  <div id="theater-list" class="nav flex-column p-0"></div>
                 </div>
               </div>
-            </td>
-            <td>
-              <div class="date-schedule d-flex justify-content-start align-items-center flex-wrap gap-2">
-                <ul id="dateList" class="d-flex list-unstyled mb-0">
-                </ul>                
+            </div>
+          </td>
+          <td>
+            <div>
+              <div id="movie-list" class="custom-movie-list"></div>
+            </div>
+          </td>
+          <td>
+            <div class="date-schedule d-flex justify-content-start align-items-center flex-wrap gap-2">
+              <ul id="dateList" class="d-flex list-unstyled mb-0"></ul>
+            </div>
+            <div>
+              <div id="screenings" class="theater-scroll"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3" class="text-center">
+            <div class="selection-container">
+              <div class="selection-summary">
+                <p>
+                  <span>선택한 극장:</span>
+                  <strong id="selected-theater">-</strong><br>
+                  <span>선택한 영화:</span>
+                  <strong id="selected-movie">-</strong><br>
+                  <span>선택한 날짜:</span>
+                  <strong id="selected-date">-</strong><br>
+                  <span>선택한 상영관:</span>
+                  <strong id="selected-auditorium">-</strong><br>
+                  <span>선택한 시간:</span>
+                  <strong id="selected-time">-</strong>
+                </p>
               </div>
-              <div>
-                <div id="screenings" class="theater-scroll">                
-                </div>
-              </div>
-            </td>                
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="3" class="text-center">
-              <div class="selection-container">
-                <div class="selection-summary">
-                  <p>
-                    <strong>선택한 극장:</strong> <span id="selected-theater">-</span><br>
-                    <strong>선택한 영화:</strong> <span id="selected-movie">-</span><br>
-                    <strong>선택한 날짜:</strong> <span id="selected-date">-</span><br>
-                    <strong>선택한 상영관:</strong> <span id="selected-auditorium">-</span><br>
-                    <strong>선택한 시간:</strong> <span id="selected-time">-</span>
-                  </p>
-                </div>
-                <a href="#" 
-                 
-                  id="seatSelection"
-                   class="select-info" 
-                   data-theater=""
-                   data-movie=""
-                   data-date=""
-                   data-auditorium=""
-                   data-time=""
-                   data-screening-id="">
-                  좌석선택 <i class="fa-solid fa-angles-right"></i>
-                </a>
-              </div>
-            </td>
-          </tr>
-        </tfoot>
-      </table>     
-    </div>    
+              <a href="#" id="seatSelection" class="select-info" data-theater="" data-movie="" data-date="" data-auditorium="" data-time="" data-screening-id="">
+                좌석선택
+                <i class="fa-solid fa-angles-right"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
   <th:block layout:fragment="js">
-   
     <script th:src="@{/js/reservation.js}"></script>
-  </th:block>   
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </th:block>
+
 </html>

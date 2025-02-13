@@ -42,18 +42,7 @@ tbody td {
   background-color: #ccc;
   cursor: not-allowed;
 }
-.select-info {
-  display: flex;
-  align-items: center;
-  height: 100px;
-  font-size: 20px;
-  justify-content: flex-end;
-  padding: 10px 20px;
-  text-decoration: none;
-  color: #000;
-  border-radius: 5px;
-  border: 2px solid black;
-}
+
 .selection-container {
   display: flex;
   justify-content: flex-end;
@@ -73,10 +62,24 @@ tbody td {
 
 .selection-summary strong {
   color: #000;
-  font-weight: bold;
 }
+
+.select-info {
+  display: flex;
+  align-items: center;
+  height: 100px;
+  font-size: 20px;
+  font-weight: bold;
+  justify-content: flex-end;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #000;
+  border-radius: 15px;
+  border: 2px solid #949494;
+}
+
 .select-info:hover {
-  background-color: #7db0e7;
+  background-color: #949494;
   color: #000;
 }
 
@@ -88,7 +91,7 @@ tbody td {
 tfoot td {
   height: 60px;
   vertical-align: middle;
-  background-color: #d4d3d3 !important;
+  background-color: #cfcfcf !important;
 }
 .payment-form {
   display: flex;

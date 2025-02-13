@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
+  <!-- CSS 영역 -->
   <th:block layout:fragment="css">
-    <link rel="stylesheet" th:href="@{/css/list.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/list.css}" type="text/css"/>
     <style>
       .anime__details__widget ul li span {
         width: auto;
       }
+
       .anime__details__widget .row {
         display: block;
       }
+
       .anime__details__widget ul li span {
         list-style: none;
         font-size: 15px;
@@ -16,12 +19,15 @@
         line-height: 30px;
         position: relative;
       }
+
       .overview {
         color: #ffffff;
       }
+
       .anime__details__content {
         margin: 0;
       }
+
       .star-rating {
         display: flex;
         flex-direction: row-reverse;
@@ -39,36 +45,34 @@
         transition: color 0.3s;
       }
 
-      .star-rating input:checked ~ label {
+      .star-rating input:checked~label {
         color: #ffc700;
       }
 
       .star-rating label:hover,
-      .star-rating label:hover ~ label {
+      .star-rating label:hover~label {
         color: #ffda00;
       }
     </style>
   </th:block>
+
+  <!-- 컨텐츠 영역 -->
   <div layout:fragment="content">
+    <!-- 로그인한 사용자 이름 표시 (필요 시) -->
     <div>[[${#authentication.name}]]</div>
     <section class="anime-details spad">
       <div class="container">
-        <!-- 영화 정보 -->
+        <!-- 영화 정보 영역 -->
         <div class="anime__details__content">
           <div class="row">
             <!-- 영화 포스터 -->
             <div class="col-lg-3">
-              <div
-                class="anime__details__pic set-bg"
-                data-setbg="img/anime/details-pic.jpg"
-              >
+              <div class="anime__details__pic set-bg" data-setbg="img/anime/details-pic.jpg">
                 <img
                   th:src="'https://image.tmdb.org/t/p/w500/' + ${movieDto.posterPath}"
                   alt=""
                   class="product__item__pic set-bg"
                 />
-                <!-- <div class="comment"><i class="fa fa-comments"></i> 11</div> -->
-                <!-- <div class="view"><i class="fa fa-eye"></i> 9141</div> -->
               </div>
             </div>
             <!-- 영화 기본 정보 -->
@@ -79,74 +83,47 @@
                 </div>
                 <div class="anime__details__rating">
                   <div class="rating">
-                    <div
-                      th:each="i : ${#numbers.sequence(0, 4)}"
-                      style="display: inline-block"
-                    >
-                      <span href="#" th:if="${i < (movieDto.voteAverage / 2)}"
-                        ><i class="fa-solid fa-star"></i
-                      ></span>
-                      <span href="#" th:if="${i >= (movieDto.voteAverage / 2)}"
-                        ><i class="fa-regular fa-star"></i
-                      ></span>
+                    <div th:each="i : ${#numbers.sequence(0, 4)}" style="display: inline-block">
+                      <span th:if="${i < (movieDto.voteAverage / 2)}">
+                        <i class="fa-solid fa-star"></i>
+                      </span>
+                      <span th:if="${i >= (movieDto.voteAverage / 2)}">
+                        <i class="fa-regular fa-star"></i>
+                      </span>
                     </div>
                   </div>
-                  <span th:text="${movieDto.voteCount} + ' Votes'"
-                    >1.029 Votes</span
-                  >
+                  <span th:text="${movieDto.voteCount} + ' Votes'">1.029 Votes</span>
                 </div>
                 <p th:text="${movieDto.tagline}">영화에 대한 상세 정보</p>
                 <div class="anime__details__widget">
                   <div class="row">
-                    <div class="">
+                    <div>
                       <ul>
                         <li>
                           <span>감독:</span>
-                          <!-- 리스트의 감독 이름을 출력 -->
                           <span th:each="director, iterStat : ${directorList}">
-                            <!-- 최대 3명까지 출력 -->
-                            <span
-                              th:if="${iterStat.index < 3}"
-                              th:text="${director.name}"
-                            ></span
-                            ><!-- 마지막 항목이 아닌 경우에만 쉼표 추가 --><span
-                              th:if="${!iterStat.last and iterStat.index < 2}"
-                              >,&nbsp</span
-                            >
+                            <span th:if="${iterStat.index < 3}" th:text="${director.name}"></span>
+                            <span th:if="${!iterStat.last and iterStat.index < 2}">,&nbsp;</span>
                           </span>
-                          <!-- 3명이 넘을 경우 외 n 명으로 출력 -->
                           <span th:if="${directorList.size() > 3}">
-                            외 [[${directorList.size() - 3}]] 명</span
-                          >
+                            외 [[${directorList.size() - 3}]] 명
+                          </span>
                         </li>
                         <li>
                           <span>출연진:</span>
-                          <!-- 리스트의 배우 이름을 출력 -->
                           <span th:each="actor, iterStat : ${actorList}">
-                            <!-- 최대 3명까지 출력 -->
-                            <span
-                              th:if="${iterStat.index < 3}"
-                              th:text="${actor.name}"
-                            ></span
-                            ><!-- 마지막 항목이 아닌 경우에만 쉼표 추가 --><span
-                              th:if="${!iterStat.last and iterStat.index < 2}"
-                              >,&nbsp</span
-                            >
+                            <span th:if="${iterStat.index < 3}" th:text="${actor.name}"></span>
+                            <span th:if="${!iterStat.last and iterStat.index < 2}">,&nbsp;</span>
                           </span>
-                          <!-- 3명이 넘을 경우 외 n 명으로 출력 -->
                           <span th:if="${actorList.size() > 3}">
-                            외 [[${actorList.size() - 3}]] 명</span
-                          >
+                            외 [[${actorList.size() - 3}]] 명
+                          </span>
                         </li>
                         <li>
                           <span>장르:</span>
-                          <!-- 리스트의 모든 감독 이름을 출력 -->
-                          <span
-                            th:each="genre, iterStat : ${movieDto.genreDtos}"
-                          >
-                            <span th:text="${genre.name}"></span
-                            ><span th:if="${!iterStat.last}">,&nbsp</span>
-                            <!-- 마지막 항목이 아닌 경우에만 쉼표 추가 -->
+                          <span th:each="genre, iterStat : ${movieDto.genreDtos}">
+                            <span th:text="${genre.name}"></span>
+                            <span th:if="${!iterStat.last}">,&nbsp;</span>
                           </span>
                         </li>
                         <li>
@@ -163,64 +140,33 @@
                   <button type="button" class="btn btn-danger follow-btn">
                     <i class="fa fa-heart-o"></i><span></span>
                   </button>
-                  <a href="#" class="watch-btn"
-                    ><span>빠른 예매</span> <i class="fa fa-angle-right"></i
-                  ></a>
+                  <a href="#" class="watch-btn">
+                    <span>빠른 예매</span> <i class="fa fa-angle-right"></i>
+                  </a>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- 탭 메뉴 (주요 정보, 감독/출연, 평점/리뷰, 추천) -->
         <div class="d-flex justify-content-center">
-          <div
-            class="btn-group"
-            role="group"
-            aria-label="Basic radio toggle button group"
-          >
-            <input
-              type="radio"
-              class="btn-check"
-              name="btnradio"
-              id="btnradio1"
-              autocomplete="off"
-              checked
-            />
-            <label class="btn btn-outline-primary" for="btnradio1"
-              >주요 정보</label
-            >
+          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked />
+            <label class="btn btn-outline-primary" for="btnradio1">주요 정보</label>
 
-            <input
-              type="radio"
-              class="btn-check"
-              name="btnradio"
-              id="btnradio2"
-              autocomplete="off"
-            />
-            <label class="btn btn-outline-primary" for="btnradio2"
-              >감독/출연</label
-            >
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" />
+            <label class="btn btn-outline-primary" for="btnradio2">감독/출연</label>
 
-            <input
-              type="radio"
-              class="btn-check"
-              name="btnradio"
-              id="btnradio3"
-              autocomplete="off"
-            />
-            <label class="btn btn-outline-primary" for="btnradio3"
-              >평점/리뷰</label
-            >
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" />
+            <label class="btn btn-outline-primary" for="btnradio3">평점/리뷰</label>
 
-            <input
-              type="radio"
-              class="btn-check"
-              name="btnradio"
-              id="btnradio4"
-              autocomplete="off"
-            />
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off" />
             <label class="btn btn-outline-primary" for="btnradio4">추천</label>
           </div>
         </div>
+
+        <!-- 기타 영화 관련 정보 -->
         <div class="movie_info">
           <div class="overview"></div>
           <div class="row trending__product-row director_row"></div>
@@ -230,75 +176,78 @@
           <div class="row trending__product-row movie_director_row"></div>
         </div>
 
+        <!-- 리뷰 영역 -->
         <div class="row" id="reviewreview">
           <div class="col-lg-8 col-md-8">
             <div class="anime__details__review">
               <div class="section-title">
                 <h5>관람평</h5>
               </div>
-              <div id="reviewList">
-                <!-- 기존 리뷰 리스트가 여기에 추가됩니다. -->
-              </div>
 
+              <!-- 리뷰 목록 (Thymeleaf 반복문을 이용) -->
+              <div id="reviewList" style="padding: 15px;">
+                <!-- 리뷰가 없을 경우 -->
+                <div th:if="${#lists.isEmpty(reviews)}" style="color: #000;">
+                  <p>아직 리뷰가 없습니다. 첫 리뷰를 작성해보세요!</p>
+                </div>
+                <!-- 리뷰가 있을 경우 -->
+                <div th:each="review : ${reviews}" class="review-item"
+                     style="background-color: #ffffff; color: #000; padding: 10px 15px; border-radius: 5px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                  <h6 th:text="${review.memberId}" style="margin-bottom: 5px;">작성자</h6>
+                  <p th:text="${review.content}" style="margin: 0;">리뷰 내용</p>
+                  <div class="star-rating" 
+                       style="display: flex; flex-direction: row !important; justify-content: left !important;">
+                    <!-- 채워진 별: 평점만큼 -->
+                    <span th:each="star : ${#numbers.sequence(1, review.rating)}"
+                          class="fa-solid fa-star"
+                          style="color: #ffc700; font-size: 1.5rem;"></span>
+                    <!-- 빈 별: 나머지 별 (총 5개 기준) -->
+                    <span th:each="star : ${#numbers.sequence(1, 5 - review.rating)}"
+                          class="fa-regular fa-star"
+                          style="color: #ffc700; font-size: 1.5rem;"></span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- 리뷰 작성 폼 -->
               <div class="anime__details__form">
                 <div class="section-title">
                   <h5>관람평 작성하기</h5>
                 </div>
-                <form id="reviewForm">
-                  <textarea
-                    placeholder="Your Comment"
-                    id="comment"
-                    required
-                  ></textarea>
+                <form id="reviewForm" th:action="@{/reviews}" method="post">
+                  <textarea placeholder="Your Comment" id="comment" name="content" required></textarea>
                   <div class="star-rating">
                     <input type="radio" id="star5" name="rating" value="5" />
-                    <label
-                      for="star5"
-                      title="5 stars"
-                      class="fa-solid fa-star"
-                    ></label>
-                    <input
-                      type="radio"
-                      id="star4"
-                      name="rating"
-                      value="4"
-                      checked
-                    />
-                    <label
-                      for="star4"
-                      title="4 stars"
-                      class="fa-solid fa-star"
-                    ></label>
+                    <label for="star5" title="5 stars" class="fa-solid fa-star"></label>
+                    <input type="radio" id="star4" name="rating" value="4" checked />
+                    <label for="star4" title="4 stars" class="fa-solid fa-star"></label>
                     <input type="radio" id="star3" name="rating" value="3" />
-                    <label
-                      for="star3"
-                      title="3 stars"
-                      class="fa-solid fa-star"
-                    ></label>
+                    <label for="star3" title="3 stars" class="fa-solid fa-star"></label>
                     <input type="radio" id="star2" name="rating" value="2" />
-                    <label
-                      for="star2"
-                      title="2 stars"
-                      class="fa-solid fa-star"
-                    ></label>
+                    <label for="star2" title="2 stars" class="fa-solid fa-star"></label>
                     <input type="radio" id="star1" name="rating" value="1" />
-                    <label
-                      for="star1"
-                      title="1 star"
-                      class="fa-solid fa-star"
-                    ></label>
+                    <label for="star1" title="1 star" class="fa-solid fa-star"></label>
                   </div>
+                  <!-- 영화 ID와 회원 ID (hidden 필드) -->
+                  <input type="hidden" name="id" th:value="${movieDto.id}" />
+                  <input type="hidden" name="mid" th:value="${memberId}" />
+
+                  <!-- CSRF 토큰 (Spring Security 사용 시 필요) -->
+                  <input type="hidden" th:if="${_csrf != null}"
+                         th:name="${_csrf.parameterName}"
+                         th:value="${_csrf.token}" />
                   <button type="submit">
                     <i class="fa fa-location-arrow"></i> 관람평 등록
                   </button>
                 </form>
-                <div
-                  id="movieDetail"
-                  data-movie-id="[[${movieDto.id}]]"
-                  data-member-id="[[${memberId}]]"
-                  data-is-login="[[${isLogin}]]"
-                  data-is-exist="[[${isExist}]]"
-                ></div>
+                
+                <!-- 추가 데이터를 담은 div (필요 시 JavaScript에서 활용) -->
+                <div id="movieDetail"
+                     data-movie-id="[[${movieDto.id}]]"
+                     data-member-id="[[${memberId}]]"
+                     data-is-login="[[${isLogin}]]"
+                     data-is-exist="[[${isExist}]]">
+                </div>
               </div>
             </div>
           </div>
@@ -306,14 +255,15 @@
       </div>
     </section>
   </div>
+
+  <!-- JavaScript 영역 -->
   <th:block layout:fragment="js">
     <script>
-      const movieId = "[[${movieDto.id}]]"; // Thymeleaf 변수를 JavaScript로 전달
+      // Thymeleaf 표현식을 JavaScript 변수로 전달
+      const movieId = "[[${movieDto.id}]]";
       const memberId = "[[${memberId}]]";
       const isLogin = "[[${isLogin}]]";
-      let isExist = "[[${isExist}]]";
-      const directors = "[[${directorList[0].id}]]";
-      const directorName = "[[${directorList[0].name}]]";
+      const isExist = "[[${isExist}]]";
     </script>
     <script th:src="@{/js/movieDetail.js}"></script>
   </th:block>

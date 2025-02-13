@@ -1,6 +1,7 @@
 package com.example.project.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.project.dto.ReviewDto;
 import com.example.project.entity.Movie;
@@ -17,4 +18,7 @@ public interface ReviewService {
     ReviewDto getReviewById(Long rid);
 
     List<ReviewDto> getAllReviews();
+
+    List<ReviewDto> findReviewsByMovieId(Long movieId);
+
 }

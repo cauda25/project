@@ -3,19 +3,26 @@ package com.example.project.controller;
 import java.security.Principal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -24,12 +31,16 @@ import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.MovieDto;
 import com.example.project.dto.reserve.ReserveDto;
+import com.example.project.entity.Member;
 import com.example.project.entity.Movie;
+import com.example.project.repository.MemberRepository;
 import com.example.project.service.MemberFavoriteMovieService;
 import com.example.project.service.MemberService;
 import com.example.project.service.MovieService;
 import com.example.project.service.reservation.ReserveService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +55,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final ReserveService reserveService;
+    private final MemberRepository memberRepository;
     private final MovieService movieService;
     private final MemberFavoriteMovieService memberFavoriteMovieService;
 
@@ -91,19 +103,34 @@ public class MemberController {
     }
 
     @GetMapping("/mypage")
-    public String getMypage(Model model, Principal principal) {
-        // 현재 로그인한 사용자 ID 가져오기
+    public String getMypage(Model model, Principal principal, HttpServletRequest request,
+            RedirectAttributes redirectAttributes) {
+        if (principal == null) {
+            redirectAttributes.addFlashAttribute("error", "로그인이 필요합니다.");
+            return "redirect:/member/login";
+        }
+
         String memberId = principal.getName();
 
-        // 회원정보 가져오기
-        MemberDto memberDto = memberService.getMemberById(memberId);
-        model.addAttribute("member", memberDto);
+        try {
+            // 회원 정보 가져오기
+            MemberDto memberDto = memberService.getMemberById(memberId);
+            model.addAttribute("member", memberDto);
 
-        // 찜 목록 가져오기
-        List<MovieDto> favorites = movieService.getFavoriteMoviesByMemberId(memberDto.getMid());
-        model.addAttribute("favorites", favorites);
+            // 찜 목록 가져오기
+            List<MovieDto> favorites = movieService.getFavoriteMoviesByMemberId(memberDto.getMid());
+            model.addAttribute("favorites", favorites);
 
-        return "member/mypage"; // mypage.html 반환
+            return "member/mypage"; // 정상적으로 마이페이지 반환
+
+        } catch (RuntimeException e) {
+            // 예외 발생 시 강제 로그아웃 (회원 정보 없음)
+            SecurityContextHolder.clearContext();
+            request.getSession().invalidate();
+
+            redirectAttributes.addFlashAttribute("error", "회원 정보를 찾을 수 없습니다. 다시 로그인해주세요.");
+            return "redirect:/member/login";
+        }
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -206,6 +233,39 @@ public class MemberController {
         // List<ReservationDto> reservation =
         // reservationService.getMemberReservations(memberId);
         // model.addAttribute("reservation", reservation);
+    }
+
+    @GetMapping("/confirm-delete")
+    public String confirmDeletePage(Model model, @AuthenticationPrincipal AuthMemberDto authMember) {
+        if (authMember == null) {
+            return "redirect:/member/login"; // 로그인되지 않은 경우 로그인 페이지로 리디렉트
+        }
+
+        model.addAttribute("memberId", authMember.getMemberId()); // 사용자 ID를 Thymeleaf에서 사용 가능하도록 전달
+        return "member/confirm-delete"; // 회원 탈퇴 확인 페이지
+    }
+
+    @DeleteMapping("/{memberId}")
+    public ResponseEntity<?> deleteMember(@PathVariable Long memberId) {
+        try {
+            log.info("회원 탈퇴 요청: " + memberId);
+
+            // 존재하는 회원인지 확인
+            Optional<Member> member = memberRepository.findById(memberId);
+            if (!member.isPresent()) {
+                log.warn("회원 없음: " + memberId);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("회원 정보를 찾을 수 없습니다.");
+            }
+
+            // 회원 삭제
+            memberService.deleteMember(memberId);
+            return ResponseEntity.ok("회원 탈퇴 성공");
+        } catch (Exception e) {
+            log.error("회원 탈퇴 오류:", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("회원 탈퇴 중 오류 발생");
+        }
     }
 
     // 개발자용 - Authentication 확인용
