@@ -6,7 +6,7 @@
   <div layout:fragment="content">
     <div class="row">
       <div class="col-md-12 grid-margin stretch-card">
-        <form th:action="@{/admin/page/join}" method="post">
+        <form th:action="@{/admin/page/join}" method="post" th:object="${adminCreateDto}">
         <div class="card">
           <div class="card-body">
             <p class="card-title">
@@ -31,9 +31,15 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td><input type="text" name="title" id="" /></td>
-                        <td><input type="text" name="directorName" id="" /></td>
-                        <td><input type="text" name="actors" id="" /></td>
+                        <td><input type="text" name="title" id="" />
+                          <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                        </td>
+                        <td><input type="text" name="directorName" id="" />
+                          <div th:if="${#fields.hasErrors('directorName')}" th:errors="*{directorName}"></div>
+                          </td>
+                        <td><input type="text" name="actors" id=""/>
+                          <div th:if="${#fields.hasErrors('actors')}" th:errors="*{actors}"></div>
+                          </td>
                       </tr>
                     </tbody>
                   </table>
@@ -85,13 +91,19 @@
                       <tr>
                         <td>
                             <div class="select-box">장르 선택</div>
-                            <div class="checkbox-list" name="name">
-                              <label th:each="genre : ${genres}">
-                                <input type="checkbox" name="genreIds"  th:value="${genre.id}" th:text="${genre.name}">
+                            <div class="checkbox-list" name="genreIds" >
+                              <label th:each="genre : ${genres}" >
+                                <input type="checkbox" name="genreIds" th:value="${genre.name}" th:text="${genre.name}">
+                                
+                                <!-- <input type="hidden" name="genreIds" th:value="${genre.id}"> -->
                               </label>
                             </div>
-                        </td>
-                        <td><input type="date" name="releaseDate" id="" /></td>
+                            <div th:if="${#fields.hasErrors('genreIds')}" th:errors="*{genreIds}"></div>
+                          </td>
+                        <td><input type="date" name="releaseDate" id="" />
+                          <div th:if="${#fields.hasErrors('releaseDate')}" th:errors="*{releaseDate}"></div>
+                          </td>
+                         
                         <td><input type="file" name="" id="" /></td>
                       </tr>
                     </tbody>

@@ -2,48 +2,46 @@
 <html lang="en">
   <header class="header" th:fragment="header">
     <div class="container">
-      <div class="row">
+      <div class="row justify-content-center">
         <div class="col-lg-2">
-          <div class="header__logo">
-            <a th:href="@{/movie/main}"
-              ><h3 class="color_white">씨네플레닛</h3></a
-            >
+          <div class="header__left">
+            <div class="header__nav">
+              <nav class="header__menu mobile-menu">
+                <ul>
+                  <li class="select_item">
+                    <a href=""><i class="fa-solid fa-bars"></i></a>
+
+                    <ul class="dropdown">
+                      <li><a th:href="@{/movie/list?movsleieList=nowPlaying&page=1&size=8&type=&keyword=&genre=&sort=popularity}">영화</a></li>
+                      <li><a th:href="@{/reservation}">예매</a></li>
+                      <li><a th:href="@{/store/main(category=combo)}">스토어</a></li>
+                      <li><a th:href="@{/center}">고객센터</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
         <div class="col-lg-8">
           <div class="header__nav">
-            <nav class="header__menu mobile-menu">
+            <nav class="header__menu">
               <ul>
                 <li class="select_item">
-                  <a
-                    th:href="@{/movie/list?movsleieList=nowPlaying&page=1&size=8&type=&keyword=&genre=&sort=popularity}"
-                    >영화</a
-                  >
+                  <a th:href="@{/movie/list?movsleieList=nowPlaying&page=1&size=8&type=&keyword=&genre=&sort=popularity}">영화</a>
 
                   <ul class="dropdown">
                     <li>
-                      <a
-                        th:href="@{/movie/list?movieList=nowPlaying&page=1&size=8&type=&keyword=&genre=&sort=popularity}"
-                        >현재 상영작</a
-                      >
+                      <a th:href="@{/movie/list?movieList=nowPlaying&page=1&size=8&type=&keyword=&genre=&sort=popularity}">현재 상영작</a>
                     </li>
                     <li>
-                      <a
-                        th:href="@{/movie/list?movieList=upcoming&page=1&size=8&type=&keyword=&genre=&sort=popularity}"
-                        >상영 예정작</a
-                      >
+                      <a th:href="@{/movie/list?movieList=upcoming&page=1&size=8&type=&keyword=&genre=&sort=popularity}">상영 예정작</a>
                     </li>
                     <li>
-                      <a
-                        th:href="@{/movie/list?movieList=popular&page=1&size=8&type=&keyword=&genre=&sort=popularity}"
-                        >전체 영화 목록</a
-                      >
+                      <a th:href="@{/movie/list?movieList=popular&page=1&size=8&type=&keyword=&genre=&sort=popularity}">전체 영화 목록</a>
                     </li>
                     <li>
-                      <a
-                        th:href="@{list(movieList=my,page=1,size=8,type=,keyword=,genre=,sort=popularity)}"
-                        >추천</a
-                      >
+                      <a th:href="@{list(movieList=my,page=1,size=8,type=,keyword=,genre=,sort=popularity)}">추천</a>
                     </li>
                   </ul>
                 </li>
@@ -54,6 +52,11 @@
                     <li><a href="">좌석선택</a></li>
                     <li><a href="">상영스케줄</a></li>
                   </ul>
+                </li>
+                <li class="header__logo">
+                  <a th:href="@{/movie/main}">
+                    <img th:src="@{/img/씨네플레닛(퍼플).JPG}" alt="" />
+                  </a>
                 </li>
                 <li>
                   <a th:href="@{/store/main(category=combo)}">스토어</a>
@@ -78,15 +81,11 @@
         </div>
         <div class="col-lg-2">
           <div class="header__right">
-            <a th:href="@{/cart/main(purchaseBtn=0)}" class="search-switch"
-              ><span class="icon_cart"></span
-            ></a>
-            <a sec:authorize="!isAuthenticated()" th:href="@{/member/login}"
-              ><span class="icon_profile"></span
-            ></a>
-            <a sec:authorize="isAuthenticated()" th:href="@{/member/mypage}"
-              ><span class="icon_profile"></span
-            ></a>
+            <a th:href="@{/cart/main(purchaseBtn=0)}" class="search-switch"><span class="icon_cart"></span></a>
+
+            <a sec:authorize="!isAuthenticated()" th:href="@{/member/login}"><span class="icon_profile"></span></a>
+            <a sec:authorize="hasAuthority('ROLE_MEMBER')" th:href="@{/member/mypage}"><span class="icon_profile"></span></a>
+            <a sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/member/adminpage}"><span class="icon_profile"></span></a>
           </div>
         </div>
       </div>
