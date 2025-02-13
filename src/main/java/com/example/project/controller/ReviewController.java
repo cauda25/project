@@ -9,7 +9,9 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.ReviewDto;
@@ -38,7 +41,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Controller
 @RequiredArgsConstructor
-@RestController
 @RequestMapping("/reviews")
 public class ReviewController {
 
@@ -47,22 +49,22 @@ public class ReviewController {
     private final MemberService memberService;
 
     @GetMapping
-    public ResponseEntity<List<ReviewDto>> getAllReviews() {
-        // 리뷰 데이터를 가져오는 로직
-        List<ReviewDto> reviews = reviewService.getAllReviews();
-        return ResponseEntity.ok(reviews);
+    public List<ReviewDto> getReviews(@RequestParam("movieId") Long movieId) {
+        return reviewService.findReviewsByMovieId(movieId);
     }
 
     // 리뷰 생성
     @PostMapping
-    public ResponseEntity<?> saveReview(@RequestBody ReviewDto reviewDto) {
+    public String saveReview(@ModelAttribute ReviewDto reviewDto, RedirectAttributes redirectAttributes) {
         try {
             reviewService.saveReview(reviewDto);
-            return ResponseEntity.ok("리뷰가 성공적으로 저장되었습니다.");
+            // 플래시 메시지를 사용하고 싶다면
+            redirectAttributes.addFlashAttribute("message", "리뷰가 성공적으로 저장되었습니다.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("리뷰 저장 중 오류가 발생했습니다.");
+            redirectAttributes.addFlashAttribute("error", "리뷰 저장 중 오류가 발생했습니다.");
         }
+        // reviewDto.getId()가 영화 id라 가정 (엔티티에서 영화 id를 전달받음)
+        return "redirect:/movie/detail?id=" + reviewDto.getId();
     }
 
     // 특정 영화에 대한 리뷰 조회
@@ -79,4 +81,5 @@ public class ReviewController {
         ReviewDto review = reviewService.getReviewById(reviewId);
         return new ResponseEntity<>(review, HttpStatus.OK);
     }
+
 }
