@@ -1,6 +1,9 @@
 package com.example.project.entity;
 
 import java.time.LocalDateTime;
+
+import com.example.project.dto.MemberDto;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,17 +21,18 @@ public class Inquiry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private String username;
-
-    @Column(nullable = false)
     private String email;
 
-    @Column(name = "mobile")
-    private String mobile;
+    @Column(name = "phone")
+    private String phone;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
@@ -37,7 +41,7 @@ public class Inquiry {
     private String answer;
 
     @Builder.Default
-    private Boolean answered = false; // 기본값 설정
+    private Boolean answered = false;
 
     @Enumerated(EnumType.STRING)
     private InquiryStatus status;
@@ -49,38 +53,41 @@ public class Inquiry {
     @Column(name = "inquiry_type", nullable = false)
     private String inquiryType;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    public Inquiry(String username, String email, String content, String mobile) {
-        this.username = username;
-        this.email = email;
-        this.mobile = mobile;
-        this.content = content;
-    }
-
     @Column(nullable = false)
     private String type;
 
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
+    private String username;
+
+    public Inquiry(Member member, String email, String content, String phone) {
+        this.member = member;
+        this.name = member.getName(); // Member의 name 사용
+        this.email = email;
+        this.phone = phone;
+        this.content = content;
+        setUsernameFromMember();
+    }
+
+    public Member convertToMemberEntity(MemberDto memberDto) {
+        Member member = new Member();
+        member.setMid(memberDto.getMid());
+        return member;
+    }
+
     // Getter와 Setter
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getMemberEmail() {
+        return member != null ? member.getEmail() : "알 수 없음";
     }
 
     public String getContent() {
@@ -91,12 +98,12 @@ public class Inquiry {
         this.content = content;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getType() {
@@ -113,5 +120,11 @@ public class Inquiry {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setUsernameFromMember() {
+        if (this.member != null) {
+            this.username = this.member.getUsername();
+        }
     }
 }

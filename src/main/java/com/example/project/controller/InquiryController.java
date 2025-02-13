@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,39 +15,45 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.project.dto.MemberDto;
 import com.example.project.entity.Inquiry;
+import com.example.project.entity.Member;
 import com.example.project.service.InquiryService;
+import com.example.project.service.MemberService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/center/inquiry")
 public class InquiryController {
 
     private final InquiryService inquiryService;
+    private final MemberService memberService;
 
-    public InquiryController(InquiryService inquiryService) {
+    public InquiryController(InquiryService inquiryService, MemberService memberService) {
         this.inquiryService = inquiryService;
+        this.memberService = memberService;
     }
 
     // 문의 작성 폼 - 로그인한 사용자 정보 자동 입력
     @GetMapping("/new")
     public String emailForm(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
-            String username = userDetails.getUsername();
+            String memberId = userDetails.getUsername();
+            MemberDto memberDto = memberService.getMemberById(memberId);
 
-            // 서비스에서 사용자 정보를 조회
-            String email = inquiryService.getEmailByUsername(username);
-            String mobile = inquiryService.getMobileByUsername(username);
-            String name = inquiryService.getNameByUsername(username);
-
-            // 뷰에 데이터 전달
-            model.addAttribute("userName", name);
-            model.addAttribute("userEmail", email);
-            model.addAttribute("userMobile", mobile);
+            if (memberDto != null) {
+                model.addAttribute("userName", memberDto.getName());
+                model.addAttribute("userEmail", memberDto.getEmail());
+                model.addAttribute("userPhone", memberDto.getPhone());
+            } else {
+                System.out.println("Member data not found for ID: " + memberId);
+            }
         } else {
             // 로그인되지 않은 경우 기본 값 처리
             model.addAttribute("userName", "");
             model.addAttribute("userEmail", "");
-            model.addAttribute("userMobile", "");
+            model.addAttribute("userPhone", "");
         }
 
         return "email"; // email.html 반환
@@ -59,12 +66,17 @@ public class InquiryController {
             return "redirect:/login";
         }
 
-        String username = userDetails.getUsername();
+        String memberId = userDetails.getUsername();
+        MemberDto memberDto = memberService.getMemberById(memberId);
 
-        // Inquiry 객체에 로그인 사용자 정보 추가
-        inquiry.setUsername(username);
-        inquiry.setEmail(inquiryService.getEmailByUsername(username));
-        inquiry.setMobile(inquiryService.getMobileByUsername(username));
+        if (memberDto == null) {
+            return "redirect:/login"; // 회원 정보가 없으면 로그인 페이지로 리다이렉트
+        }
+
+        // inquiry에 사용자 정보 설정
+        inquiry.setName(memberDto.getName());
+        inquiry.setEmail(memberDto.getEmail());
+        inquiry.setPhone(memberDto.getPhone());
 
         // 서비스에서 저장 처리
         inquiryService.saveInquiry(inquiry);
@@ -79,14 +91,18 @@ public class InquiryController {
             return "redirect:/login";
         }
 
-        String username = userDetails.getUsername();
-        List<Inquiry> inquiries = inquiryService.getInquiriesByUsername(username);
+        List<Inquiry> inquiries = inquiryService.getInquiriesByUser();
         model.addAttribute("inquiries", inquiries);
-        return "email/my-inquiries"; // 사용자 문의 내역 템플릿
+
+        if (inquiries.isEmpty()) {
+            model.addAttribute("message", "작성한 문의가 없습니다.");
+        }
+
+        return "center/counseling";
     }
 
     // 관리자 - 문의 목록 페이지
-    @GetMapping
+    @GetMapping("/list")
     public String listInquiries(Model model, @RequestParam(defaultValue = "0") int page) {
         Page<Inquiry> inquiries = inquiryService.getAllInquiries(PageRequest.of(page, 10));
         model.addAttribute("inquiries", inquiries.getContent());
@@ -98,8 +114,12 @@ public class InquiryController {
     // 관리자 - 답변 상태 변경
     @PostMapping("/{id}/status")
     public ResponseEntity<Inquiry> updateStatus(@PathVariable Long id, @RequestParam String status) {
-        Inquiry updatedInquiry = inquiryService.updateStatus(id, status);
-        return ResponseEntity.ok(updatedInquiry);
+        try {
+            Inquiry updatedInquiry = inquiryService.updateStatus(id, status);
+            return ResponseEntity.ok(updatedInquiry);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
     // 개별 문의 조회 (API)
@@ -113,11 +133,22 @@ public class InquiryController {
         }
     }
 
-    @GetMapping("/center/email/form")
-    public String showInquiryForm(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        String username = userDetails.getUsername();
-        model.addAttribute("username", username);
-        return "inquiryForm"; // inquiryForm.html로 이동
-    }
+    // 문의 작성 폼 (별도 경로)
+    @GetMapping("/inquiry")
+    public String showInquiryForm(Model model, HttpSession session) {
+        Inquiry inquiry = new Inquiry();
+        Member member = (Member) session.getAttribute("member");
 
+        // 로그인한 사용자가 있다면 username을 Inquiry에 설정
+        if (member != null) {
+            inquiry.setUsername(member.getUsername());
+            inquiry.setEmail(member.getEmail());
+            inquiry.setPhone(member.getPhone());
+        }
+
+        model.addAttribute("inquiry", inquiry);
+
+        // 상담 페이지로 이동
+        return "center/counseling";
+    }
 }

@@ -3,6 +3,7 @@ package com.example.project.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,9 +38,11 @@ public class CenterController {
     public String getEmail(@RequestParam(defaultValue = "1") int page, Model model) {
         log.info(" 이메일게시판 요청");
 
-        List<Inquiry> inquiries = inquiryService.getInquiries(page);
+        Page<Inquiry> inquiryPage = inquiryService.getInquiries(page);
+        List<Inquiry> inquiries = inquiryPage.getContent();
+
         model.addAttribute("inquiries", inquiries);
-        model.addAttribute("totalPages", inquiryService.getTotalPages());
+        model.addAttribute("totalPages", inquiryPage.getTotalPages());
         model.addAttribute("currentPage", page);
         return "center/email";
     }
@@ -48,7 +51,8 @@ public class CenterController {
     public String getCounseling(Model model) {
         log.info("상담 내역 요청");
 
-        List<Inquiry> inquiries = inquiryService.getAllInquiries();
+        List<Inquiry> inquiries = inquiryService.getAllInquiries(1);
+
         model.addAttribute("inquiries", inquiries);
         return "center/counseling";
     }

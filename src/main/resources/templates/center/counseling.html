@@ -24,27 +24,24 @@
             <tr>
               <th>번호</th>
               <th>이름</th>
-              <th>문의</th>
-              <th>유형</th>
               <th>제목</th>
-              <th>상태</th>
+              <th>유형</th>
+              <th>문의</th>
               <th>등록일</th>
+              <th>상태</th>
             </tr>
           </thead>
           <tbody>
             <!-- 문의 내역이 있을 때 -->
             <tr th:each="inquiry, iterStat : ${inquiries}">
               <td th:text="${iterStat.index + 1}"></td>
-              <td th:text="${inquiry.id}"></td>
+              <td th:text="${inquiry.member?.email}"></td>
               <td th:text="${inquiry.content}"></td>
               <td th:text="${inquiry.username}"></td>
               <td th:text="${inquiry.type}"></td>
               <td th:text="${inquiry.title}"></td>
               <td th:text="${inquiry.createdDate}"></td>
               <td th:text="${inquiry.status}"></td>
-              <span
-                th:text="${#temporals.format(inquiry.createdDate, 'yyyy-MM-dd')}"
-              ></span>
             </tr>
             <!-- 문의 내역이 없을 때 -->
             <tr th:if="${#lists.isEmpty(inquiries)}">
