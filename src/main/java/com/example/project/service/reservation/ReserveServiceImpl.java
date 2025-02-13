@@ -45,16 +45,6 @@ public class ReserveServiceImpl implements ReserveService {
     private final SeatStatusRepository seatStatusRepository;
 
     @Override
-    public List<ReserveDto> getAllReserves() {
-
-        List<Reserve> reserves = reserveRepository.findAll();
-
-        return reserves.stream()
-                .map(reserve -> entityToDto(reserve))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<String> getAllRegions() {
         return theaterRepository.findAllRegions();
     }
@@ -148,22 +138,23 @@ public class ReserveServiceImpl implements ReserveService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public ScreeningDto getScreeningById(Long screeningId) {
+    // @Override
+    // public ScreeningDto getScreeningById(Long screeningId) {
 
-        Screening screening = screeningRepository.findById(screeningId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid screening ID: " + screeningId));
+    // Screening screening = screeningRepository.findById(screeningId)
+    // .orElseThrow(() -> new IllegalArgumentException("Invalid screening ID: " +
+    // screeningId));
 
-        return ScreeningDto.builder()
-                .screeningId(screening.getScreeningId())
-                .startTime(screening.getStartTime())
-                .movieTitle(screening.getMovieTitle())
-                .runtime(screening.getRuntime())
-                .screeningDate(screening.getScreeningDate())
-                .auditoriumNo(screening.getAuditorium().getAuditoriumNo())
-                .auditoriumName(screening.getAuditorium().getAuditoriumName())
-                .build();
-    }
+    // return ScreeningDto.builder()
+    // .screeningId(screening.getScreeningId())
+    // .startTime(screening.getStartTime())
+    // .movieTitle(screening.getMovieTitle())
+    // .runtime(screening.getRuntime())
+    // .screeningDate(screening.getScreeningDate())
+    // .auditoriumNo(screening.getAuditorium().getAuditoriumNo())
+    // .auditoriumName(screening.getAuditorium().getAuditoriumName())
+    // .build();
+    // }
 
     @Transactional
     @Override
@@ -296,4 +287,14 @@ public class ReserveServiceImpl implements ReserveService {
                 .map(reserve -> entityToDto(reserve))
                 .collect(Collectors.toList());
     }
+
+    // @Override
+    // public List<ReserveDto> getAllReserves() {
+
+    // List<Reserve> reserves = reserveRepository.findAll();
+
+    // return reserves.stream()
+    // .map(reserve -> entityToDto(reserve))
+    // .collect(Collectors.toList());
+    // }
 }

@@ -24,7 +24,7 @@ import com.example.project.entity.reserve.Theater;
 
 public interface ReserveService {
 
-        List<ReserveDto> getAllReserves();
+        // List<ReserveDto> getAllReserves();
 
         List<String> getAllRegions();
 
@@ -40,7 +40,7 @@ public interface ReserveService {
 
         List<SeatStatusDto> getSeatStatusesByScreening(Long screeningId);
 
-        ScreeningDto getScreeningById(Long screeningId);
+        // ScreeningDto getScreeningById(Long screeningId);
 
         void updateSeatStatus(Long seatStatusId, SeatStatusEnum seatStatusEnum);
 
