@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" layout:decorate="~{/layouts/layout}">
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  layout:decorate="~{/layouts/layout}"
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -53,16 +57,16 @@
                         id="inp_name"
                         name="username"
                         class="inp01"
-                        th:value="${userName}"
+                        th:value="${userName ?: ''}"
                         readonly
                       />
                     </td>
                   </tr>
 
-                  <!-- 휴대전화 -->
+                  <!-- 전화번호 -->
                   <tr>
                     <th scope="row">
-                      <label for="inp_phone">휴대전화</label>
+                      <label for="inp_phone">전화번호</label>
                     </th>
                     <td>
                       <input
@@ -70,7 +74,7 @@
                         id="inp_phone"
                         name="phone"
                         class="inp01"
-                        th:value="${userPhone}"
+                        th:value="${userPhone ?: ''}"
                         readonly
                       />
                     </td>
@@ -85,7 +89,7 @@
                         id="inp_email"
                         name="email"
                         class="inp01"
-                        th:value="${userEmail}"
+                        th:value="${userEmail ?: ''}"
                         readonly
                       />
                     </td>

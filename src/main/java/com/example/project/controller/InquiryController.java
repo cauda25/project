@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +28,10 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/center/inquiry")
 public class InquiryController {
 
+    @Autowired
     private final InquiryService inquiryService;
+
+    @Autowired
     private final MemberService memberService;
 
     public InquiryController(InquiryService inquiryService, MemberService memberService) {
@@ -36,18 +40,20 @@ public class InquiryController {
     }
 
     // 문의 작성 폼 - 로그인한 사용자 정보 자동 입력
-    @GetMapping("/new")
-    public String emailForm(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    @GetMapping("/email")
+    public String emailForm(Model model, @AuthenticationPrincipal UserDetails userDetails, HttpSession session) {
         if (userDetails != null) {
             String memberId = userDetails.getUsername();
+            System.out.println("로그인한 사용자 ID: " + memberId);
+
             MemberDto memberDto = memberService.getMemberById(memberId);
 
             if (memberDto != null) {
-                model.addAttribute("userName", memberDto.getName());
-                model.addAttribute("userEmail", memberDto.getEmail());
-                model.addAttribute("userPhone", memberDto.getPhone());
-            } else {
-                System.out.println("Member data not found for ID: " + memberId);
+                session.setAttribute("userName", memberDto.getName());
+                session.setAttribute("userEmail", memberDto.getEmail());
+                session.setAttribute("userPhone", memberDto.getPhone());
+
+                System.out.println("세션 저장 완료 : " + memberDto.getName() + ", " + memberDto.getEmail());
             }
         } else {
             // 로그인되지 않은 경우 기본 값 처리
@@ -56,7 +62,7 @@ public class InquiryController {
             model.addAttribute("userPhone", "");
         }
 
-        return "email"; // email.html 반환
+        return "center/email"; // email.html 반환
     }
 
     // 문의 저장
@@ -103,12 +109,12 @@ public class InquiryController {
 
     // 관리자 - 문의 목록 페이지
     @GetMapping("/list")
-    public String listInquiries(Model model, @RequestParam(defaultValue = "0") int page) {
+    public String listInquiries(Model model, @RequestParam(defaultValue = "1") int page) {
         Page<Inquiry> inquiries = inquiryService.getAllInquiries(PageRequest.of(page, 10));
         model.addAttribute("inquiries", inquiries.getContent());
         model.addAttribute("totalPages", inquiries.getTotalPages());
         model.addAttribute("currentPage", page);
-        return "email/list"; // 이메일 목록 템플릿
+        return "center/email/list"; // 이메일 목록 템플릿
     }
 
     // 관리자 - 답변 상태 변경
@@ -150,5 +156,15 @@ public class InquiryController {
 
         // 상담 페이지로 이동
         return "center/counseling";
+    }
+
+    // 로그인한 사용자의 문의 내역 조회
+    @GetMapping
+    public String getUserInquiries(@RequestParam(defaultValue = "1") int page, Model model) {
+        Page<Inquiry> inquiries = inquiryService.getInquiriesByUser(page); // 페이징된 문의 내역 가져오기
+        model.addAttribute("inquiries", inquiries.getContent()); // 문의 목록 전달
+        model.addAttribute("currentPage", page); // 현재 페이지
+        model.addAttribute("totalPages", inquiries.getTotalPages()); // 총 페이지 수
+        return "inquiryList"; // 문의 목록 뷰
     }
 }

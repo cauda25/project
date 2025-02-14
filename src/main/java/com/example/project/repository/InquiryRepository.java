@@ -2,6 +2,8 @@ package com.example.project.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,5 +18,7 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
     List<Inquiry> findByMemberMid(Long mid);
 
     List<Inquiry> findByMember(Member member);
+
+    Page<Inquiry> findByMember(Member member, Pageable pageable);
 
 }

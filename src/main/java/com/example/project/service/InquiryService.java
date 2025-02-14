@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.example.project.dto.InquiryDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.entity.Inquiry;
 import com.example.project.entity.InquiryStatus;
@@ -51,9 +52,9 @@ public class InquiryService {
     }
 
     // 페이징 처리된 문의 조회 (Page<Inquiry> 반환)
-    public Page<Inquiry> getInquiries(int page) {
+    public Page<Inquiry> getInquiries(Member member, int page) {
         Pageable pageable = PageRequest.of(page - 1, 10); // 한 페이지당 10개씩
-        return inquiryRepository.findAll(pageable);
+        return inquiryRepository.findByMember(member, pageable);
     }
 
     // 총 페이지 수 반환
@@ -97,14 +98,41 @@ public class InquiryService {
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new RuntimeException("로그인된 사용자가 없습니다.");
         }
-        String memberId = authentication.getName(); // 현재 로그인한 사용자의 memberId 가져오기
-        return getMemberById(memberId);
+
+        String username = authentication.getName(); // 현재 로그인한 사용자의 memberId 가져오기
+        System.out.println("로그인한 사용자명(username) : " + username);
+
+        return memberRepository.findByMemberId(username)
+                .orElseThrow(() -> {
+                    System.out.println("ERROR : 해당 ID(" + username + ")을 가진 회원을 찾을 수 없음");
+                    return new RuntimeException("Member not found with memberid" + username);
+                });
     }
 
     // memberId로 Member 조회
-    public Member getMemberById(String memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+    public InquiryDto getMemberInfoForInquiry(String memberId) {
+        try {
+            // memberId를 Long으로 변환 후 조회
+            Long id = Long.parseLong(memberId);
+            Optional<Member> memberOptional = memberRepository.findById(id);
+
+            if (memberOptional.isPresent()) {
+                Member member = memberOptional.get();
+
+                // InquiryDto로 변환하여 반환
+                return InquiryDto.builder()
+                        .name(member.getName())
+                        .email(member.getEmail())
+                        .phone(member.getPhone())
+                        .username(member.getMemberId()) // username 필드에 회원 ID 저장
+                        .build();
+            } else {
+                return null;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("memberId 변환 실패: " + memberId);
+            return null;
+        }
     }
 
     // 현재 로그인한 사용자의 이메일 조회
@@ -135,6 +163,13 @@ public class InquiryService {
     public List<Inquiry> getInquiriesByUser() {
         Member member = getCurrentMember();
         return inquiryRepository.findByMember(member);
+    }
+
+    // 로그인한 사용자의 문의 내역 조회 (페이징 처리)
+    public Page<Inquiry> getInquiriesByUser(int page) {
+        Member member = getCurrentMember(); // 로그인한 사용자 가져오기
+        Pageable pageable = PageRequest.of(page - 1, 10); // 한 페이지당 10개
+        return inquiryRepository.findByMember(member, pageable);
     }
 
     // 문의 답변 여부 확인
