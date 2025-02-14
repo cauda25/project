@@ -123,7 +123,7 @@ public class SecurityConfig {
 
                 http
                                 .securityMatcher("/admin/**")
-                                .userDetailsService(adminDetailsServiceImpl)
+                                .userDetailsService(memberLoginServiceImpl)
                                 .authorizeHttpRequests(authorize -> authorize
                                                 .requestMatchers("/css/**", "/fonts/**", "/img/**", "/js/**",
                                                                 "/sass/**",
@@ -134,6 +134,7 @@ public class SecurityConfig {
                                                 .permitAll()
                                                 .requestMatchers("/admin/page/**").hasAnyRole("ADMIN")
                                                 .requestMatchers("/member/adminpage").hasAnyRole("ADMIN")
+                                                .requestMatchers("/movie/**").hasRole("ADMIN")
                                                 .anyRequest().authenticated());
 
                 // http.sessionManagement(session ->
