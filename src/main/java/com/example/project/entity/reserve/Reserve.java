@@ -1,6 +1,8 @@
 package com.example.project.entity.reserve;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +52,12 @@ public class Reserve extends BaseEntity {
     private String movieTitle;
 
     private String screeningTime;
+    private String screeningDate;
 
     private int totalPrice;
+
+    private String theaterName;
+    private String auditoriumName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mid", nullable = true)

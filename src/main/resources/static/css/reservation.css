@@ -120,12 +120,14 @@ tbody td {
 .select_tit {
   margin: 20px 0 5px 0;
   font-weight: bold;
+  color: #000000;
 }
 
 .theaterCate {
   font-size: 14px;
   font-weight: bold;
   line-height: 2;
+  color: rgb(75, 75, 255);
 }
 
 .timelist-container {

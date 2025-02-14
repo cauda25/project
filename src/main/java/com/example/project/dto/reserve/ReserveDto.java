@@ -2,9 +2,12 @@ package com.example.project.dto.reserve;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.example.project.entity.constant.ReserveStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,24 +23,21 @@ public class ReserveDto {
     private Long reserveNo; // 예매번호
     private String reserveStatus;
     private String movieTitle;
-    private LocalDate screeningDate;
+
+    private String screeningDate;
+
     private String screeningTime;
     private int totalPrice;
 
     private String theaterName;
-
-    private Long auditoriumNo;
     private String auditoriumName;
 
     private List<Long> seatStatuses;
     private List<SeatDto> seats;
 
     private Long mid;
-    private String memberId;
 
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
-
-    private String formattedScreeningDate;
 
 }

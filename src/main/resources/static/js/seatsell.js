@@ -266,7 +266,11 @@ document
         body: JSON.stringify({
           seatStatuses: selectedSeats.map((seat) => seat.seatStatusId),
           movieTitle: document.getElementById("selected-movie").textContent,
+          screeningDate: document.getElementById("selected-date").textContent,
+          auditoriumName: document.getElementById("selected-auditorium")
+            .textContent,
           screeningTime: document.getElementById("selected-time").textContent,
+          theaterName: document.getElementById("selected-theater").textContent,
         }),
       });
 
@@ -274,6 +278,10 @@ document
         seatStatuses: selectedSeats.map((seat) => seat.seatStatusId),
         movieTitle: document.getElementById("selected-movie").textContent,
         screeningTime: document.getElementById("selected-time").textContent,
+        screeningDate: document.getElementById("selected-date").textContent,
+        theaterName: document.getElementById("selected-theater").textContent,
+        auditoriumName: document.getElementById("selected-auditorium")
+          .textContent,
       });
 
       if (!completeResponse.ok) {

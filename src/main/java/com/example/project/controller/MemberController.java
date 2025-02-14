@@ -217,14 +217,8 @@ public class MemberController {
         Long mid = authMemberDto.getMemberId(); // 인증된 사용자 ID 가져오기
         log.info("사용자" + mid);
         List<ReserveDto> reservations = reserveService.getMemberReservations(mid);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        reservations.forEach(reservation -> {
-            if (reservation.getScreeningDate() != null) {
-                reservation.setFormattedScreeningDate(reservation.getScreeningDate().format(formatter));
-            }
-        });
         model.addAttribute("reservations", reservations);
-        return "member/reservation"; // 템플릿 경로 수정 (member 디렉토리로 변경)
+        return "member/reservation";
     }
 
     @GetMapping("/paymentDetails")

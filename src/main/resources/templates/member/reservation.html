@@ -2,9 +2,7 @@
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <div layout:fragment="content">
     <section class="reservation-history spad">
-      <div
-        class="container"
-        style="
+      <div class="container" style="
           max-width: 800px;
           margin: 0 auto;
           background-color: #222;
@@ -12,24 +10,19 @@
           border-radius: 10px;
           color: #ddd;
           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        "
-      >
-        <h3
-          style="
+        ">
+        <h3 style="
             color: #fff;
             text-align: center;
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 20px;
-          "
-        >
+          ">
           예매 내역
         </h3>
 
         <div style="display: flex; flex-direction: column; gap: 20px">
-          <div
-            th:each="res : ${reservations}"
-            style="
+          <div th:each="res : ${reservations}" style="
               position: relative;
               display: flex;
               flex-direction: column;
@@ -38,80 +31,57 @@
               padding: 15px;
               border-radius: 5px;
               box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            "
-          >
+            ">
             <p style="color: #ffb74d; font-size: 18px; margin: 0">
               <strong th:text="'예매 번호: ' + ${res.reserveNo}"></strong>
             </p>
             <p style="color: #ddd; margin: 0">
-              영화 제목: <span th:text="${res.movieTitle}"></span>
+              영화 제목:
+              <span th:text="${res.movieTitle}"></span>
             </p>
             <p style="color: #ddd; margin: 0">
               상영 날짜:
-              <span th:text="${res.formattedScreeningDate}"></span>
+              <span th:text="${res.screeningDate}"></span>
             </p>
             <p style="color: #ddd; margin: 0">
-              상영 시간: <span th:text="${res.screeningTime}"></span>
+              상영 시간:
+              <span th:text="${res.screeningTime}"></span>
             </p>
             <p style="color: #ddd; margin: 0">
               상영관:
-              <span
-                th:text="${res.auditoriumName + ' ' + res.auditoriumNo + '관'}"
-              ></span>
+              <span th:text="${res.auditoriumName}"></span>
             </p>
             <p style="color: #ddd; margin: 0">좌석 번호:</p>
             <ul class="list-unstyled">
-              <li
-                th:each="seat : ${res.seats}"
-                th:text="${seat.rowNum + seat.seatNum}"
-              ></li>
+              <li th:each="seat : ${res.seats}" th:text="${seat.rowNum + seat.seatNum}"></li>
             </ul>
             <p style="color: #ddd; margin: 0">
               결제 금액:
-              <span
-                th:if="${res.reserveStatus == 'COMPLETE'}"
-                th:text="${res.totalPrice + '원'}"
-              ></span>
-              <span th:if="${res.reserveStatus == 'CANCEL'}" style="color: red"
-                >취소 완료</span
-              >
+              <span th:if="${res.reserveStatus == 'COMPLETE'}" th:text="${res.totalPrice + '원'}"></span>
+              <span th:if="${res.reserveStatus == 'CANCEL'}" style="color: red">취소 완료</span>
             </p>
-            <button
-              type="button"
-              class="btn btn-danger"
-              th:if="${res.reserveStatus == 'COMPLETE'}"
-              style="
-                position: absolute;
-                bottom: 10px;
-                right: 10px;
-                padding: 5px 10px;
-                font-size: 14px;
-              "
-              th:onclick="'cancelReservation(' + ${res.reserveId} + ')'"
-            >
-              예매 취소
-            </button>
+            <th:block th:with="
+    now=${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm')},
+    formattedScreeningTime=${#strings.length(res.screeningTime) == 4 ? '0' + res.screeningTime : res.screeningTime},
+    screeningDateTime=${res.screeningDate + ' ' + formattedScreeningTime}">
+              <button type="button" class="btn btn-danger" th:if="${res.reserveStatus == 'COMPLETE' and screeningDateTime > now}" th:onclick="'cancelReservation(' + ${res.reserveId} + ')'" style="position: absolute; bottom: 10px; right: 10px; padding: 5px 10px; font-size: 14px;">
+                예매 취소
+              </button>
+            </th:block>
           </div>
         </div>
 
-        <div
-          th:if="${#lists.isEmpty(reservations)}"
-          style="text-align: center; margin-top: 20px; color: #ff8f00"
-        >
+        <div th:if="${#lists.isEmpty(reservations)}" style="text-align: center; margin-top: 20px; color: #ff8f00">
           <p>예매 내역이 없습니다.</p>
         </div>
 
-        <div
-          style="
+        <div style="
             display: flex;
             justify-content: center;
             gap: 15px;
             margin-top: 30px;
-          "
-        >
-          <a
-            th:href="@{/member/mypage}"
-            style="
+          ">
+          <a th:href="@{/member/mypage}" style="
               background-color: #ffb74d;
               color: #222;
               border: none;
@@ -120,8 +90,7 @@
               font-size: 16px;
               text-decoration: none;
               text-align: center;
-            "
-          >
+            ">
             마이페이지로 돌아가기
           </a>
         </div>
@@ -135,16 +104,18 @@
           fetch("/reservation/cancel", {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/json"
             },
-            body: JSON.stringify({ reserveId: reserveId }),
+            body: JSON.stringify({reserveId: reserveId})
           })
             .then((response) => {
               if (response.ok) {
                 alert("예매가 취소되었습니다.");
                 location.reload(); // 페이지 새로고침
               } else {
-                response.text().then((errorMsg) => alert("에러: " + errorMsg));
+                response
+                  .text()
+                  .then((errorMsg) => alert("에러: " + errorMsg));
               }
             })
             .catch((error) => {

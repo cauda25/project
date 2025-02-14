@@ -75,7 +75,7 @@ public class ReserveRepositoryTest {
         LocalDate earliestDate = screeningRepository.findEarliestScreeningDate();
 
         // 오늘부터 7일 동안 빈 날짜 확인 후 Screening 복사 및 SeatStatus 생성
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
             LocalDate targetDate = today.plusDays(i);
             long existingCount = screeningRepository.countByScreeningDate(targetDate);
 
