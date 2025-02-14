@@ -15,52 +15,66 @@
         <button>검색하기</button>
         <div class="total-delete">
           <span>총 <span th:text="${#lists.size(inquiries)}">0</span>건</span>
-          <button class="delete-button">선택삭제</button>
+          <button class="delete-button" id="delete-selected">선택삭제</button>
         </div>
       </div>
       <div class="table-container">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>번호</th>
-              <th>이름</th>
-              <th>제목</th>
-              <th>유형</th>
-              <th>문의</th>
-              <th>등록일</th>
-              <th>상태</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- 문의 내역이 있을 때 -->
-            <tr th:each="inquiry, iterStat : ${inquiries}">
-              <td th:text="${iterStat.index + 1}"></td>
-              <td th:text="${inquiry.member?.email}"></td>
-              <td th:text="${inquiry.content}"></td>
-              <td th:text="${inquiry.username}"></td>
-              <td th:text="${inquiry.type}"></td>
-              <td th:text="${inquiry.title}"></td>
-              <td th:text="${inquiry.createdDate}"></td>
-              <td th:text="${inquiry.status}"></td>
-            </tr>
-            <!-- 문의 내역이 없을 때 -->
-            <tr th:if="${#lists.isEmpty(inquiries)}">
-              <td colspan="7">고객님의 상담 내역이 존재하지 않습니다.</td>
-            </tr>
-          </tbody>
-        </table>
+        <form
+          id="deleteForm"
+          method="post"
+          th:action="@{/center/inquiry/delete-selected}"
+        >
+          <table class="table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="select-all" /></th>
+                <th>번호</th>
+                <th>이름</th>
+                <th>제목</th>
+                <th>유형</th>
+                <th>문의유형</th>
+                <th>등록일</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody id="inquiryTable">
+              <!-- 문의 내역이 있을 때 -->
+              <tr th:each="inquiry, iterStat : ${inquiries}">
+                <td>
+                  <input
+                    type="checkbox"
+                    name="inquiryIds"
+                    th:value="${inquiry.id}"
+                    class="select-checkbox"
+                  />
+                </td>
+                <td th:text="${iterStat.index + 1}"></td>
+                <td th:text="${inquiry.member?.email}"></td>
+                <td th:text="${inquiry.content}"></td>
+                <td th:text="${inquiry.username}"></td>
+                <td th:text="${inquiry.type}"></td>
+                <td th:text="${inquiry.createdDate}"></td>
+                <td th:text="${inquiry.status}"></td>
+              </tr>
+              <!-- 문의 내역이 없을 때 -->
+              <tr th:if="${#lists.isEmpty(inquiries)}">
+                <td colspan="8">고객님의 상담 내역이 존재하지 않습니다.</td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
       </div>
       <div class="faq-inquiry">
         <div class="faq">
           <h3>자주하시는 질문</h3>
-          <a href="#">바로가기</a>
+          <a href="http://www.cgv.co.kr/support/faq/default.aspx">바로가기</a>
           <p>
             고객님들께서 주로 하시는 질문에 대한 답변을 한곳에 모아두었습니다.
           </p>
         </div>
         <div class="inquiry">
           <h3>고객의 말씀</h3>
-          <a href="#">문의하기</a>
+          <a href="/center/email">문의하기</a>
           <p>불편사항과 문의사항을 남겨주시면 친절히 답변드리겠습니다.</p>
         </div>
       </div>

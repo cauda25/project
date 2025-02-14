@@ -45,9 +45,17 @@ public class InquiryService {
 
     // ID로 문의 삭제
     public void deleteInquiry(Long id) {
-        if (!inquiryRepository.existsById(id)) {
-            throw new IllegalArgumentException("유효하지 않는 문의 ID 입니다. " + id);
+        Inquiry inquiry = inquiryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 문의 ID 입니다. " + id));
+
+        // 현재 로그인한 사용자 가져오기
+        Member currentMember = getCurrentMember();
+
+        // 사용자가 본인의 문의글만 삭제할 수 있도록 검증
+        if (!inquiry.getMember().equals(currentMember)) {
+            throw new IllegalArgumentException("본인이 작성한 문의만 삭제할 수 있습니다.");
         }
+
         inquiryRepository.deleteById(id);
     }
 

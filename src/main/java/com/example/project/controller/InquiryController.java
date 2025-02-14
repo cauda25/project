@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.project.dto.MemberDto;
 import com.example.project.entity.Inquiry;
@@ -166,5 +167,19 @@ public class InquiryController {
         model.addAttribute("currentPage", page); // 현재 페이지
         model.addAttribute("totalPages", inquiries.getTotalPages()); // 총 페이지 수
         return "inquiryList"; // 문의 목록 뷰
+    }
+
+    @PostMapping("/delete-selected")
+    public String deleteSelectedInquiries(@RequestParam("inquiryIds") List<Long> inquiryIds,
+            RedirectAttributes redirectAttributes) {
+        try {
+            for (Long id : inquiryIds) {
+                inquiryService.deleteInquiry(id);
+            }
+            redirectAttributes.addFlashAttribute("successMessage", "문의가 성공적으로 삭제되었습니다.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/center/inquiry/my-inquiries";
     }
 }
