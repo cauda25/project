@@ -52,9 +52,9 @@ public class InquiryService {
     }
 
     // 페이징 처리된 문의 조회 (Page<Inquiry> 반환)
-    public Page<Inquiry> getInquiries(Member member, int page) {
+    public Page<Inquiry> getInquiries(int page) {
         Pageable pageable = PageRequest.of(page - 1, 10); // 한 페이지당 10개씩
-        return inquiryRepository.findByMember(member, pageable);
+        return inquiryRepository.findAll(pageable);
     }
 
     // 총 페이지 수 반환
