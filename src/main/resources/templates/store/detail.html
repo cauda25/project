@@ -20,9 +20,6 @@
         width: 75%;
         justify-self: center;
       }
-      .nav-tabs {
-        justify-self: center;
-      }
       .product__item__pic {
         object-fit: cover;
         width: 100%;
@@ -45,38 +42,12 @@
         padding-left: 18px;
       }
     </style>
+    <link rel="stylesheet" th:href="@{/css/nav-tabs.css}" type="text/css" />
   </th:block>
   <div layout:fragment="content">
-    <section class="product spad mb-5">
+    <div th:replace="~{/fragments/store-tab::store-tab}"></div>
+    <section class="product spad mb-5 mt-4">
       <div class="container">
-        <div class="row mt-4 mb-4">
-          <ul class="nav nav-tabs">
-            <!-- <li class="nav-item">
-              <a class="nav-link active" th:href="@{/store?category=ticket}">영화관람권</a>
-            </li> -->
-            <li class="nav-item">
-              <a
-                th:class="'nav-link ' + ${category == 'combo' ? 'active':'text-white'}"
-                th:href="@{/store/main(category=combo)}"
-                >콤보</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                th:class="'nav-link ' + ${category == 'popcorn' ? 'active':'text-white'}"
-                th:href="@{/store/main(category=popcorn)}"
-                >팝콘</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                th:class="'nav-link ' + ${category == 'drink' ? 'active':'text-white'}"
-                th:href="@{/store/main(category=drink)}"
-                >음료</a
-              >
-            </li>
-          </ul>
-        </div>
         <div class="row">
           <div class="col-lg-8 col-md-8 col-sm-8">
             <div class="section-title">

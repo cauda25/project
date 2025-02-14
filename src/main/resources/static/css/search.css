@@ -1,0 +1,7 @@
+.form-select {
+  width: 100px;
+}
+#searchForm div {
+  width: 75%;
+  justify-self: center;
+}
