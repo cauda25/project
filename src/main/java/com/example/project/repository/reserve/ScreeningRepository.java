@@ -1,7 +1,6 @@
 package com.example.project.repository.reserve;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,8 +26,7 @@ public interface ScreeningRepository extends JpaRepository<Screening, Long> {
 
         @Modifying
         @Transactional
-        @Query("DELETE FROM Screening s WHERE s.screeningDate < :date")
-        int deletePastScreenings(@Param("date") LocalDate date);
+        int deleteByScreeningDateBefore(LocalDate date);
 
         long countByScreeningDate(LocalDate screeningDate);
 
