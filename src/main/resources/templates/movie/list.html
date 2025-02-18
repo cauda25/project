@@ -30,32 +30,10 @@
       <input type="hidden" name="sort" th:value="${requestDto.sort}" />
       <input type="hidden" name="movieList" th:value="popular" />
       <div class="d-flex mt-4 align-items-center justify-content-center">
-        <select
-          name="type"
-          id="type"
-          class="form-select me-2 border-danger border-2 border-2 bg-transparent text-white"
-        >
-          <option
-            class="text-dark"
-            value="mp"
-            th:selected="${requestDto.type == 'mp'}"
-          >
-            전체
-          </option>
-          <option
-            class="text-dark"
-            value="m"
-            th:selected="${requestDto.type == 'm'}"
-          >
-            영화
-          </option>
-          <option
-            class="text-dark"
-            value="p"
-            th:selected="${requestDto.type == 'p'}"
-          >
-            인물
-          </option>
+        <select name="type" id="type" class="form-select me-2 border-danger border-2 border-2 bg-transparent text-white">
+          <option class="text-dark" value="mp" th:selected="${requestDto.type == 'mp'}">전체</option>
+          <option class="text-dark" value="m" th:selected="${requestDto.type == 'm'}">영화</option>
+          <option class="text-dark" value="p" th:selected="${requestDto.type == 'p'}">인물</option>
         </select>
         <input
           class="form-control me-2 border-danger border-2 bg-transparent text-white"
@@ -75,14 +53,7 @@
             <div class="header-title d-flex m-3">
               <!-- 장르 -->
               <div class="btn-group mr-3">
-                <button
-                  type="button"
-                  class="btn btn-outline-danger dropdown-toggle"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  장르
-                </button>
+                <button type="button" class="btn btn-outline-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">장르</button>
                 <ul class="dropdown-menu">
                   <li>
                     <a
@@ -133,16 +104,11 @@
                 >
               </li>
               <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link text-white" th:href="@{/member/login}"
-                  >추천</a
-                >
+                <a class="nav-link text-white" th:href="@{/member/login}">추천</a>
               </li>
             </ul>
             <!-- 영화 리스트 -->
-            <div
-              class="row trending__product-row"
-              th:if="${requestDto.type != 'p' and requestDto.movieList != 'my'}"
-            >
+            <div class="row trending__product-row" th:if="${requestDto.type != 'p' and requestDto.movieList != 'my'}">
               <!-- <div class="d-flex sub-head">
                 <h3 class="text-white">영화 [[${movies.totalElements}]] 건</h3>
                 <a
@@ -175,18 +141,20 @@
                 th:each="dto, iterStat : ${movies != null ? movies.dtoList : null}"
               >
                 <div class="product__item mb-2">
-                  <a th:href="@{detail(id=${dto.id})}"
-                    ><img
-                      th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
+                  <a th:href="@{detail(id=${dto.id})}">
+                    <!-- <img th:src="'https://image.tmdb.org/t/p/w500' + ${dto.posterPath}" alt="" class="product__item__pic set-bg" />
+                    <img th:src="${dto.posterPath}" alt="" class="product__item__pic set-bg" /> -->
+
+                    <img
+                      th:src="${#strings.startsWith(dto.posterPath, '/upload')  ?  dto.posterPath : 'https://image.tmdb.org/t/p/w500/' + dto.posterPath }"
                       alt=""
                       class="product__item__pic set-bg"
-                  /></a>
+                    />
+                  </a>
                 </div>
                 <div class="product__item__text mx-4">
                   <h5>
-                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}"
-                      >타이틀</a
-                    >
+                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}">타이틀</a>
                   </h5>
                   <ul>
                     <li>평점</li>
@@ -206,10 +174,7 @@
                 찜목록에 영화를 추가해주세요
               </p>
             </div> -->
-            <div
-              class="row trending__product-row"
-              th:if="${requestDto.movieList == 'my' and recommendMovies.size() != 0}"
-            >
+            <div class="row trending__product-row" th:if="${requestDto.movieList == 'my' and recommendMovies.size() != 0}">
               <div class="row">
                 <div class="col-lg-8 col-md-8 col-sm-8">
                   <div class="section-title">
@@ -224,17 +189,12 @@
               >
                 <div class="product__item mb-2">
                   <a th:href="@{detail(id=${dto.id})}"
-                    ><img
-                      th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
-                      alt=""
-                      class="product__item__pic set-bg"
+                    ><img th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}" alt="" class="product__item__pic set-bg"
                   /></a>
                 </div>
                 <div class="product__item__text mx-4">
                   <h5>
-                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}"
-                      >타이틀</a
-                    >
+                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}">타이틀</a>
                   </h5>
                   <ul>
                     <li>평점</li>
@@ -248,10 +208,7 @@
               </div>
               <div class="mt-4"></div>
             </div>
-            <div
-              class="row trending__product-row"
-              th:if="${requestDto.movieList == 'my' and recommendMoviesByDirector.size() != 0}"
-            >
+            <div class="row trending__product-row" th:if="${requestDto.movieList == 'my' and recommendMoviesByDirector.size() != 0}">
               <div class="row">
                 <div class="col-lg-8 col-md-8 col-sm-8">
                   <div class="section-title">
@@ -266,17 +223,12 @@
               >
                 <div class="product__item mb-2">
                   <a th:href="@{detail(id=${dto.id})}"
-                    ><img
-                      th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
-                      alt=""
-                      class="product__item__pic set-bg"
+                    ><img th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}" alt="" class="product__item__pic set-bg"
                   /></a>
                 </div>
                 <div class="product__item__text mx-4">
                   <h5>
-                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}"
-                      >타이틀</a
-                    >
+                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}">타이틀</a>
                   </h5>
                   <ul>
                     <li>평점</li>
@@ -291,10 +243,7 @@
               <div class="mt-4"></div>
             </div>
             <!-- 인물 리스트 -->
-            <div
-              class="row trending__people-row"
-              th:if="${requestDto.type != 'm' and requestDto.type != ''}"
-            >
+            <div class="row trending__people-row" th:if="${requestDto.type != 'm' and requestDto.type != ''}">
               <div class="row">
                 <div class="col-lg-8 col-md-8 col-sm-8">
                   <div class="section-title">
@@ -319,18 +268,12 @@
               >
                 <div class="product__item mb-2">
                   <a th:href="@{person/detail(id=${dto.id})}"
-                    ><img
-                      th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.profilePath}"
-                      alt=""
-                      class="product__item__pic set-bg"
+                    ><img th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.profilePath}" alt="" class="product__item__pic set-bg"
                   /></a>
                 </div>
                 <div class="product__item__text mx-4">
                   <h5>
-                    <a
-                      th:href="@{person/detail(id=${dto.id})}"
-                      th:text="${dto.name}"
-                    ></a>
+                    <a th:href="@{person/detail(id=${dto.id})}" th:text="${dto.name}"></a>
                   </h5>
                   <ul>
                     [[${dto.job}]]
@@ -340,15 +283,10 @@
             </div>
           </div>
           <!-- 페이지 -->
-          <nav
-            aria-label="..."
-            th:if="${requestDto.type != 'mp' and requestDto.movieList != 'my'}"
-          >
+          <nav aria-label="..." th:if="${requestDto.type != 'mp' and requestDto.movieList != 'my'}">
             <ul class="pagination justify-content-center">
               <!-- Previous button -->
-              <li
-                th:class="'page-item ' + ${(movies != null and movies.prev) or (people != null and people.prev) ? '' : 'disabled'}"
-              >
+              <li th:class="'page-item ' + ${(movies != null and movies.prev) or (people != null and people.prev) ? '' : 'disabled'}">
                 <a
                   class="page-link text-light bg-transparent"
                   th:href="@{
@@ -367,11 +305,7 @@
               </li>
 
               <!-- Page list -->
-              <li
-                th:class="page-item"
-                aria-current="page"
-                th:each="page : ${movies != null ? movies.pageList : people.pageList}"
-              >
+              <li th:class="page-item" aria-current="page" th:each="page : ${movies != null ? movies.pageList : people.pageList}">
                 <a
                   th:class="'page-link text-light ' + ${movies != null ? (movies.page == page ? 'bg-danger border-light active' : 'bg-transparent') : (people.page == page ? 'bg-danger border-light active' : 'bg-transparent')}"
                   th:href="@{
@@ -390,9 +324,7 @@
               </li>
 
               <!-- Next button -->
-              <li
-                th:class="'page-item ' + ${(movies != null and movies.next) or (people != null and people.next) ? '' : 'disabled'}"
-              >
+              <li th:class="'page-item ' + ${(movies != null and movies.next) or (people != null and people.next) ? '' : 'disabled'}">
                 <a
                   class="page-link text-light bg-transparent"
                   th:href="@{
@@ -422,11 +354,7 @@
       <input type="hidden" name="keyword" th:value="${requestDto.keyword}" />
       <input type="hidden" name="sort" th:value="${requestDto.sort}" />
       <input type="hidden" name="genre" th:value="${requestDto.genre}" />
-      <input
-        type="hidden"
-        name="movieList"
-        th:value="${requestDto.movieList}"
-      />
+      <input type="hidden" name="movieList" th:value="${requestDto.movieList}" />
     </form>
   </div>
   <th:block layout:fragment="js">
@@ -436,8 +364,7 @@
     <script>
       if ("[[${requestDto.keyword}]]" != "") {
         // 검색값이 있을 경우
-        document.querySelector(".header-title-text").innerHTML =
-          "검색: [[${requestDto.keyword}]]";
+        document.querySelector(".header-title-text").innerHTML = "검색: [[${requestDto.keyword}]]";
       } else if ("[[${requestDto.genre}]]" != "") {
         // 장르값이 있을 경우
         genres.forEach((genre) => {
@@ -449,16 +376,13 @@
         // movieList 값에 따라
         switch ("[[${requestDto.movieList}]]") {
           case "nowPlaying":
-            document.querySelector(".header-title-text").innerHTML =
-              "현재 상영중";
+            document.querySelector(".header-title-text").innerHTML = "현재 상영중";
             break;
           case "upcoming":
-            document.querySelector(".header-title-text").innerHTML =
-              "상영 예정작";
+            document.querySelector(".header-title-text").innerHTML = "상영 예정작";
             break;
           case "popular":
-            document.querySelector(".header-title-text").innerHTML =
-              "전체 영화 목록";
+            document.querySelector(".header-title-text").innerHTML = "전체 영화 목록";
             break;
           default:
             break;

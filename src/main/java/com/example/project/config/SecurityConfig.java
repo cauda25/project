@@ -24,6 +24,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import com.example.project.admin.filter.CustomSessionCookieFilter;
+import com.example.project.admin.handler.CustomAccessDeniedHandler;
 import com.example.project.admin.handler.CustomAuthenticationFailureHandler;
 import com.example.project.admin.handler.CustomAuthenticationSuccessHandler;
 import com.example.project.admin.service.AdminDetailsServiceImpl;
@@ -113,6 +114,9 @@ public class SecurityConfig {
                 // CSRF 설정
                 http.csrf(csrf -> csrf.disable()); // 필요에 따라 CSRF 비활성화
 
+                // http.exceptionHandling(exception ->
+                // exception.accessDeniedHandler(customAccessDeniedHandler()));
+
                 return http.build();
 
         }
@@ -164,6 +168,10 @@ public class SecurityConfig {
                 // );
 
                 http.csrf(csrf -> csrf.disable());
+
+                // http.exceptionHandling(exception ->
+                // exception.accessDeniedPage("/accessdenied.html"));
+                http.exceptionHandling(exception -> exception.accessDeniedHandler(customAccessDeniedHandler()));
                 return http.build();
 
         }
@@ -171,6 +179,11 @@ public class SecurityConfig {
         @Bean
         PasswordEncoder passwordEncoder() {
                 return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        }
+
+        @Bean
+        CustomAccessDeniedHandler customAccessDeniedHandler() {
+                return new CustomAccessDeniedHandler();
         }
 
 }

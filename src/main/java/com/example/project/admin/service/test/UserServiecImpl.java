@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.project.admin.Entity.MovieState;
+import com.example.project.admin.Entity.constant.JobRole;
 import com.example.project.admin.Entity.constant.StatusRole;
 import com.example.project.admin.dto.test.AdminInquiryDto;
 import com.example.project.admin.dto.test.MovieDetailsDTO;
@@ -283,8 +284,10 @@ public class UserServiecImpl implements UserService {
             MoviePerson movieActor = MoviePerson.builder()
                     .movie(movie)
                     .person(actorPerson)
+                    .role("Actor")
                     .build();
             moviePersonRepository.save(movieActor);
+            moviePersonRepository.flush();
             log.info("Saved MovieActor: {}" + movieActor);
         }
 
@@ -297,8 +300,10 @@ public class UserServiecImpl implements UserService {
         MoviePerson movieDirector = MoviePerson.builder()
                 .movie(movie)
                 .person(directorPerson)
+                .role("Director")
                 .build();
         moviePersonRepository.save(movieDirector);
+        moviePersonRepository.flush();
         log.info("Saved MovieDirector: {}" + movieDirector);
     }
 

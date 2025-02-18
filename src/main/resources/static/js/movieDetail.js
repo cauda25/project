@@ -78,9 +78,7 @@ fetch(`/rest/movieDetail/${movieId}`)
         str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 product">`;
         str += `<div class="product__item mb-2">`;
         str += `<a href="person/detail?id=${director.id}"><img src=${
-          director.profilePath != null
-            ? "https://image.tmdb.org/t/p/w500" + director.profilePath
-            : "https://placehold.co/217x325?text=Director"
+          director.profilePath != null ? "https://image.tmdb.org/t/p/w500" + director.profilePath : "https://placehold.co/217x325?text=Director"
         } alt="" class="product__item__pic set-bg"></a></div>`;
         str += `<div class="product__item__text mx-4">`;
         str += `<h5><a href="person/detail?id=${director.id}">${director.name}</a></h5>`;
@@ -95,9 +93,7 @@ fetch(`/rest/movieDetail/${movieId}`)
         str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 product">`;
         str += `<div class="product__item mb-2">`;
         str += `<a href="person/detail?id=${actor.id}"><img src=${
-          actor.profilePath != null
-            ? "https://image.tmdb.org/t/p/w500" + actor.profilePath
-            : "https://placehold.co/217x325?text=Actor"
+          actor.profilePath != null ? "https://image.tmdb.org/t/p/w500" + actor.profilePath : "https://placehold.co/217x325?text=Actor"
         } alt="" class="product__item__pic set-bg"></a></div>`;
         str += `<div class="product__item__text mx-4">`;
         str += `<h5><a href="person/detail?id=${actor.id}">${actor.name}</a></h5>`;
@@ -175,9 +171,7 @@ fetch(`/rest/movieDetail/${movieId}`)
             str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
             str += `<div class="product__item mb-2">`;
             str += `<a href="detail?id=${movie.id}"><img src=${
-              movie.posterPath != null
-                ? "https://image.tmdb.org/t/p/w500" + movie.posterPath
-                : "https://placehold.co/217x325?text=Movie"
+              movie.posterPath != null ? "https://image.tmdb.org/t/p/w500" + movie.posterPath : "https://placehold.co/217x325?text=Movie"
             } alt="" class="product__item__pic set-bg"></a></div>`;
             str += `<div class="product__item__text mx-4 pt-0">`;
             str += `<h5><a href="detail?id=${movie.id}">${movie.title}</a></h5>`;
@@ -210,9 +204,7 @@ fetch(`/rest/movieDetail/${movieId}`)
               str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
               str += `<div class="product__item mb-2">`;
               str += `<a href="detail?id=${movie.id}"><img src=${
-                movie.posterPath != null
-                  ? "https://image.tmdb.org/t/p/w500" + movie.posterPath
-                  : "https://placehold.co/217x325?text=Movie"
+                movie.posterPath != null ? "https://image.tmdb.org/t/p/w500" + movie.posterPath : "https://placehold.co/217x325?text=Movie"
               } alt="" class="product__item__pic set-bg"></a></div>`;
               str += `<div class="product__item__text mx-4 pt-0">`;
               str += `<h5><a href="detail?id=${movie.id}">${movie.title}</a></h5>`;
