@@ -1,0 +1,59 @@
+#searchForm div {
+  width: 75%;
+  justify-self: center;
+}
+
+/* search-form-control */
+.form-control:focus,
+.asColorPicker-input:focus,
+.dataTables_wrapper select:focus,
+.jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type="text"],
+.jsgrid .jsgrid-table .jsgrid-filter-row select:focus,
+.jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type="number"],
+.select2-container--default .select2-selection--single:focus,
+.select2-container--default
+  .select2-selection--single
+  .select2-search__field:focus,
+.typeahead:focus,
+.tt-query:focus,
+.tt-hint:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 71, 71, 0.5);
+}
+
+/* search-btn */
+.search-btn {
+  color: #ff4747;
+}
+
+.search-btn:hover {
+  color: #ff4747;
+  background-color: transparent;
+}
+
+.search-btn:focus,
+.search-btn.focus {
+  color: #ff4747;
+  background-color: transparent;
+  box-shadow: 0 0 0 0rem transparent;
+}
+
+.search-btn.disabled,
+.search-btn:disabled {
+  color: #ff4747;
+  background-color: transparent;
+}
+
+.search-btn:not(:disabled):not(.disabled):active,
+.search-btn:not(:disabled):not(.disabled).active,
+.show > .search-btn.dropdown-toggle {
+  color: #fff;
+  background-color: #ff4747;
+  border-color: #ff4747;
+}
+
+.search-btn:not(:disabled):not(.disabled):active:focus,
+.search-btn:not(:disabled):not(.disabled).active:focus,
+.show > .search-btn.dropdown-toggle:focus {
+  background-color: transparent;
+  box-shadow: 0 0 0 0rem transparent;
+}
