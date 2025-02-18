@@ -185,29 +185,31 @@
               </div>
 
               <!-- 리뷰 목록 (Thymeleaf 반복문을 이용) -->
-              <div id="reviewList" style="padding: 15px;">
-                <!-- 리뷰가 없을 경우 -->
-                <div th:if="${#lists.isEmpty(reviews)}" style="color: #000;">
-                  <p>아직 리뷰가 없습니다. 첫 리뷰를 작성해보세요!</p>
-                </div>
-                <!-- 리뷰가 있을 경우 -->
-                <div th:each="review : ${reviews}" class="review-item"
-                     style="background-color: #ffffff; color: #000; padding: 10px 15px; border-radius: 5px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                  <h6 th:text="${review.memberId}" style="margin-bottom: 5px;">작성자</h6>
-                  <p th:text="${review.content}" style="margin: 0;">리뷰 내용</p>
-                  <div class="star-rating" 
-                       style="display: flex; flex-direction: row !important; justify-content: left !important;">
-                    <!-- 채워진 별: 평점만큼 -->
-                    <span th:each="star : ${#numbers.sequence(1, review.rating)}"
-                          class="fa-solid fa-star"
-                          style="color: #ffc700; font-size: 1.5rem;"></span>
-                    <!-- 빈 별: 나머지 별 (총 5개 기준) -->
-                    <span th:each="star : ${#numbers.sequence(1, 5 - review.rating)}"
-                          class="fa-regular fa-star"
-                          style="color: #ffc700; font-size: 1.5rem;"></span>
-                  </div>
-                </div>
-              </div>
+<div id="reviewList" style="padding: 15px;">
+  <!-- 리뷰가 없을 경우 -->
+  <div th:if="${#lists.isEmpty(reviews)}" style="color: #000;">
+    <p>아직 리뷰가 없습니다. 첫 리뷰를 작성해보세요!</p>
+  </div>
+  <!-- 리뷰가 있을 경우 -->
+  <div th:each="review : ${reviews}" class="review-item"
+       style="background-color: #ffffff; color: #000; padding: 10px 15px; border-radius: 5px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+    <h6 th:text="${review.memberId}" style="margin-bottom: 5px;">작성자</h6>
+    <p th:text="${review.content}" style="margin: 0;">리뷰 내용</p>
+    <div class="star-rating" 
+         style="display: flex; flex-direction: row !important; justify-content: left !important;">
+      <!-- 채워진 별: review.rating 값 만큼 -->
+      <span th:each="star : ${#numbers.sequence(1, review.rating)}"
+            class="fa-solid fa-star"
+            style="color: #ffc700; font-size: 1.5rem;"></span>
+      <!-- 평점이 5 미만일 때만, 빈 별 (총 5개 기준) -->
+      <span th:if="${review.rating < 5}"
+            th:each="star : ${#numbers.sequence(1, 5 - review.rating)}"
+            class="fa-regular fa-star"
+            style="color: #ffc700; font-size: 1.5rem;"></span>
+    </div>
+  </div>
+</div>
+
               
               <!-- 리뷰 작성 폼 -->
               <div class="anime__details__form">
