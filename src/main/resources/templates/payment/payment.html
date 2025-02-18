@@ -14,9 +14,9 @@
       <div class="row g-5 mb-5">
         <div class="col-md-5 col-lg-4 order-md-last">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-primary">Your cart</span>
+            <span class="text-white">주문 상품</span>
             <span
-              class="badge bg-primary rounded-pill"
+              class="badge bg-danger rounded-pill"
               th:text="${orderItemDtos.size()}"
               >3</span
             >
@@ -75,11 +75,11 @@
           </form> -->
         </div>
         <div class="col-md-7 col-lg-8">
-          <h4 class="mb-3 text-white">Shipping information</h4>
-          <form class="needs-validation" novalidate>
+          <h4 class="mb-3 text-white">받는 사람</h4>
+          <form class="needs-validation" id="shippingInfoForm" novalidate>
             <div class="row g-3">
               <div class="col-12">
-                <label for="name" class="form-label">Name</label>
+                <label for="name" class="form-label">이름</label>
                 <input
                   type="text"
                   class="form-control"
@@ -88,7 +88,7 @@
                   th:value="${memberDto.name}"
                   required
                 />
-                <div class="invalid-feedback">Valid name is required.</div>
+                <div class="invalid-feedback">이름을 입력해주세요</div>
               </div>
 
               <!-- <div class="col-12">
@@ -107,37 +107,36 @@
               </div> -->
 
               <div class="col-12">
-                <label for="email" class="form-label"
-                  >Email
-                  <span class="text-body-secondary">(Optional)</span></label
-                >
+                <label for="email" class="form-label">이메일</label>
                 <input
                   type="email"
                   class="form-control"
                   id="email"
                   placeholder="you@example.com"
                   th:value="${memberDto.email}"
+                  required
                 />
                 <div class="invalid-feedback">
-                  Please enter a valid email address for shipping updates.
+                  유효한 이메일 형식으로 입력해주세요
                 </div>
               </div>
 
               <div class="col-12">
-                <label for="phoneNumber" class="form-label"
-                  >Phone number
-                  <span class="text-body-secondary">(Optional)</span></label
-                >
+                <label for="phoneNumber" class="form-label">전화번호</label>
                 <input
                   type="text"
                   class="form-control"
                   id="phoneNumber"
                   placeholder="010-0000-0000"
                   th:value="${memberDto.phone}"
+                  required
                 />
+                <div class="invalid-feedback">
+                  유효한 전화번호 형식으로 입력해주세요
+                </div>
               </div>
 
-              <div class="col-12">
+              <!-- <div class="col-12">
                 <label for="address" class="form-label">Address</label>
                 <input
                   type="text"
@@ -164,7 +163,7 @@
                   placeholder="Apartment or suite"
                   th:value="${memberDto.district}"
                 />
-              </div>
+              </div> -->
 
               <!-- 
               <div class="col-md-5">
@@ -224,7 +223,7 @@
 
             <hr class="my-4" />
 
-            <h4 class="mb-3 text-white">Payment</h4>
+            <!-- <h4 class="mb-3 text-white">Payment</h4> -->
 
             <!-- <div class="my-3">
               <div class="form-check">
@@ -260,7 +259,7 @@
               </div>
             </div> -->
 
-            <div class="row gy-3">
+            <!-- <div class="row gy-3">
               <div class="col-md-6">
                 <label for="cc-name" class="form-label">Name on card</label>
                 <input
@@ -315,13 +314,13 @@
                 />
                 <div class="invalid-feedback">Security code required</div>
               </div>
-            </div>
+            </div> -->
             <hr class="my-4" />
             <button
-              class="w-100 btn btn-primary btn-lg checkout-btn"
+              class="w-100 btn btn-outline-danger btn-lg checkout-btn"
               type="button"
             >
-              Continue to checkout
+              결제하기
             </button>
           </form>
         </div>
@@ -331,11 +330,14 @@
   <th:block layout:fragment="js">
     <script>
       const orderId = "[[${orderDto.id}]]";
-      let productName = "[[${orderItemDtos[0].productDto.name}]]";
+      const productName = "[[${orderItemDtos[0].productDto.name}]]";
       const totalPrice = "[[${orderDto.totalPrice}]]";
+      let isValidated = false;
     </script>
     <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+    <script th:src="@{/js/checkAuth.js}"></script>
     <script th:src="@{/js/checkout.js}"></script>
+    <script th:src="@{/js/payment.js}"></script>
     <script th:src="@{/js/order.js}"></script>
   </th:block>
 </html>

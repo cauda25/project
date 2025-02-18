@@ -1,0 +1,10 @@
+.form-select option {
+  background-color: #0b0c2a;
+  color: white;
+}
+
+.form-select option:hover,
+.form-select option:focus {
+  text-decoration: none;
+  background-color: #dc3545;
+}

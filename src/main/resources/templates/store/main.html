@@ -26,38 +26,12 @@
         height: 100%;
       }
     </style>
+    <link rel="stylesheet" th:href="@{/css/nav-tabs.css}" type="text/css" />
   </th:block>
   <div layout:fragment="content">
+    <div th:replace="~{/fragments/store-tab::store-tab}"></div>
     <section class="product spad">
       <div class="container">
-        <div class="row justify-content-center">
-          <ul class="nav nav-tabs mt-4">
-            <!-- <li class="nav-item">
-              <a class="nav-link active" th:href="@{/store?category=ticket}">영화관람권</a>
-            </li> -->
-            <li class="nav-item">
-              <a
-                th:class="'nav-link ' + ${category == 'combo' ? 'active':'text-white'}"
-                th:href="@{/store/main(category=combo)}"
-                >콤보</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                th:class="'nav-link ' + ${category == 'popcorn' ? 'active':'text-white'}"
-                th:href="@{/store/main(category=popcorn)}"
-                >팝콘</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                th:class="'nav-link ' + ${category == 'drink' ? 'active':'text-white'}"
-                th:href="@{/store/main(category=drink)}"
-                >음료</a
-              >
-            </li>
-          </ul>
-        </div>
         <div class="row mb-5">
           <div class="row row-cols-1 row-cols-md-4 g-4">
             <div class="col" th:each="product : ${productDtos}">

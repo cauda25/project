@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{/layouts/layout}">
+  <th:block layout:fragment="css"> </th:block>
+  <section class="mt-4" th:fragment="movie-tab">
+    <ul class="nav nav-tabs nav-justified">
+      <li class="nav-item">
+        <a
+          th:class="'nav-link btn btn-outline-danger nowPlaying ' + ${requestDto.movieList == 'nowPlaying' ? 'active' : ''}"
+          th:href="@{list(movieList=nowPlaying,page=1,size=${requestDto.size},type=,keyword=,genre=,sort=popularity)}"
+          >현재 상영작</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          th:class="'nav-link btn btn-outline-danger upcoming ' + ${requestDto.movieList == 'upcoming' ? 'active' : ''}"
+          th:href="@{list(movieList=upcoming,page=1,size=${requestDto.size},type=,keyword=,genre=,sort=popularity)}"
+          >상영 예정작</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          th:class="'nav-link btn btn-outline-danger popular ' + ${requestDto.movieList == 'popular' ? 'active' : ''}"
+          th:href="@{list(movieList=popular,page=1,size=${requestDto.size},type=,keyword=,genre=,sort=popularity)}"
+          >전체 영화 목록</a
+        >
+      </li>
+      <li class="nav-item" sec:authorize="isAuthenticated()">
+        <a
+          th:class="'nav-link btn btn-outline-danger my ' + ${requestDto.movieList == 'my' ? 'active' : ''}"
+          th:href="@{list(movieList=my,page=1,size=${requestDto.size},type=,keyword=,genre=,sort=popularity)}"
+          >추천</a
+        >
+      </li>
+      <li class="nav-item" sec:authorize="!isAuthenticated()">
+        <a class="nav-link btn btn-outline-danger" th:href="@{/member/login}"
+          >추천</a
+        >
+      </li>
+    </ul>
+  </section>
+  <th:block layout:fragment="js"></th:block>
+</html>

@@ -47,5 +47,10 @@
       </div>
     </main>
   </div>
-  <th:block layout:fragment="js"> </th:block>
+  <th:block layout:fragment="js">
+    <script>
+      orderId = "[[${orderId}]]";
+    </script>
+    <script th:src="@{/js/paymentSuccess.js}"></script>
+  </th:block>
 </html>

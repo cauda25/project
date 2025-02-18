@@ -36,7 +36,7 @@ public class MovieRestController {
     @GetMapping("/movieDetail/{id}")
     public ResponseEntity<MovieDto> getMovieDetail(@PathVariable Long id,
             @ModelAttribute("requestDto") @RequestBody PageRequestDTO requestDto) {
-        log.info("rest 영화 전체 목록 요청 {}", requestDto);
+        log.info("rest 영화 상세 정보 요청 {}", id);
         MovieDto movieDto = movieService.getMovieDetail(id);
         return new ResponseEntity<>(movieDto, HttpStatus.OK);
     }
@@ -44,7 +44,7 @@ public class MovieRestController {
     @GetMapping("/movieDetail/director/{id}")
     public ResponseEntity<List<MovieDto>> getMoviesByDirector(@PathVariable Long id,
             @ModelAttribute("requestDto") @RequestBody PageRequestDTO requestDto) {
-        log.info("rest 영화 전체 목록 요청 {}", requestDto);
+        log.info("rest 영화 감독 요청 {}", id);
         List<MovieDto> movieDtos = movieService.getMovieListByPersonId(id);
         return new ResponseEntity<>(movieDtos, HttpStatus.OK);
     }

@@ -110,22 +110,22 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    @Transactional
-    @Scheduled(fixedRate = 60000) // 1분마다 실행
-    public void deleteUnCompletedOrder() {
-        LocalDateTime tenMinutesAgo = LocalDateTime.now().minusMinutes(1);
+    // @Override
+    // @Transactional
+    // @Scheduled(fixedRate = 60000) // 1분마다 실행
+    // public void deleteUnCompletedOrder() {
+    // LocalDateTime tenMinutesAgo = LocalDateTime.now().minusMinutes(30);
 
-        // 1분 이상 경과한 데이터를 찾기
-        List<Order> orders = orderRepository.findByUpdateDateBefore(tenMinutesAgo);
+    // // 30분 이상 경과한 데이터를 찾기
+    // List<Order> orders = orderRepository.findByUpdateDateBefore(tenMinutesAgo);
 
-        for (Order order : orders) {
-            if (order.getStatus() == OrderStatus.PENDING) {
-                orderItemRepository.deleteByOrderId(order.getId());
-                orderRepository.deleteById(order.getId());
-            }
-        }
-    }
+    // for (Order order : orders) {
+    // if (order.getStatus() == OrderStatus.PENDING) {
+    // orderItemRepository.deleteByOrderId(order.getId());
+    // order.setStatus(OrderStatus.CANCELLED);
+    // }
+    // }
+    // }
 
     @Override
     public Boolean isStatusPending(Long orderId) {

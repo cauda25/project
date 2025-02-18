@@ -1,6 +1,5 @@
 package com.example.project.repository;
 
-import java.util.List;
 import java.util.stream.IntStream;
 
 import org.json.simple.JSONArray;
@@ -24,8 +23,6 @@ import com.example.project.repository.movie.MovieGenreRepository;
 import com.example.project.repository.movie.MoviePersonRepository;
 import com.example.project.repository.movie.MovieRepository;
 import com.example.project.repository.movie.PersonRepository;
-
-import jakarta.transaction.Transactional;
 
 @SpringBootTest
 public class MovieRepositoryTest {
