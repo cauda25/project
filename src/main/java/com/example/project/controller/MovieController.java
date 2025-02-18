@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,12 +22,14 @@ import com.example.project.dto.MoviePersonDto;
 import com.example.project.dto.PageRequestDTO;
 import com.example.project.dto.PageResultDTO;
 import com.example.project.dto.PersonDto;
+import com.example.project.dto.ReviewDto;
 import com.example.project.entity.Movie;
 import com.example.project.entity.Person;
 import com.example.project.service.GenreService;
 import com.example.project.service.MemberFavoriteMovieService;
 import com.example.project.service.MovieService;
 import com.example.project.service.PersonService;
+import com.example.project.service.ReviewService;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -37,6 +38,7 @@ import com.example.project.service.PersonService;
 public class MovieController {
 
     private final MovieService movieService;
+    private final ReviewService reviewService;
     private final GenreService genreService;
     private final PersonService personService;
     private final MemberFavoriteMovieService memberFavoriteMovieService;
@@ -121,14 +123,16 @@ public class MovieController {
 
     }
 
-    @GetMapping("detail")
+    @GetMapping("/detail")
     public void getMovieDetail(Long id, @ModelAttribute("requestDto") PageRequestDTO requestDto,
             Model model) {
         log.info("movieDetail 폼 요청 {}", id);
 
+        // movieService.findById(id) 대신 movieService.getMovieDetail(id) 사용
         MovieDto movieDto = movieService.getMovieDetail(id);
         model.addAttribute("movieDto", movieDto);
 
+        // 영화의 인물 정보 중 감독/출연 분류
         List<PersonDto> directorList = new ArrayList<>();
         List<PersonDto> actorList = new ArrayList<>();
         for (PersonDto peopleDto : movieDto.getPersonDtos()) {
@@ -146,26 +150,30 @@ public class MovieController {
         model.addAttribute("directorList", directorList);
         model.addAttribute("actorList", actorList);
 
+        // 로그인 여부 및 사용자 정보
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isLogin = authentication != null && authentication.isAuthenticated()
                 && !(authentication.getPrincipal() instanceof String);
+        model.addAttribute("isLogin", isLogin);
 
-        // 로그인한 사용자인지 확인
         if (isLogin) {
-            // 로그인된 사용자일 때
             AuthMemberDto authMemberDto = (AuthMemberDto) authentication.getPrincipal();
-            List<Movie> favoriteMovies = memberFavoriteMovieService
-                    .getFavoriteMoviesByMemberId(authMemberDto.getMemberDto().getMid());
+            Long memberId = authMemberDto.getMemberDto().getMid();
+            model.addAttribute("memberId", memberId);
+
+            List<Movie> favoriteMovies = memberFavoriteMovieService.getFavoriteMoviesByMemberId(memberId);
             model.addAttribute("favoriteMovies", favoriteMovies);
-            model.addAttribute("isExist",
-                    memberFavoriteMovieService.existsByMemberIdAndMovieId(authMemberDto.getMemberDto().getMid(), id));
+            model.addAttribute("isExist", memberFavoriteMovieService.existsByMemberIdAndMovieId(memberId, id));
         } else {
-            // 로그인하지 않은 사용자일 때 (익명 사용자)
+            model.addAttribute("memberId", "");
             model.addAttribute("favoriteMovies", new ArrayList<>());
             model.addAttribute("isExist", false);
-            model.addAttribute("isLogin", isLogin);
         }
         log.info("로그인 {}", isLogin);
+
+        // ★ 여기서 리뷰 목록을 추가합니다.
+        List<ReviewDto> reviews = reviewService.findReviewsByMovieId(id);
+        model.addAttribute("reviews", reviews);
     }
 
     @GetMapping("/person/detail")
@@ -175,4 +183,5 @@ public class MovieController {
         PersonDto peopleDto = personService.read(id);
         model.addAttribute("peopleDto", peopleDto);
     }
+
 }

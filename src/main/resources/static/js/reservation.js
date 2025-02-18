@@ -414,7 +414,7 @@ document.querySelectorAll(".timeSelect a").forEach((timeLink) => {
   });
 });
 
-document.querySelector(".select-info").addEventListener("click", (e) => {
+document.querySelector(".select-info").addEventListener("click", async (e) => {
   e.preventDefault();
 
   const selectInfo = e.currentTarget;
@@ -426,18 +426,38 @@ document.querySelector(".select-info").addEventListener("click", (e) => {
   const screeningId = selectInfo.getAttribute("data-screening-id");
 
   if (!theater || !movie || !date || !auditorium || !time || !screeningId) {
-    alert("모든 정보를 선택해주세요.");
+    Swal.fire({
+      icon: "warning",
+      text: "모든 정보를 선택해주세요.",
+      confirmButtonColor: "#0022ff",
+      confirmButtonText: "다시선택",
+    });
     return;
   }
 
-  // URL에 tfoot 정보 추가
-  const url = `/reservation/seat_sell?screeningId=${encodeURIComponent(
-    screeningId
-  )}&theater=${encodeURIComponent(theater)}&movie=${encodeURIComponent(
-    movie
-  )}&date=${encodeURIComponent(date)}&auditorium=${encodeURIComponent(
-    auditorium
-  )}&time=${encodeURIComponent(time)}`;
+  try {
+    const response = await fetch("/reservation/save", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        theater,
+        movie,
+        date,
+        auditorium,
+        time,
+        screeningId,
+      }),
+    });
 
-  window.location.href = url;
+    if (!response.ok) {
+      throw new Error("서버에 정보를 저장하는데 실패했습니다.");
+    }
+
+    window.location.href = "/reservation/seat_sell";
+  } catch (error) {
+    console.error("예약 정보 저장 실패:", error);
+    Swal.fire("예약 정보를 저장하는 중 오류가 발생했습니다.");
+  }
 });

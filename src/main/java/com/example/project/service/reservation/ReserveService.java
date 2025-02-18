@@ -5,26 +5,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.example.project.dto.MovieDto;
 import com.example.project.dto.reserve.ReserveDto;
 import com.example.project.dto.reserve.ScreeningDto;
 import com.example.project.dto.reserve.SeatDto;
 import com.example.project.dto.reserve.SeatStatusDto;
 import com.example.project.dto.reserve.TheaterDto;
 import com.example.project.entity.Member;
-import com.example.project.entity.Movie;
 import com.example.project.entity.constant.ReserveStatus;
 import com.example.project.entity.constant.SeatStatusEnum;
-import com.example.project.entity.reserve.Auditorium;
 import com.example.project.entity.reserve.Reserve;
-import com.example.project.entity.reserve.Screening;
-import com.example.project.entity.reserve.Seat;
 import com.example.project.entity.reserve.SeatStatus;
-import com.example.project.entity.reserve.Theater;
 
 public interface ReserveService {
-
-        List<ReserveDto> getAllReserves();
 
         List<String> getAllRegions();
 
@@ -40,8 +32,6 @@ public interface ReserveService {
 
         List<SeatStatusDto> getSeatStatusesByScreening(Long screeningId);
 
-        ScreeningDto getScreeningById(Long screeningId);
-
         void updateSeatStatus(Long seatStatusId, SeatStatusEnum seatStatusEnum);
 
         void resetExpiredReservations();
@@ -51,8 +41,6 @@ public interface ReserveService {
         int calculateTotalPrice(List<SeatStatus> seatStatuses);
 
         Reserve saveReservation(ReserveDto reserveDto);
-
-        // void addSeatToReserve(Reserve reserve, SeatStatus seatStatus);
 
         void cancelReservation(Long reserveId);
 
@@ -65,7 +53,10 @@ public interface ReserveService {
                                 .reserveStatus(ReserveStatus.valueOf(reserveDto.getReserveStatus()))
                                 .movieTitle(reserveDto.getMovieTitle())
                                 .screeningTime(reserveDto.getScreeningTime())
+                                .screeningDate(reserveDto.getScreeningDate())
                                 .totalPrice(reserveDto.getTotalPrice())
+                                .theaterName(reserveDto.getTheaterName())
+                                .auditoriumName(reserveDto.getAuditoriumName())
                                 .member(Member.builder().mid(reserveDto.getMid()).build())
                                 .build();
         }
@@ -88,23 +79,14 @@ public interface ReserveService {
                                 .screeningTime(reserve.getScreeningTime())
                                 .totalPrice(reserve.getTotalPrice())
                                 .mid(reserve.getMember().getMid())
-                                .memberId((reserve.getMember().getMemberId()))
                                 .seats(seatDtos)
                                 .seatStatuses(
                                                 reserve.getSeatStatuses().stream()
                                                                 .map(SeatStatus::getSeatStatusId)
                                                                 .collect(Collectors.toList()))
-                                .screeningDate(reserve.getSeatStatuses().isEmpty() ? null
-                                                : reserve.getSeatStatuses().get(0).getScreening().getScreeningDate())
-                                .theaterName(reserve.getSeatStatuses().isEmpty() ? null
-                                                : reserve.getSeatStatuses().get(0).getScreening().getAuditorium()
-                                                                .getTheater().getTheaterName())
-                                .auditoriumName(reserve.getSeatStatuses().isEmpty() ? null
-                                                : reserve.getSeatStatuses().get(0).getScreening().getAuditorium()
-                                                                .getAuditoriumName())
-                                .auditoriumNo(reserve.getSeatStatuses().isEmpty() ? null
-                                                : reserve.getSeatStatuses().get(0).getScreening().getAuditorium()
-                                                                .getAuditoriumNo())
+                                .screeningDate(reserve.getScreeningDate())
+                                .theaterName(reserve.getTheaterName())
+                                .auditoriumName(reserve.getAuditoriumName())
                                 .regDate(reserve.getRegDate())
                                 .updateDate(reserve.getUpdateDate())
                                 .build();

@@ -2,10 +2,10 @@ let cartTotal = 0;
 let checkedItems = [];
 
 function getCartItems() {
-  fetch("/rest/cart/list", { method: "GET" }) // 예시로 인증 상태 확인 API 호출
+  fetch("/rest/cart/list", { method: "GET" })
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Not authenticated");
+        throw new Error("Failed");
       }
       return response.json();
     })
@@ -88,7 +88,7 @@ function getCartItems() {
       ischeckedItems();
     })
     .catch((error) => {
-      console.error("Error adding to cart:", error);
+      console.error(error);
     });
 }
 getCartItems();
@@ -150,7 +150,7 @@ document.querySelector(".cart-item-list").addEventListener("click", (e) => {
         console.log(data);
       })
       .catch((error) => {
-        console.error("Error adding to cart:", error);
+        console.error(error);
       });
   }
   if (e.target.closest(".delete-cart-item")) {
@@ -163,7 +163,7 @@ document.querySelector(".cart-item-list").addEventListener("click", (e) => {
         getCartItems();
       })
       .catch((error) => {
-        console.error("Error adding to cart:", error);
+        console.error(error);
       });
   }
   if (e.target.matches("#productSelect")) {
@@ -203,42 +203,32 @@ function ischeckedItems() {
 }
 ischeckedItems();
 
-document.querySelector(".btn-checkout").addEventListener("click", () => {
+document.querySelector(".btn-checkout").addEventListener("click", async () => {
   console.log(checkedItems);
+  const isAuth = await checkAuth(); // checkAuth()가 완료될 때까지 기다림
+  console.log("로그인 여부: ", isAuth);
 
-  fetch("/rest/check-auth", { method: "GET" }) // 예시로 인증 상태 확인 API 호출
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Not authenticated");
-      }
-      return response.json();
+  if (isAuth) {
+    // 인증된 사용자일 경우 수행할 동작
+    fetch(`/rest/payment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(checkedItems),
     })
-    .then((data) => {
-      if (data == true) {
-        // 인증된 사용자일 경우 수행할 동작
-        fetch(`/rest/payment`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(checkedItems),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            orderId = data[0].orderId;
-            window.location.href = `/payment/payment?orderId=${orderId}`;
-          })
-          .catch((error) => {
-            console.error("Error adding to cart:", error);
-          });
-      } else {
-        if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
-          window.location.href = "/member/login"; // 로그인 페이지로 이동
-        }
-      }
-    })
-    .catch((error) => {
-      console.error("Error adding to cart:", error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        orderId = data[0].orderId;
+        window.location.href = `/payment/payment?orderId=${orderId}`;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  } else {
+    if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {
+      window.location.href = "/member/login"; // 로그인 페이지로 이동
+    }
+  }
 });

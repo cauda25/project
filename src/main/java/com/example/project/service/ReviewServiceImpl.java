@@ -2,6 +2,7 @@ package com.example.project.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -31,17 +32,20 @@ public class ReviewServiceImpl implements ReviewService {
                 Review review = Review.builder()
                                 .content(reviewDto.getContent())
                                 .rating(reviewDto.getRating())
+                                // 다른 필요한 필드들을 설정
                                 .build();
 
-                // 영화 ID를 통해 영화 조회 및 설정
+                // 영화와 회원 설정 (기존 로직)
                 Movie movie = movieRepository.findById(reviewDto.getId())
                                 .orElseThrow(() -> new IllegalArgumentException("영화 정보를 찾을 수 없습니다."));
                 review.setMovie(movie);
 
-                // 회원 ID를 통해 회원 조회 및 설정
                 Member member = memberRepository.findById(reviewDto.getMid())
                                 .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
                 review.setMember(member);
+
+                // 생성 시간 설정
+                review.setCreatedAt(LocalDateTime.now());
 
                 // 리뷰 저장
                 reviewRepository.save(review);
@@ -104,20 +108,27 @@ public class ReviewServiceImpl implements ReviewService {
                                 .rating(review.getRating())
                                 .build();
         }
-        // @Override
-        // public ReviewDto getReview(Long reviewNo) {
-        // return entityToDto(reviewRepository.findById(reviewNo).get());
-        // }
 
-        // @Override
-        // public ReviewDto getReview(Long rid) {
-        // return Review.builder()
-        // .rid(reviewNo.getRid())
-        // .rating(reviewDto.getRating())
-        // .content(reviewDto.getContent())
-        // .member(Member.builder().mid(reviewDto.getMid()).build())
-        // .movie(Movie.builder().id(reviewDto.getId()).build())
-        // .build();
-        // }
+        public List<ReviewDto> findReviewsByMovieId(Long movieId) {
+                // 영화 ID에 해당하는 리뷰 엔티티 리스트 조회
+                List<Review> reviews = reviewRepository.findByMovieId(movieId);
+
+                // 엔티티를 DTO로 변환하여 반환
+                return reviews.stream()
+                                .map(this::convertToDto)
+                                .collect(Collectors.toList());
+        }
+
+        private ReviewDto convertToDto(Review review) {
+                return ReviewDto.builder()
+                                .rid(review.getRid())
+                                // 아래 두 메서드는 Member 엔티티에서 회원 식별 정보를 가져온다고 가정합니다.
+                                .memberId(review.getMember().getMemberId()) // 예: 회원 고유 문자열 ID
+                                .mid(review.getMember().getMid()) // 예: 회원의 Long 타입 ID
+                                .id(review.getMovie().getId()) // 영화 ID
+                                .content(review.getContent())
+                                .rating(review.getRating())
+                                .build();
+        }
 
 }

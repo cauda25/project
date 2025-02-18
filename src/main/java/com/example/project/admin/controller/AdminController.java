@@ -209,7 +209,7 @@ public class AdminController {
     }
 
     @GetMapping({ "/movie", "/movieAdd" })
-    public void getMovie(String state, String theaterName, Model model) {
+    public void getMovie(String state, String theaterName, Model model, TheaterDto aDto) {
         log.info("movie 폼 요청 {} {}", state, theaterName);
         List<TheaterDto> add = userServie.selectList(state, theaterName);
         model.addAttribute("add", add);
@@ -232,7 +232,7 @@ public class AdminController {
 
         model.addAttribute("add", add);
         rttr.addAttribute("state", theaterState);
-        return "redirect:/admin/page/movie?";
+        return "redirect:/admin/page/movie";
 
     }
 

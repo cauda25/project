@@ -45,16 +45,6 @@ public class ReserveServiceImpl implements ReserveService {
     private final SeatStatusRepository seatStatusRepository;
 
     @Override
-    public List<ReserveDto> getAllReserves() {
-
-        List<Reserve> reserves = reserveRepository.findAll();
-
-        return reserves.stream()
-                .map(reserve -> entityToDto(reserve))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<String> getAllRegions() {
         return theaterRepository.findAllRegions();
     }
@@ -80,7 +70,8 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public List<String> getMoviesByTheaterId(Long theaterId) {
-        List<Screening> screenings = screeningRepository.findScreeningsByTheaterId(theaterId);
+        List<Screening> screenings = screeningRepository
+                .findByAuditorium_Theater_TheaterIdOrderByScreeningIdAsc(theaterId);
         return screenings.stream()
                 .map(Screening::getMovieTitle)
                 .distinct()
@@ -93,7 +84,7 @@ public class ReserveServiceImpl implements ReserveService {
         movieTitle = movieTitle.trim();
         System.out.println("Service - movieTitle: " + movieTitle);
         System.out.println("Service - date: " + date);
-        List<Screening> screenings = screeningRepository.findScreeningsByMovieAndDate(movieTitle, date);
+        List<Screening> screenings = screeningRepository.findByMovieTitleAndScreeningDate(movieTitle, date);
         return screenings.stream()
                 .map(screening -> ScreeningDto.builder()
                         .screeningId(screening.getScreeningId())
@@ -146,23 +137,6 @@ public class ReserveServiceImpl implements ReserveService {
                         .price(seatStatus.getSeat().getAuditorium().getPrice())
                         .build())
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public ScreeningDto getScreeningById(Long screeningId) {
-
-        Screening screening = screeningRepository.findById(screeningId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid screening ID: " + screeningId));
-
-        return ScreeningDto.builder()
-                .screeningId(screening.getScreeningId())
-                .startTime(screening.getStartTime())
-                .movieTitle(screening.getMovieTitle())
-                .runtime(screening.getRuntime())
-                .screeningDate(screening.getScreeningDate())
-                .auditoriumNo(screening.getAuditorium().getAuditoriumNo())
-                .auditoriumName(screening.getAuditorium().getAuditoriumName())
-                .build();
     }
 
     @Transactional
@@ -242,6 +216,9 @@ public class ReserveServiceImpl implements ReserveService {
         reserve.setTotalPrice(calculateTotalPrice(seatStatuses));
         reserve.setMovieTitle(reserveDto.getMovieTitle());
         reserve.setScreeningTime(reserveDto.getScreeningTime());
+        reserve.setScreeningDate(reserveDto.getScreeningDate());
+        reserve.setAuditoriumName(reserveDto.getAuditoriumName());
+        reserve.setTheaterName(reserveDto.getTheaterName());
         reserve.setMember(member);
 
         for (SeatStatus seatStatus : seatStatuses) {
@@ -280,20 +257,21 @@ public class ReserveServiceImpl implements ReserveService {
         // 사용자 ID로 예매 정보 조회
         List<Reserve> reserves = reserveRepository.findByMemberMidWithJoins(mid);
         if (reserves.isEmpty()) {
-            System.out.println("No reservations found for member ID: " + mid);
+            log.info("No reservations found for member ID: {}", mid);
         } else {
             reserves.forEach(reserve -> {
                 System.out.println("Reserve ID: " + reserve.getReserveId());
                 reserve.getSeatStatuses().forEach(seatStatus -> {
-                    System.out.println("Seat: " + seatStatus.getSeat().getRowNum() + seatStatus.getSeat().getSeatNum());
-                    System.out.println("Screening Date: " + seatStatus.getScreening().getScreeningDate());
+                    log.info("Seat: {}{}", seatStatus.getSeat().getRowNum(), seatStatus.getSeat().getSeatNum());
+                    log.info("Screening Date: {}", seatStatus.getScreening().getScreeningDate());
                 });
             });
         }
 
         // 엔티티 → DTO 변환
         return reserves.stream()
-                .map(reserve -> entityToDto(reserve))
+                .map(this::entityToDto)
                 .collect(Collectors.toList());
     }
+
 }

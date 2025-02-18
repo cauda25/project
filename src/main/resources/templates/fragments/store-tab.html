@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{/layouts/layout}">
+  <th:block layout:fragment="css"> </th:block>
+  <section class="mt-3" th:fragment="store-tab">
+    <ul class="nav nav-tabs nav-justified">
+      <li class="nav-item">
+        <a
+          th:class="'nav-link btn btn-outline-danger ' + ${category == 'combo' ? 'active':''}"
+          th:href="@{/store/main(category=combo)}"
+          >콤보</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          th:class="'nav-link btn btn-outline-danger ' + ${category == 'popcorn' ? 'active':''}"
+          th:href="@{/store/main(category=popcorn)}"
+          >팝콘</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          th:class="'nav-link btn btn-outline-danger ' + ${category == 'drink' ? 'active':''}"
+          th:href="@{/store/main(category=drink)}"
+          >음료</a
+        >
+      </li>
+    </ul>
+  </section>
+  <th:block layout:fragment="js"></th:block>
+</html>

@@ -1,5 +1,7 @@
 package com.example.project.service;
 
+import java.util.Optional;
+
 import com.example.project.dto.MemberDto;
 import com.example.project.entity.Member;
 import com.example.project.entity.constant.MemberRole;
@@ -19,5 +21,9 @@ public interface MemberService {
     boolean isMemberIdDuplicate(String memberId);
 
     boolean isEmailDuplicate(String email);
+
+    void deleteMember(Long memberId);
+
+    Optional<Member> findByMid(Long mid);
 
 }

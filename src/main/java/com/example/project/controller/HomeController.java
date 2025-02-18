@@ -17,11 +17,11 @@ public class HomeController {
 
     @GetMapping("/access-denied")
     public String getAcc() {
-        return "/except/denied";
+    return "/except/denied";
     }
 
-    // @GetMapping("/error")
-    // public String get404() {
-    // return "/except/url404";
-    // }
+    @GetMapping("/error")
+    public String get404() {
+    return "/except/url404";
+    }
 }
