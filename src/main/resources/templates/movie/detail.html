@@ -79,6 +79,7 @@
                 <div class="anime__details__rating">
                   <div class="rating">
                     <div
+                      th:if="movieDto.voteAverage != 0"
                       th:each="i : ${#numbers.sequence(0, 4)}"
                       style="display: inline-block"
                     >

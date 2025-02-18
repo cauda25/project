@@ -94,7 +94,11 @@
               />
               <input type="hidden" name="sort" th:value="${requestDto.sort}" />
               <input type="hidden" name="movieList" th:value="popular" />
-              <input type="hidden" name="type" th:value="${requestDto.type}" />
+              <input
+                type="hidden"
+                name="type"
+                th:value="${requestDto.type != '' ? requestDto.type:'mp'}"
+              />
 
               <div class="col-2 btn-group type-group">
                 <button
@@ -133,15 +137,18 @@
                 </ul>
               </div>
               <input
-                class="col-6 form-control me-2 border-danger border-2 bg-transparent text-white"
+                class="col-6 form-control border-danger border-2 bg-transparent text-white search-form-control"
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
                 name="keyword"
                 th:value="${keyword}"
               />
-              <button class="col-2 btn btn-outline-light" type="submit">
-                Search
+              <button
+                class="col-1 btn btn-outline-danger border-0 search-btn"
+                type="submit"
+              >
+                <span class="icon_search"></span>
               </button>
             </form>
           </div>
@@ -210,7 +217,7 @@
               </p>
             </div> -->
             <div
-              class="row trending__product-row"
+              class="row trending__product-row mt-4"
               th:if="${requestDto.movieList == 'my' and recommendMovies.size() != 0}"
             >
               <div class="row">
@@ -295,7 +302,7 @@
             </div>
             <!-- 인물 리스트 -->
             <div
-              class="row trending__people-row"
+              class="row trending__people-row mt-4"
               th:if="${requestDto.type != 'm' and requestDto.type != ''}"
             >
               <div class="row">
@@ -376,7 +383,7 @@
                 th:each="page : ${movies != null ? movies.pageList : people.pageList}"
               >
                 <a
-                  th:class="'page-link text-light ' + ${movies != null ? (movies.page == page ? 'bg-danger border-light active' : 'bg-transparent') : (people.page == page ? 'bg-danger border-light active' : 'bg-transparent')}"
+                  th:class="'page-link btn btn-outline-danger text-light ' + ${movies != null ? (movies.page == page ? 'border-light active' : 'bg-transparent') : (people.page == page ? 'bg-danger border-light active' : 'bg-transparent')}"
                   th:href="@{
                       list(
                         movieList=${requestDto.movieList},
