@@ -10,7 +10,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.project.admin.Entity.Admin;
 import com.example.project.admin.Entity.constant.StatusRole;
+import com.example.project.admin.dto.test.AdminDto;
+import com.example.project.admin.dto.test.AuthAdminDto;
+import com.example.project.admin.repository.AdminRepository;
 import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.entity.Member;
@@ -27,10 +31,25 @@ import lombok.extern.log4j.Log4j2;
 public class MemberLoginServiceImpl implements UserDetailsService {
 
     private final MemberRepository memberRepository;
+    private final AdminRepository adminRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Authenticating username: {}", username);
+
+        Optional<Admin> adminResult = adminRepository.findByUserId(username);
+        if (adminResult.isPresent()) {
+            Admin admin = adminResult.get();
+            log.info("Admin user authenticated: {}", admin);
+
+            return new AuthMemberDto(
+                    MemberDto.builder()
+                            .memberId(admin.getUserId())
+                            .password(admin.getPassword())
+                            .role(admin.getRole())
+                            .build());
+
+        }
 
         // 사용자 조회
         Optional<Member> result = memberRepository.findByMemberId(username);
@@ -70,6 +89,7 @@ public class MemberLoginServiceImpl implements UserDetailsService {
 
         // AuthMemberDto로 변환하여 반환
         return new AuthMemberDto(memberDto);
+
     }
 
     // 로그인 날짜 업데이트 메서드

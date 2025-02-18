@@ -1,5 +1,7 @@
 package com.example.project.entity;
 
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,5 +43,10 @@ public class MoviePerson extends BaseEntity {
     private String character;
 
     private String role;
+
+    @PrePersist
+    public void prePersist() {
+        this.id = UUID.randomUUID().toString(); // 엔티티 저장 전 UUID 설정
+    }
 
 }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{/layouts/layout}">
+  <div layout:fragment="content">
+    <section class="user-info spad">
+      <div
+        class="container"
+        style="
+          max-width: 600px;
+          margin: 0 auto;
+          background-color: #222;
+          padding: 20px;
+          border-radius: 10px;
+          color: #ddd;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        "
+      >
+        <h3 style="color: #fff; text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px"><span text=""></span>관리자</h3>
+
+        <div style="display: flex; justify-content: center; gap: 15px; margin-top: 30px">
+          <form action="#" method="post" style="margin: 0">
+            <a
+              th:href="@{/member/logout}"
+              style="background-color: #555; color: #fff; border: none; border-radius: 5px; padding: 10px 20px; font-size: 16px; cursor: pointer"
+            >
+              로그아웃
+            </a>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+  <th:block layout:fragment="js">
+    <!-- <script>
+      const memberId = "[[${member.memberId}]]"; // 서버에서 전달된 값
+      console.log("아이디:", memberId); // 콘솔에 출력
+    </script> -->
+  </th:block>
+</html>

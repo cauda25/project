@@ -216,7 +216,6 @@ public class ReserveController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
             reserveDto.setMid(mid);
-            // reserveDto.setMid(dummyMemberId);
 
             // 예약 정보 저장
             Reserve reserve = reserveService.saveReservation(reserveDto);
@@ -226,8 +225,6 @@ public class ReserveController {
             }
             // 응답 데이터 구성
             response.put("success", true);
-            response.put("reserveId", reserve.getReserveId());
-            response.put("reserveNo", reserve.getReserveNo());
             response.put("totalPrice", reserve.getTotalPrice());
             return ResponseEntity.ok(response);
 
