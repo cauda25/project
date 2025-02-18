@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import com.example.project.entity.Inquiry;
 import com.example.project.entity.Member;
 
+import jakarta.transaction.Transactional;
+
 @Repository
 public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
@@ -19,6 +21,13 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
     List<Inquiry> findByMember(Member member);
 
+    List<Inquiry> findByEmail(String email);
+
     Page<Inquiry> findByMember(Member member, Pageable pageable);
+
+    @Transactional
+    void deleteAllByMember(Member member);
+
+    List<Inquiry> findByStatus(String status);
 
 }

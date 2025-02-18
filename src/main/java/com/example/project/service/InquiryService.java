@@ -22,6 +22,7 @@ import com.example.project.repository.InquiryRepository;
 import com.example.project.repository.MemberRepository;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class InquiryService {
@@ -31,6 +32,8 @@ public class InquiryService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    private InquiryService inquiryService;
 
     // ID로 문의 조회
     public Inquiry getInquiryById(Long id) {
@@ -44,19 +47,18 @@ public class InquiryService {
     }
 
     // ID로 문의 삭제
-    public void deleteInquiry(Long id) {
-        Inquiry inquiry = inquiryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 문의 ID 입니다. " + id));
-
-        // 현재 로그인한 사용자 가져오기
-        Member currentMember = getCurrentMember();
-
-        // 사용자가 본인의 문의글만 삭제할 수 있도록 검증
-        if (!inquiry.getMember().equals(currentMember)) {
-            throw new IllegalArgumentException("본인이 작성한 문의만 삭제할 수 있습니다.");
+    @Transactional
+    public void deleteInquiriesByIds(List<Long> inquiryIds) {
+        if (inquiryIds == null || inquiryIds.isEmpty()) {
+            throw new IllegalArgumentException("삭제할 문의 ID 목록이 비어 있습니다.");
         }
 
-        inquiryRepository.deleteById(id);
+        List<Inquiry> inquiries = inquiryRepository.findAllById(inquiryIds);
+        if (inquiries.isEmpty()) {
+            throw new EntityNotFoundException("해당 ID에 해당하는 문의가 없습니다.");
+        }
+
+        inquiryRepository.deleteAll(inquiries);
     }
 
     // 페이징 처리된 문의 조회 (Page<Inquiry> 반환)
@@ -77,6 +79,11 @@ public class InquiryService {
         return inquiryPage.getContent();
     }
 
+    // 모든 문의를 Pageable 방식으로 가져오는 메서드 수정
+    public Page<Inquiry> getAllInquiries(Pageable pageable) {
+        return inquiryRepository.findAll(pageable); // PageRequest를 사용하여 페이징된 데이터를 반환
+    }
+
     // 문의 상태 업데이트
     public Inquiry updateStatus(Long id, String status) {
         Inquiry inquiry = inquiryRepository.findById(id)
@@ -89,6 +96,27 @@ public class InquiryService {
             throw new RuntimeException("유효하지 않은 상태 값입니다: " + status);
         }
 
+        return inquiryRepository.save(inquiry);
+    }
+
+    // 예시: setStatus와 saveCounseling을 수정한 코드
+    public void updateInquiryStatus(Long inquiryId, String status) {
+        Inquiry inquiry = inquiryRepository.findById(inquiryId)
+                .orElseThrow(() -> new RuntimeException("Inquiry not found"));
+
+        // setStatus 수정: String을 InquiryStatus로 변환하여 사용
+        inquiry.setStatus(InquiryStatus.valueOf(status)); // "answered" 또는 "unanswered"
+
+        // saveCounseling 수정: Member와 String을 전달
+        inquiryService.saveCounseling(inquiry.getMember(), inquiry.getContent()); // inquiry.getMember()와
+                                                                                  // inquiry.getContent() 전달
+
+        // 저장
+        inquiryRepository.save(inquiry);
+    }
+
+    // Inquiry 객체를 저장하는 메소드
+    public Inquiry save(Inquiry inquiry) {
         return inquiryRepository.save(inquiry);
     }
 
@@ -167,17 +195,31 @@ public class InquiryService {
         inquiryRepository.save(inquiry);
     }
 
-    // 로그인한 사용자의 문의 내역 조회 추가
-    public List<Inquiry> getInquiriesByUser() {
-        Member member = getCurrentMember();
-        return inquiryRepository.findByMember(member);
+    // 로그인한 사용자의 문의 내역 조회 (페이징 포함)
+    public Page<Inquiry> getInquiriesByUser(String memberId, int page) {
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID(" + memberId + ")를 가진 회원을 찾을 수 없습니다."));
+
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        Page<Inquiry> inquiries = inquiryRepository.findByMember(member, pageable);
+
+        inquiries.forEach(inquiry -> {
+            if (inquiry.getMember() != null) {
+                System.out.println("Inquiry ID: " + inquiry.getId() + " | Member: " + inquiry.getMember().getName());
+            } else {
+                System.out.println("Inquiry ID: " + inquiry.getId() + " | Member: NULL");
+            }
+        });
+
+        return inquiries;
     }
 
-    // 로그인한 사용자의 문의 내역 조회 (페이징 처리)
-    public Page<Inquiry> getInquiriesByUser(int page) {
-        Member member = getCurrentMember(); // 로그인한 사용자 가져오기
-        Pageable pageable = PageRequest.of(page - 1, 10); // 한 페이지당 10개
-        return inquiryRepository.findByMember(member, pageable);
+    // 기존의 memberId만 받는 메서드 (페이징 없이 사용 가능)
+    public List<Inquiry> getInquiriesByUser(String memberId) {
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID(" + memberId + ")를 가진 회원을 찾을 수 없습니다."));
+
+        return inquiryRepository.findByMember(member);
     }
 
     // 문의 답변 여부 확인
@@ -199,5 +241,40 @@ public class InquiryService {
         }
 
         return response;
+    }
+
+    // 답변을 처리하고 상태를 ANSWERED로 변경하는 서비스 메서드
+    public void answerInquiry(Long inquiryId, String answer) {
+        Inquiry inquiry = inquiryRepository.findById(inquiryId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid inquiry Id"));
+
+        // 답변 내용 설정
+        inquiry.setAnswer(answer);
+
+        // 상태 변경
+        inquiry.setStatus(InquiryStatus.ANSWERED); // 상태를 ANSWERED로 변경
+
+        // 변경된 상태 저장
+        inquiryRepository.save(inquiry);
+    }
+
+    // 상담 내역
+    public List<Inquiry> findInquiriesByMember(Member member) {
+        return inquiryRepository.findByMember(member); // Member와 연결된 상담 내역 조회
+    }
+
+    // 상태에 따른 상담 목록 조회
+    public List<Inquiry> getInquiriesByStatus(String status) {
+        return inquiryRepository.findByStatus(status); // 상태에 따라 조회
+    }
+
+    public Inquiry findInquiryById(Long inquiryId) {
+        return inquiryRepository.findById(inquiryId).orElse(null); // 상담 내역 조회
+    }
+
+    // 로그인한 사용자의 상담 내역 조회 (본인만 조회 가능)
+    public List<Inquiry> getInquiriesByCurrentMember() {
+        Member currentMember = getCurrentMember(); // 현재 로그인된 사용자의 정보 가져오기
+        return inquiryRepository.findByMember(currentMember); // 본인의 상담 내역만 조회
     }
 }

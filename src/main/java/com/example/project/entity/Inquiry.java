@@ -98,6 +98,14 @@ public class Inquiry {
         this.content = content;
     }
 
+    public InquiryStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(InquiryStatus status) {
+        this.status = status;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -126,5 +134,13 @@ public class Inquiry {
         if (this.member != null) {
             this.username = this.member.getUsername();
         }
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 }

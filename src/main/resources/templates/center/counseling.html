@@ -10,6 +10,21 @@
     <div layout:fragment="content" class="bg-light">
       <h1>나의 문의내역</h1>
       <h2>1:1 문의</h2>
+
+      <!-- 새로 등록된 글 출력 -->
+      <div th:if="${newInquiry != null}">
+        <h3>새로 등록된 글</h3>
+        <p>제목: <span th:text="${newInquiry.title}"></span></p>
+        <p>내용: <span th:text="${newInquiry.content}"></span></p>
+        <p>
+          등록일:
+          <span
+            th:text="${#temporals.format(newInquiry.createdDate, 'yyyy-MM-dd HH:mm:ss')}"
+          >
+          </span>
+        </p>
+      </div>
+
       <div class="search-bar">
         <input type="text" placeholder="문의조회" />
         <button>검색하기</button>
@@ -18,20 +33,23 @@
           <button class="delete-button" id="delete-selected">선택삭제</button>
         </div>
       </div>
+
       <div class="table-container">
         <form
           id="deleteForm"
           method="post"
           th:action="@{/center/inquiry/delete-selected}"
         >
+          <input type="hidden" name="inquiryIds" id="inquiryIds" />
           <table class="table">
             <thead>
               <tr>
                 <th><input type="checkbox" id="select-all" /></th>
                 <th>번호</th>
-                <th>이름</th>
+                <th>이메일</th>
                 <th>제목</th>
-                <th>유형</th>
+                <th>내용</th>
+                <th>이름</th>
                 <th>문의유형</th>
                 <th>등록일</th>
                 <th>상태</th>
@@ -49,21 +67,61 @@
                   />
                 </td>
                 <td th:text="${iterStat.index + 1}"></td>
-                <td th:text="${inquiry.member?.email}"></td>
+                <td>
+                  <span
+                    th:if="${inquiry.member != null}"
+                    th:text="${inquiry.getMemberEmail()}"
+                  >
+                  </span>
+                  <span th:unless="${inquiry.member != null}">없음</span>
+                </td>
+                <td th:text="${inquiry.title}"></td>
                 <td th:text="${inquiry.content}"></td>
                 <td th:text="${inquiry.username}"></td>
                 <td th:text="${inquiry.type}"></td>
-                <td th:text="${inquiry.createdDate}"></td>
-                <td th:text="${inquiry.status}"></td>
+                <td
+                  th:text="${#temporals.format(inquiry.createdDate, 'yyyy-MM-dd HH:mm:ss')}"
+                ></td>
+                <td>
+                  <div class="status-container">
+                    <span
+                      th:if="${inquiry.status != null and inquiry.status.name() == 'ANSWERED'}"
+                      class="status answered"
+                    >
+                      <a
+                        th:href="@{/center/inquiry/answered/{id}(id=${inquiry.id})}"
+                        th:text="'답변'"
+                      >
+                      </a>
+                    </span>
+                    <span
+                      th:if="${inquiry.status == null or inquiry.status.name() == 'PENDING'}"
+                      class="status pending"
+                    >
+                      <a
+                        th:href="@{/center/inquiry/pending/{id}(id=${inquiry.id})}"
+                        th:text="'미답변'"
+                      >
+                      </a>
+                    </span>
+                    <span
+                      th:if="${inquiry.status != null and inquiry.status.name() == 'CLOSED'}"
+                      class="status closed"
+                    >
+                      <a href="/center/inquiry/closed" th:text="'종료'"></a>
+                    </span>
+                  </div>
+                </td>
               </tr>
               <!-- 문의 내역이 없을 때 -->
-              <tr th:if="${#lists.isEmpty(inquiries)}">
+              <tr th:if="${inquiries == null or #lists.isEmpty(inquiries)}">
                 <td colspan="8">고객님의 상담 내역이 존재하지 않습니다.</td>
               </tr>
             </tbody>
           </table>
         </form>
       </div>
+
       <div class="faq-inquiry">
         <div class="faq">
           <h3>자주하시는 질문</h3>

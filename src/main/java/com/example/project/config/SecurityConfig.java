@@ -33,7 +33,8 @@ public class SecurityConfig {
                                                 .requestMatchers("/member/mypage").authenticated() // 마이페이지 접근은 인증 필요
                                                 .requestMatchers("/mypage/reservations").authenticated() // 예매 내역 접근은 인증
                                                                                                          // 필요
-                                                .requestMatchers("/center/counseling/**", "/email-board/**")
+                                                .requestMatchers("/center/counseling/**", "/email-board/**",
+                                                                "/center/email/**")
                                                 .authenticated() // 상담 및 이메일 게시판은 인증 필요
                                                 .anyRequest().permitAll() // 그 외 요청은 모두 허용
                                 )

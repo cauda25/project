@@ -3,22 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>상담 내용</title>
+    <title>상담 답변</title>
     <link rel="stylesheet" th:href="@{/css/detail.css}" />
     <th:block layout:fragment="css"></th:block>
   </head>
   <body>
     <div layout:fragment="content" class="bg-light">
-      <h2>상담 내용</h2>
-      <p>
-        <strong>상담 내용:</strong> <span th:text="${inquiry.content}"></span>
-      </p>
-      <p>
-        <strong>상담 답변:</strong>
-        <span
-          th:text="${inquiry.answer != null ? inquiry.answer : '답변이 없습니다.'}"
-        ></span>
-      </p>
+      <h1>상담 답변</h1>
+      <p><strong>제목:</strong> <span th:text="${inquiry.title}"></span></p>
+      <p><strong>내용:</strong> <span th:text="${inquiry.content}"></span></p>
+      <p><strong>답변:</strong> <span th:text="${inquiry.answer}"></span></p>
+      <p><strong>상태:</strong> <span th:text="${inquiry.status}"></span></p>
     </div>
     <script th:src="@{/js/counseling.js}"></script>
   </body>
