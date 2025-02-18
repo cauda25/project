@@ -2,7 +2,6 @@ package com.example.project.entity;
 
 import java.util.UUID;
 
-import com.example.project.admin.Entity.constant.JobRole;
 import com.example.project.admin.Entity.constant.StatusRole;
 
 import jakarta.persistence.Column;
