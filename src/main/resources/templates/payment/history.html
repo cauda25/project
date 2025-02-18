@@ -104,18 +104,25 @@
                     <div class="col-8">
                       <div class="row">
                         <div class="col-3">
-                          <img
-                            th:src="'/img/product' + ${orderItemDtos.productDto.image}"
-                            class="img-thumbnail item-pic"
-                          />
+                          <a
+                            th:href="@{/store/detail(category=${orderItemDtos.productDto.category}, id=${orderItemDtos.productDto.id})}"
+                          >
+                            <img
+                              th:src="'/img/product' + ${orderItemDtos.productDto.image}"
+                              class="img-thumbnail item-pic"
+                          /></a>
                         </div>
                         <div class="col-7">
                           <div
                             class="row d-flex align-items-center justify-content-center"
                           >
                             <div class="row">
-                              <span class="fs-2 fw-bold"
-                                >[[${orderItemDtos.productDto.name}]]</span
+                              <a
+                                th:href="@{/store/detail(category=${orderItemDtos.productDto.category}, id=${orderItemDtos.productDto.id})}"
+                              >
+                                <span class="fs-2 fw-bold text-black"
+                                  >[[${orderItemDtos.productDto.name}]]</span
+                                ></a
                               >
                             </div>
                             <div class="row">

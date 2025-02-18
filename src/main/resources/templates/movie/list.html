@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <th:block layout:fragment="css">
-    <link rel="stylesheet" th:href="@{/css/list.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/basic.css}" type="text/css" />
     <link rel="stylesheet" th:href="@{/css/search.css}" type="text/css" />
-    <link rel="stylesheet" th:href="@{/css/nav-tabs.css}" type="text/css" />
-    <link rel="stylesheet" th:href="@{/css/dropdown.css}" type="text/css" />
-    <link rel="stylesheet" th:href="@{/css/select.css}" type="text/css" />
     <style>
       .dropdown-menu-types {
         width: 90%; /* 원하는 너비 설정 */
@@ -187,7 +184,7 @@
                 <div class="product__item mb-2">
                   <a th:href="@{detail(id=${dto.id})}"
                     ><img
-                      th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
+                      th:src="${dto.posterPath != null ? 'https://image.tmdb.org/t/p/w500/' + dto.posterPath : 'https://placehold.co/217x325?text=Movie'}"
                       alt=""
                       class="product__item__pic set-bg"
                   /></a>
@@ -211,11 +208,11 @@
               <div class="mt-4"></div>
             </div>
             <!-- MY -->
-            <!-- <div class="row" th:if="${recommendMovies.size() == 0}">
+            <div class="row" th:if="${recommendMovies.size() == 0}">
               <p class="text-white text-center fw-bold fs-3 mt-5 mb-5">
                 찜목록에 영화를 추가해주세요
               </p>
-            </div> -->
+            </div>
             <div
               class="row trending__product-row mt-4"
               th:if="${requestDto.movieList == 'my' and recommendMovies.size() != 0}"
@@ -235,7 +232,7 @@
                 <div class="product__item mb-2">
                   <a th:href="@{detail(id=${dto.id})}"
                     ><img
-                      th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
+                      th:src="${dto.posterPath != null ? 'https://image.tmdb.org/t/p/w500/' + dto.posterPath : 'https://placehold.co/217x325?text=Movie'}"
                       alt=""
                       class="product__item__pic set-bg"
                   /></a>
@@ -277,7 +274,7 @@
                 <div class="product__item mb-2">
                   <a th:href="@{detail(id=${dto.id})}"
                     ><img
-                      th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
+                      th:src="${dto.posterPath != null ? 'https://image.tmdb.org/t/p/w500/' + dto.posterPath : 'https://placehold.co/217x325?text=Movie'}"
                       alt=""
                       class="product__item__pic set-bg"
                   /></a>
@@ -330,7 +327,7 @@
                 <div class="product__item mb-2">
                   <a th:href="@{person/detail(id=${dto.id})}"
                     ><img
-                      th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.profilePath}"
+                      th:src="${dto.profilePath != null ? 'https://image.tmdb.org/t/p/w500/' + dto.profilePath : dto.job == 'Acting' ? 'https://placehold.co/217x325?text=Actor' : 'https://placehold.co/217x325?text=Director'}"
                       alt=""
                       class="product__item__pic set-bg"
                   /></a>
@@ -360,7 +357,7 @@
                 th:class="'page-item ' + ${(movies != null and movies.prev) or (people != null and people.prev) ? '' : 'disabled'}"
               >
                 <a
-                  class="page-link text-light bg-transparent"
+                  class="page-link"
                   th:href="@{
                       list(
                         movieList=${requestDto.movieList},
@@ -383,7 +380,7 @@
                 th:each="page : ${movies != null ? movies.pageList : people.pageList}"
               >
                 <a
-                  th:class="'page-link btn btn-outline-danger text-light ' + ${movies != null ? (movies.page == page ? 'border-light active' : 'bg-transparent') : (people.page == page ? 'bg-danger border-light active' : 'bg-transparent')}"
+                  th:class="'page-link ' + ${movies != null ? (movies.page == page ? 'active' : '') : (people.page == page ? 'active' : '')}"
                   th:href="@{
                       list(
                         movieList=${requestDto.movieList},
@@ -404,7 +401,7 @@
                 th:class="'page-item ' + ${(movies != null and movies.next) or (people != null and people.next) ? '' : 'disabled'}"
               >
                 <a
-                  class="page-link text-light bg-transparent"
+                  class="page-link"
                   th:href="@{
                       list(
                         movieList=${requestDto.movieList},

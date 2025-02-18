@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <th:block layout:fragment="css">
-    <link rel="stylesheet" th:href="@{/css/list.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/basic.css}" type="text/css" />
     <style>
       .spad {
         padding: 0;
@@ -44,19 +44,8 @@
         position: relative;
         padding-left: 18px;
       }
-      .quantity {
-        max-width: 200px; /* 전체 너비를 줄임 */
-        font-size: 0.8rem; /* 글꼴 크기 축소 */
-      }
-      .quantity .btn {
-        padding: 0.2rem 0.5rem; /* 버튼 크기 축소 */
-        font-size: 0.8rem; /* 버튼 아이콘 크기 축소 */
-      }
-      .quantity .form-control {
-        padding: 0.2rem; /* 입력 필드 높이 축소 */
-        font-size: 0.8rem; /* 입력 필드 글꼴 크기 축소 */
-      }
-      .btn-outline-dark {
+
+      .btn-outline-secondary {
         padding: 0.2rem 0.5rem; /* 버튼 크기 축소 */
         font-size: 0.8rem; /* 버튼 아이콘 크기 축소 */
       }
@@ -76,6 +65,7 @@
           </div>
           <div class="row mb-5">
             <ul class="list-group cart-item-list">
+              <div class="col-1 align-center"></div>
               <!-- <li class="list-group-item">
                 <div class="row">
                   <div class="col-1 align-center">

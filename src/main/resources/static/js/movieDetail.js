@@ -25,7 +25,7 @@ async function main() {
   // 개요 화면 출력
   let str = `<div class="section-title"><h5>개요</h5></div>`;
   if (movieData.overview != null) {
-    str += `<div class="anime__review__item overview">${movieData.overview}</div>`;
+    str += `<div class="anime__review__item text-light overview">${movieData.overview}</div>`;
   }
   document.querySelector(".overview").innerHTML = str;
 
@@ -63,7 +63,7 @@ document.querySelector("#btnradio1").addEventListener("click", () => {
 
   let str = `<div class="section-title"><h5>개요</h5></div>`;
   if (movieData.overview != null) {
-    str += `<div class="anime__review__item overview">${movieData.overview}</div>`;
+    str += `<div class="anime__review__item text-light overview">${movieData.overview}</div>`;
   }
 
   document.querySelector(".overview").innerHTML = str;

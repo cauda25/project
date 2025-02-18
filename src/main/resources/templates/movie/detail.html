@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <th:block layout:fragment="css">
-    <link rel="stylesheet" th:href="@{/css/list.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/basic.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/star-rating.css}" type="text/css" />
     <style>
       .anime__details__widget ul li span {
         width: auto;
@@ -16,36 +17,8 @@
         line-height: 30px;
         position: relative;
       }
-      .overview {
-        color: #ffffff;
-      }
       .anime__details__content {
         margin: 0;
-      }
-      .star-rating {
-        display: flex;
-        flex-direction: row-reverse;
-        justify-content: left;
-      }
-
-      .star-rating input {
-        display: none;
-      }
-
-      .star-rating label {
-        font-size: 2rem;
-        color: #ccc;
-        cursor: pointer;
-        transition: color 0.3s;
-      }
-
-      .star-rating input:checked ~ label {
-        color: #ffc700;
-      }
-
-      .star-rating label:hover,
-      .star-rating label:hover ~ label {
-        color: #ffda00;
       }
     </style>
   </th:block>
@@ -185,7 +158,9 @@
               autocomplete="off"
               checked
             />
-            <label class="btn btn-outline-primary" for="btnradio1"
+            <label
+              class="btn btn-outline-danger text-light rounded-start"
+              for="btnradio1"
               >주요 정보</label
             >
 
@@ -196,7 +171,7 @@
               id="btnradio2"
               autocomplete="off"
             />
-            <label class="btn btn-outline-primary" for="btnradio2"
+            <label class="btn btn-outline-danger text-light" for="btnradio2"
               >감독/출연</label
             >
 
@@ -207,7 +182,7 @@
               id="btnradio3"
               autocomplete="off"
             />
-            <label class="btn btn-outline-primary" for="btnradio3"
+            <label class="btn btn-outline-danger text-light" for="btnradio3"
               >평점/리뷰</label
             >
 
@@ -218,7 +193,11 @@
               id="btnradio4"
               autocomplete="off"
             />
-            <label class="btn btn-outline-primary" for="btnradio4">추천</label>
+            <label
+              class="btn btn-outline-danger text-light rounded-end"
+              for="btnradio4"
+              >추천</label
+            >
           </div>
         </div>
         <div class="movie_info">

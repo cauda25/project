@@ -13,15 +13,15 @@ function getCartItems() {
       console.log(data);
 
       cartTotal = 0;
-      let str = `<li class="list-group-item list-menu">`;
+      let str = `<li class="list-group-item list-menu bg-danger">`;
       str += `<div class="row"><div class="col-1 align-center">`;
       // str += `<div class="form-check">`;
       // str += `<input class="form-check-input" type="checkbox" value="" id="productSelectAll">`;
       // str += `</div>`;
       str += `</div>`;
-      str += `<div class="col-7 text-center fw-bold">상품정보</div>`;
-      str += `<div class="col-2 text-center fw-bold">수량</div>`;
-      str += `<div class="col-2 text-center fw-bold">주문금액</div>`;
+      str += `<div class="col-7 text-center fw-bold text-white">상품정보</div>`;
+      str += `<div class="col-2 text-center fw-bold text-white">수량</div>`;
+      str += `<div class="col-2 text-center fw-bold text-white">주문금액</div>`;
       str += `</div>`;
       // str += `<input type="hidden" class="quantity-count" name="" value="0">`;
       // str += `<input type="hidden" name="id" value="0">`;
@@ -41,27 +41,27 @@ function getCartItems() {
         str += `</div></div>`;
         str += `<div class="col-6">`;
         str += `<div class="row">`;
-        str += `<div class="col-4">`;
-        str += `<img src="/img/product${cartItem.productDto.image}" class="img-thumbnail item-pic">`;
+        str += `<div class="col-4"><a href="/store/detail?category=${cartItem.productDto.category}&id=${cartItem.productDto.id}">`;
+        str += `<img src="/img/product${cartItem.productDto.image}" class="img-thumbnail item-pic"></a>`;
         str += `</div>`;
         str += `<div class="col-6">`;
-        str += `<div class="row"><span class="fs-2 fw-bold">${cartItem.productDto.name}</span></div>`;
+        str += `<div class="row"><a href="/store/detail?category=${cartItem.productDto.category}&id=${cartItem.productDto.id}" class=""><span class="fs-2 fw-bold text-black">${cartItem.productDto.name}</span></a></div>`;
         str += `<div class="row"><span class="fw-semibold text-secondary">${cartItem.productDto.itemDetails}</span></div>`;
         str += `<div class="row"><span class="text-secondary">${cartItem.productDto.price}</span></div>`;
         str += `</div></div></div>`;
         str += `<div class="col-1 d-flex justify-content-end">`;
-        str += `<div><button type="button" class="btn btn-outline-dark delete-cart-item">X</button></div>`;
+        str += `<div><button type="button" class="btn btn-outline-secondary fw-bold delete-cart-item">X</button></div>`;
         str += `</div>`;
-        str += `<div class="col-2 text-center d-flex align-items-center justify-content-center"><div>`;
+        str += `<div class="col-2 text-center d-flex align-items-center justify-content-center"><div class="mt-4">`;
         str += `<div class="input-group col-4 quantity">`;
         str += `<button class="btn btn-outline-danger" type="button" id="quantity-minus-btn"><i class="fa-solid fa-minus"></i></button>`;
-        str += `<input type="text" class="form-control border-danger bg-transparent text-center quantity-count" value="${cartItem.quantity}" readonly>`;
+        str += `<input type="text" class="form-control border-danger bg-transparent text-center quantity-count fw-bold" value="${cartItem.quantity}" readonly>`;
         str += `<button class="btn btn-outline-danger" type="button" id="quantity-plus-btn"><i class="fa-solid fa-plus"></i></button>`;
         str += `</div>`;
         str += `<p class="text-center text-secondary">최대 10개</p>`;
         str += `</div></div>`;
         str += `<div class="col-2 text-center d-flex align-items-center justify-content-center">`;
-        str += `<p class="itemTotal" value=${
+        str += `<p class="itemTotal fs-4 fw-medium" value=${
           cartItem.price * cartItem.quantity
         }>${cartItem.price * cartItem.quantity}원</p>`;
         str += `</div></div>`;
@@ -80,9 +80,9 @@ function getCartItems() {
           }
         }
       });
-      str += `<li class="list-group-item cartTotal">`;
+      str += `<li class="list-group-item">`;
       str += `<div class="row">`;
-      str += `<div class="cartTotal">총 결제금액 ${cartTotal}원</div>`;
+      str += `<div class="cartTotal d-flex justify-content-end fs-4 fw-semibold">총 결제금액 ${cartTotal}원</div>`;
       str += `</div></li>`;
       document.querySelector(".cart-item-list").innerHTML = str;
       ischeckedItems();
@@ -208,7 +208,7 @@ document.querySelector(".btn-checkout").addEventListener("click", async () => {
   const isAuth = await checkAuth(); // checkAuth()가 완료될 때까지 기다림
   console.log("로그인 여부: ", isAuth);
 
-  if (isAuth) {
+  if (isAuth && checkedItems.length > 0) {
     // 인증된 사용자일 경우 수행할 동작
     fetch(`/rest/payment`, {
       method: "POST",

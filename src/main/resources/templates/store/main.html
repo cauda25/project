@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <th:block layout:fragment="css">
-    <link rel="stylesheet" th:href="@{/css/list.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/basic.css}" type="text/css" />
     <style>
       .spad {
         padding: 0;
@@ -26,7 +26,6 @@
         height: 100%;
       }
     </style>
-    <link rel="stylesheet" th:href="@{/css/nav-tabs.css}" type="text/css" />
   </th:block>
   <div layout:fragment="content">
     <div th:replace="~{/fragments/store-tab::store-tab}"></div>
@@ -38,15 +37,28 @@
               <a
                 th:href="@{/store/detail(category=${category}, id=${product.id})}"
               >
-                <div class="card">
-                  <img
-                    th:src="'/img/product' + ${product.image}"
-                    class="card-img-top product__item__pic set-bg"
-                  />
-                  <div class="card-body">
-                    <h5 class="card-title" th:text="${product.name}"></h5>
-                    <p class="card-text" th:text="${product.itemDetails}"></p>
-                    <h4 class="text-end" th:text="${product.price} + '원'"></h4>
+                <div class="card border-danger border-2 bg-transparent">
+                  <div
+                    class="d-flex justify-content-center align-items-center card-img p-3"
+                  >
+                    <img
+                      th:src="'/img/product' + ${product.image}"
+                      class="card-img-top product__item__pic set-bg"
+                    />
+                  </div>
+                  <div class="card-body pt-0 pb-3">
+                    <h5
+                      class="card-title text-light fw-bolder mb-1"
+                      th:text="${product.name}"
+                    ></h5>
+                    <p
+                      class="card-text text-secondary mb-2"
+                      th:text="${product.itemDetails}"
+                    ></p>
+                    <h4
+                      class="text-end text-light"
+                      th:text="${product.price} + '원'"
+                    ></h4>
                   </div>
                 </div>
               </a>

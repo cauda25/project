@@ -41,7 +41,15 @@
                     </li>
                     <li>
                       <a
-                        th:href="@{list(movieList=my,page=1,size=8,type=,keyword=,genre=,sort=popularity)}"
+                        th:href="@{/member/login}"
+                        sec:authorize="!isAuthenticated()"
+                        >추천</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        th:href="@{/movie/list?movieList=my&page=1&size=8&type=&keyword=&genre=&sort=popularity}"
+                        sec:authorize="isAuthenticated()"
                         >추천</a
                       >
                     </li>
