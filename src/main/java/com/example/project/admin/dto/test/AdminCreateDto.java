@@ -2,6 +2,8 @@ package com.example.project.admin.dto.test;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -26,4 +28,9 @@ public class AdminCreateDto {
     private List<String> actors;
     @NotBlank(message = "해당 영화의 감독을 등록해주세요.")
     private String directorName;
+    @NotNull(message = "포스터 이미지를 업로드해주세요.")
+    private MultipartFile posterFile;
+
+    private Double voteAverage;
+    private Long voteCount;
 }

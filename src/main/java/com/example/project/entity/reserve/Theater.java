@@ -27,7 +27,7 @@ import lombok.Setter;
 @Entity
 public class Theater {
     @SequenceGenerator(name = "theater_seq_gen", sequenceName = "theater_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "theater_seq_gen")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "theater_seq_gen")
     @Id
     private Long theaterId; // 상영관번호
 

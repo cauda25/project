@@ -18,7 +18,7 @@ movieForm.addEventListener("click", (e) => {
   if (!confirm("정보를 지우시겠습니까?")) return;
 
   // 서버에 DELETE 요청
-  fetch(`/admin/page/${theaterId}`, {
+  fetch(`/admin/page/movie/${theaterId}`, {
     method: "DELETE",
   })
     .then((response) => {

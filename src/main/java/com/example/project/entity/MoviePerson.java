@@ -2,8 +2,12 @@ package com.example.project.entity;
 
 import java.util.UUID;
 
+import com.example.project.admin.Entity.constant.StatusRole;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;

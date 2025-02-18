@@ -6,7 +6,7 @@
   <div layout:fragment="content">
     <div class="row">
       <div class="col-md-12 grid-margin stretch-card">
-        <form th:action="@{/admin/page/join}" method="post" th:object="${adminCreateDto}">
+        <form th:action="@{/admin/page/join}" method="post" th:object="${adminCreateDto}" enctype="multipart/form-data">
         <div class="card">
           <div class="card-body">
             <p class="card-title">
@@ -93,7 +93,7 @@
                             <div class="select-box">장르 선택</div>
                             <div class="checkbox-list" name="genreIds" >
                               <label th:each="genre : ${genres}" >
-                                <input type="checkbox" name="genreIds" th:value="${genre.name}" th:text="${genre.name}">
+                                <input type="checkbox" name="genreIds" th:value="${genre.id}" th:text="${genre.name}">
                                 
                                 <!-- <input type="hidden" name="genreIds" th:value="${genre.id}"> -->
                               </label>
@@ -104,7 +104,10 @@
                           <div th:if="${#fields.hasErrors('releaseDate')}" th:errors="*{releaseDate}"></div>
                           </td>
                          
-                        <td><input type="file" name="" id="" /></td>
+                        <td>
+                          <input type="file" name="posterFile" id="posterFile" accept="image/*" />
+                          <div th:if="${#fields.hasErrors('posterFile')}" th:errors="*{posterFile}"></div>
+                        </td>
                       </tr>
                     </tbody>
                   </table>

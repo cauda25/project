@@ -15,4 +15,13 @@ public class HomeController {
         return "redirect:/movie/main";
     }
 
+    @GetMapping("/access-denied")
+    public String getAcc() {
+    return "/except/denied";
+    }
+
+    @GetMapping("/error")
+    public String get404() {
+    return "/except/url404";
+    }
 }
