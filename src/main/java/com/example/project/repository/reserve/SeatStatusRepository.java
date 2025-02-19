@@ -11,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.project.entity.constant.SeatStatusEnum;
-import com.example.project.entity.reserve.Screening;
 import com.example.project.entity.reserve.SeatStatus;
 
 public interface SeatStatusRepository extends JpaRepository<SeatStatus, Long> {

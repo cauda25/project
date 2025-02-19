@@ -3,7 +3,6 @@ package com.example.project.repository;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +17,12 @@ import com.example.project.entity.constant.SeatStatusEnum;
 import com.example.project.entity.reserve.Screening;
 import com.example.project.entity.reserve.Seat;
 import com.example.project.entity.reserve.SeatStatus;
-import com.example.project.repository.reserve.ReserveRepository;
 import com.example.project.repository.reserve.ScreeningRepository;
 import com.example.project.repository.reserve.SeatRepository;
 import com.example.project.repository.reserve.SeatStatusRepository;
 
 @SpringBootTest
 public class ReserveRepositoryTest {
-
-    @Autowired
-    private ReserveRepository reserveRepository;
 
     @Autowired
     private ScreeningRepository screeningRepository;
