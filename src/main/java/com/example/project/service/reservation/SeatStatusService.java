@@ -1,7 +1,6 @@
 package com.example.project.service.reservation;
 
 import com.example.project.dto.reserve.SeatStatusDto;
-import com.example.project.entity.reserve.Auditorium;
 import com.example.project.entity.reserve.Seat;
 import com.example.project.entity.reserve.SeatStatus;
 

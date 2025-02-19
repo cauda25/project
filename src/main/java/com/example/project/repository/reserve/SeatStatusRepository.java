@@ -14,14 +14,13 @@ import com.example.project.entity.constant.SeatStatusEnum;
 import com.example.project.entity.reserve.SeatStatus;
 
 public interface SeatStatusRepository extends JpaRepository<SeatStatus, Long> {
-    @Query("SELECT ss FROM SeatStatus ss WHERE ss.screening.screeningId = :screeningId")
-    List<SeatStatus> findByScreeningId(@Param("screeningId") Long screeningId);
+
+    List<SeatStatus> findByScreening_ScreeningId(Long screeningId);
 
     @Query("SELECT COUNT(s) FROM SeatStatus s WHERE s.screening.screeningId = :screeningId AND s.seatStatusEnum = 'AVAILABLE'")
     int countAvailableSeats(@Param("screeningId") Long screeningId);
 
-    @Query("SELECT COUNT(s) FROM SeatStatus s WHERE s.screening.screeningId = :screeningId")
-    int countTotalSeats(@Param("screeningId") Long screeningId);
+    int countByScreening_ScreeningId(Long screeningId);
 
     @Query("SELECT ss FROM SeatStatus ss JOIN FETCH ss.seat s WHERE ss.screening.screeningId = :screeningId")
     List<SeatStatus> findSeatStatusesByScreeningId(@Param("screeningId") Long screeningId);
@@ -30,6 +29,6 @@ public interface SeatStatusRepository extends JpaRepository<SeatStatus, Long> {
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM SeatStatus s WHERE s.screening.screeningDate < :date")
-    int deleteSeatStatusByPastScreenings(@Param("date") LocalDate date);
+    int deleteByScreening_ScreeningDateBefore(LocalDate date);
+
 }

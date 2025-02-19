@@ -27,7 +27,6 @@ import com.example.project.entity.reserve.Theater;
 import com.example.project.repository.MemberRepository;
 import com.example.project.repository.reserve.ReserveRepository;
 import com.example.project.repository.reserve.ScreeningRepository;
-import com.example.project.repository.reserve.SeatRepository;
 import com.example.project.repository.reserve.SeatStatusRepository;
 import com.example.project.repository.reserve.TheaterRepository;
 
@@ -53,7 +52,7 @@ public class ReserveServiceImpl implements ReserveService {
     public List<TheaterDto> getTheatersByRegion(String region) {
 
         System.out.println("Received region: " + region);
-        List<Theater> theaters = theaterRepository.findByTheaterState(region);
+        List<Theater> theaters = theaterRepository.findByTheaterStateOrderByTheaterIdAsc(region);
         if (theaters.isEmpty()) {
             throw new IllegalArgumentException("No theaters found for the region: " + region);
         }
@@ -100,7 +99,7 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public List<SeatStatusDto> getSeatStatuses(Long screeningId) {
-        List<SeatStatus> seatStatuses = seatStatusRepository.findByScreeningId(screeningId);
+        List<SeatStatus> seatStatuses = seatStatusRepository.findByScreening_ScreeningId(screeningId);
         return seatStatuses.stream()
                 .map(seatStatus -> SeatStatusDto.builder()
                         .seatId(seatStatus.getSeat().getSeatId())
@@ -114,7 +113,7 @@ public class ReserveServiceImpl implements ReserveService {
     @Override
     public Map<String, Integer> getSeatCounts(Long screeningId) {
         int availableSeats = seatStatusRepository.countAvailableSeats(screeningId);
-        int totalSeats = seatStatusRepository.countTotalSeats(screeningId);
+        int totalSeats = seatStatusRepository.countByScreening_ScreeningId(screeningId);
 
         Map<String, Integer> seatCounts = new HashMap<>();
         seatCounts.put("availableSeats", availableSeats);

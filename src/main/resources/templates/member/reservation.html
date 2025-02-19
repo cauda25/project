@@ -49,12 +49,11 @@
             </p>
             <p style="color: #ddd; margin: 0">
               상영관:
-              <span th:text="${res.auditoriumName}"></span>
+              <span th:text="${res.theaterName + ' ' + res.auditoriumName}"></span>
             </p>
-            <p style="color: #ddd; margin: 0">좌석 번호:</p>
-            <ul class="list-unstyled">
-              <li th:each="seat : ${res.seats}" th:text="${seat.rowNum + seat.seatNum}"></li>
-            </ul>
+            <p style="color: #ddd; margin: 0">좌석 번호:
+              <span th:each="seat : ${res.seats}" th:text="${seat.rowNum + seat.seatNum + ' '}"></span>
+            </p>
             <p style="color: #ddd; margin: 0">
               결제 금액:
               <span th:if="${res.reserveStatus == 'COMPLETE'}" th:text="${res.totalPrice + '원'}"></span>

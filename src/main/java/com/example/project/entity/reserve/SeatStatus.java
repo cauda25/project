@@ -49,12 +49,4 @@ public class SeatStatus extends BaseEntity {
     @JoinColumn(name = "reserve_id")
     private Reserve reserve;
 
-    public Reserve getReserve() {
-        return reserve;
-    }
-
-    public void setReserve(Reserve reserve) {
-        this.reserve = reserve;
-    }
-
 }

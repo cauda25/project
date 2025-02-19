@@ -211,7 +211,7 @@ document
       return;
     }
 
-    document.getElementById("seat-container").innerHTML = "결제 진행 중";
+    document.getElementById("seatpage").innerHTML = "결제 진행 중";
     const priceDisplayElement = document.getElementById("price-display");
     const totalAmount = parseInt(
       priceDisplayElement.getAttribute("data-total-price"),
