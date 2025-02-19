@@ -20,6 +20,12 @@
       .anime__details__content {
         margin: 0;
       }
+      .anime__details__title {
+        margin-bottom: 0;
+      }
+      .anime__details__title h3 {
+        margin-bottom: 5px;
+      }
     </style>
   </th:block>
   <div layout:fragment="content">
@@ -48,6 +54,7 @@
               <div class="anime__details__text">
                 <div class="anime__details__title">
                   <h3 th:text="${movieDto.title}"></h3>
+                  <p th:text="${movieDto.tagline}">영화에 대한 상세 정보</p>
                 </div>
                 <div class="anime__details__rating">
                   <div class="rating">
@@ -56,10 +63,10 @@
                       th:each="i : ${#numbers.sequence(0, 4)}"
                       style="display: inline-block"
                     >
-                      <span href="#" th:if="${i < (movieDto.voteAverage / 2)}"
+                      <span th:if="${i < (movieDto.voteAverage / 2)}"
                         ><i class="fa-solid fa-star"></i
                       ></span>
-                      <span href="#" th:if="${i >= (movieDto.voteAverage / 2)}"
+                      <span th:if="${i >= (movieDto.voteAverage / 2)}"
                         ><i class="fa-regular fa-star"></i
                       ></span>
                     </div>
@@ -68,7 +75,7 @@
                     >1.029 Votes</span
                   >
                 </div>
-                <p th:text="${movieDto.tagline}">영화에 대한 상세 정보</p>
+
                 <div class="anime__details__widget">
                   <div class="row">
                     <div class="">
@@ -136,7 +143,7 @@
                   <button type="button" class="btn btn-danger follow-btn">
                     <i class="fa fa-heart-o"></i><span></span>
                   </button>
-                  <a href="#" class="watch-btn"
+                  <a th:href="@{/reservation}" class="watch-btn"
                     ><span>빠른 예매</span> <i class="fa fa-angle-right"></i
                   ></a>
                 </div>

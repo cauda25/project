@@ -21,6 +21,14 @@
   overflow: hidden;
   white-space: nowrap;
 }
+.product__item__text div {
+  color: #fff;
+}
+.product__item__text span {
+  width: 50px;
+  display: inline-block;
+  font-weight: bolder;
+}
 
 /* Dropdown */
 .dropdown-menu {
