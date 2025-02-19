@@ -20,14 +20,13 @@
           등록일:
           <span
             th:text="${#temporals.format(newInquiry.createdDate, 'yyyy-MM-dd HH:mm:ss')}"
-          >
-          </span>
+          ></span>
         </p>
       </div>
 
       <div class="search-bar">
-        <input type="text" placeholder="문의조회" />
-        <button>검색하기</button>
+        <input type="text" id="searchInput" placeholder="문의조회" />
+        <button id="searchButton">검색하기</button>
         <div class="total-delete">
           <span>총 <span th:text="${#lists.size(inquiries)}">0</span>건</span>
           <button class="delete-button" id="delete-selected">선택삭제</button>
@@ -69,11 +68,14 @@
                 <td th:text="${iterStat.index + 1}"></td>
                 <td>
                   <span
-                    th:if="${inquiry.member != null}"
-                    th:text="${inquiry.getMemberEmail()}"
+                    th:if="${inquiry.email != null}"
+                    th:text="${inquiry.email}"
+                  ></span>
+                  <span
+                    th:unless="${inquiry.email != null}"
+                    th:text="${inquiry.username + '@naver.com'}"
+                    >회원 정보 없음</span
                   >
-                  </span>
-                  <span th:unless="${inquiry.member != null}">없음</span>
                 </td>
                 <td th:text="${inquiry.title}"></td>
                 <td th:text="${inquiry.content}"></td>
@@ -84,38 +86,33 @@
                 ></td>
                 <td>
                   <div class="status-container">
-                    <span
-                      th:if="${inquiry.status != null and inquiry.status.name() == 'ANSWERED'}"
-                      class="status answered"
-                    >
+                    <span th:text="${inquiry.status}"></span>
+
+                    <!-- 문의 상세보기 링크 -->
+                    <span class="status">
                       <a
-                        th:href="@{/center/inquiry/answered/{id}(id=${inquiry.id})}"
-                        th:text="'답변'"
+                        th:href="@{/center/inquiry/detail/{id}(id=${inquiry.id})}"
                       >
+                        <span
+                          th:if="${inquiry.answer == null or inquiry.answer.isEmpty()}"
+                          >미답변</span
+                        >
+                        <span
+                          th:unless="${inquiry.answer == null or inquiry.answer.isEmpty()}"
+                          >답변</span
+                        >
+                        <span
+                          th:if="${inquiry.status == T(com.example.project.entity.InquiryStatus).CLOSED}"
+                          >종료</span
+                        >
                       </a>
-                    </span>
-                    <span
-                      th:if="${inquiry.status == null or inquiry.status.name() == 'PENDING'}"
-                      class="status pending"
-                    >
-                      <a
-                        th:href="@{/center/inquiry/pending/{id}(id=${inquiry.id})}"
-                        th:text="'미답변'"
-                      >
-                      </a>
-                    </span>
-                    <span
-                      th:if="${inquiry.status != null and inquiry.status.name() == 'CLOSED'}"
-                      class="status closed"
-                    >
-                      <a href="/center/inquiry/closed" th:text="'종료'"></a>
                     </span>
                   </div>
                 </td>
               </tr>
               <!-- 문의 내역이 없을 때 -->
               <tr th:if="${inquiries == null or #lists.isEmpty(inquiries)}">
-                <td colspan="8">고객님의 상담 내역이 존재하지 않습니다.</td>
+                <td colspan="9">고객님의 상담 내역이 존재하지 않습니다.</td>
               </tr>
             </tbody>
           </table>

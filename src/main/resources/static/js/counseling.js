@@ -88,4 +88,34 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+  document
+    .getElementById("searchButton")
+    .addEventListener("click", function () {
+      var searchTerm = document
+        .getElementById("searchInput")
+        .value.toLowerCase();
+      var rows = document.querySelectorAll("#inquiryTable tr");
+
+      rows.forEach(function (row) {
+        var title = row
+          .querySelector("td:nth-child(3)")
+          .textContent.toLowerCase();
+        var content = row
+          .querySelector("td:nth-child(4)")
+          .textContent.toLowerCase();
+        var email = row
+          .querySelector("td:nth-child(2)")
+          .textContent.toLowerCase();
+
+        if (
+          title.includes(searchTerm) ||
+          content.includes(searchTerm) ||
+          email.includes(searchTerm)
+        ) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+    });
 });

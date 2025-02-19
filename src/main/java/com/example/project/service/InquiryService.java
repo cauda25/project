@@ -43,7 +43,9 @@ public class InquiryService {
 
     // 문의 저장
     public void saveInquiry(Inquiry inquiry) {
+        System.out.println("저장 전 상태: " + inquiry.getStatus()); // 로그 추가
         inquiryRepository.save(inquiry);
+        System.out.println("저장할 문의 ID: " + inquiry.getId() + ", 상태: " + inquiry.getStatus());
     }
 
     // ID로 문의 삭제
@@ -79,9 +81,14 @@ public class InquiryService {
         return inquiryPage.getContent();
     }
 
-    // 모든 문의를 Pageable 방식으로 가져오는 메서드 수정
     public Page<Inquiry> getAllInquiries(Pageable pageable) {
-        return inquiryRepository.findAll(pageable); // PageRequest를 사용하여 페이징된 데이터를 반환
+        Page<Inquiry> inquiries = inquiryRepository.findAll(pageable);
+
+        // 조회된 문의 상태 출력 (디버깅용)
+        inquiries.forEach(
+                inquiry -> System.out.println("조회된 문의 ID: " + inquiry.getId() + ", 상태: " + inquiry.getStatus()));
+
+        return inquiries;
     }
 
     // 문의 상태 업데이트
@@ -196,12 +203,10 @@ public class InquiryService {
     }
 
     // 로그인한 사용자의 문의 내역 조회 (페이징 포함)
-    public Page<Inquiry> getInquiriesByUser(String memberId, int page) {
-        Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 ID(" + memberId + ")를 가진 회원을 찾을 수 없습니다."));
+    public Page<Inquiry> getInquiriesByUsername(String username, int page) {
 
         Pageable pageable = PageRequest.of(page - 1, 10);
-        Page<Inquiry> inquiries = inquiryRepository.findByMember(member, pageable);
+        Page<Inquiry> inquiries = inquiryRepository.findByUsername(username, pageable);
 
         inquiries.forEach(inquiry -> {
             if (inquiry.getMember() != null) {
@@ -211,7 +216,7 @@ public class InquiryService {
             }
         });
 
-        return inquiries;
+        return inquiryRepository.findByUsername(username, pageable);
     }
 
     // 기존의 memberId만 받는 메서드 (페이징 없이 사용 가능)
