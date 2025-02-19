@@ -34,12 +34,15 @@ import com.example.project.repository.movie.MovieGenreRepository;
 import com.example.project.repository.movie.MoviePersonRepository;
 import com.example.project.repository.movie.MovieRepository;
 import com.example.project.repository.movie.PersonRepository;
+import com.example.project.repository.reserve.TheaterRepository;
 import com.example.project.service.MovieService;
 import com.querydsl.core.types.Predicate;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest
+@Log4j2
 public class AdminRepositoryTest {
     @Autowired
     private AdminRepository adminRepository;
@@ -70,6 +73,8 @@ public class AdminRepositoryTest {
     private MemberRepository memberRepository;
     @Autowired
     private InquiryRepository inquiryRepository;
+    @Autowired
+    private TheaterRepository theaterRepository;
 
     @Test
     public void insertAdmin() {
@@ -342,16 +347,28 @@ public class AdminRepositoryTest {
 
     }
 
+    @Test
+    public void ss() {
+        List<MovieState> state = movieStateRepository.findAll();
+        System.out.println(state);
+    }
+
+    @Test
+    public void one() {
+        MovieState state = movieStateRepository.findById(2L).get();
+        System.out.println(state);
+    }
+
     @Commit
     @Transactional
     @Test
     public void insetStateTest() {
-        MovieState state = movieStateRepository.findById(9L).get();
+        MovieState state = movieStateRepository.findById(3L).get();
 
         Theater movieAdd = Theater.builder()
                 .theaterName("test test test")
-                .theaterAdd("서울특별시")
-                .theaterState("서울특별시")
+                .theaterState("강원도")
+                .theaterAdd("강원도")
                 .movieState(state)
                 .build();
 

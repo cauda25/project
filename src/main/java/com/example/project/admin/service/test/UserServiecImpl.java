@@ -194,11 +194,12 @@ public class UserServiecImpl implements UserService {
     }
 
     // 영화관 리스트 출력
-    @Transactional
     @Override
+    @Transactional
     public Long addMovie(TheaterDto aDto) {
-        MovieState movieState = movieStateRepository.findById(aDto.getSno()).get();
 
+        MovieState movieState = movieStateRepository.findById(aDto.getSno()).get();
+        log.info("번호 확인", movieState);
         Theater theater = Theater.builder()
                 .theaterName(aDto.getTheaterName())
                 .theaterAdd(aDto.getTheaterAdd())
@@ -206,6 +207,7 @@ public class UserServiecImpl implements UserService {
                 .movieState(movieState)
                 .build();
 
+        log.info("등록 확인", theater);
         return movieAddRepository.save(theater).getTheaterId();
     }
 
@@ -283,8 +285,10 @@ public class UserServiecImpl implements UserService {
             MoviePerson movieActor = MoviePerson.builder()
                     .movie(movie)
                     .person(actorPerson)
+                    .role("Actor")
                     .build();
             moviePersonRepository.save(movieActor);
+            moviePersonRepository.flush();
             log.info("Saved MovieActor: {}" + movieActor);
         }
 
@@ -297,8 +301,10 @@ public class UserServiecImpl implements UserService {
         MoviePerson movieDirector = MoviePerson.builder()
                 .movie(movie)
                 .person(directorPerson)
+                .role("Director")
                 .build();
         moviePersonRepository.save(movieDirector);
+        moviePersonRepository.flush();
         log.info("Saved MovieDirector: {}" + movieDirector);
     }
 

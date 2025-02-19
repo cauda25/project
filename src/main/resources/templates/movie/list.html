@@ -22,12 +22,7 @@
             <div class="row">
               <!-- 장르 -->
               <div class="col-2 btn-group">
-                <button
-                  type="button"
-                  class="btn text-white btn-outline-danger dropdown-toggle"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
+                <button type="button" class="btn text-white btn-outline-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                   장르
                 </button>
                 <ul class="dropdown-menu dropdown-genres">
@@ -51,12 +46,7 @@
             </div>
           </div>
           <div class="col-6">
-            <form
-              class="row justify-content-end align-items-center"
-              role="search"
-              th:action="@{list}"
-              id="searchForm"
-            >
+            <form class="row justify-content-end align-items-center" role="search" th:action="@{list}" id="searchForm">
               <!-- <select
                 name="type"
                 id="type"
@@ -87,18 +77,10 @@
 
               <input type="hidden" name="page" th:value="1" />
               <input type="hidden" name="size" th:value="${requestDto.size}" />
-              <input
-                type="hidden"
-                name="genre"
-                th:value="${requestDto.genre}"
-              />
+              <input type="hidden" name="genre" th:value="${requestDto.genre}" />
               <input type="hidden" name="sort" th:value="${requestDto.sort}" />
               <input type="hidden" name="movieList" th:value="popular" />
-              <input
-                type="hidden"
-                name="type"
-                th:value="${requestDto.type != '' ? requestDto.type:'mp'}"
-              />
+              <input type="hidden" name="type" th:value="${requestDto.type != '' ? requestDto.type:'mp'}" />
 
               <div class="col-2 btn-group type-group">
                 <button
@@ -111,28 +93,13 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-types">
                   <li>
-                    <a
-                      class="dropdown-item dropdown-item-type text-white"
-                      data-value="mp"
-                    >
-                      전체
-                    </a>
+                    <a class="dropdown-item dropdown-item-type text-white" data-value="mp"> 전체 </a>
                   </li>
                   <li>
-                    <a
-                      class="dropdown-item dropdown-item-type text-white"
-                      data-value="m"
-                    >
-                      영화
-                    </a>
+                    <a class="dropdown-item dropdown-item-type text-white" data-value="m"> 영화 </a>
                   </li>
                   <li>
-                    <a
-                      class="dropdown-item dropdown-item-type text-white"
-                      data-value="p"
-                    >
-                      인물
-                    </a>
+                    <a class="dropdown-item dropdown-item-type text-white" data-value="p"> 인물 </a>
                   </li>
                 </ul>
               </div>
@@ -144,10 +111,7 @@
                 name="keyword"
                 th:value="${keyword}"
               />
-              <button
-                class="col-1 btn btn-outline-danger border-0 search-btn"
-                type="submit"
-              >
+              <button class="col-1 btn btn-outline-danger border-0 search-btn" type="submit">
                 <span class="icon_search"></span>
               </button>
             </form>
@@ -158,10 +122,7 @@
         <div class="row mb-5">
           <div class="trending__product">
             <!-- 영화 리스트 -->
-            <div
-              class="row trending__product-row mt-4"
-              th:if="${requestDto.type != 'p' and requestDto.movieList != 'my'}"
-            >
+            <div class="row trending__product-row mt-4" th:if="${requestDto.type != 'p' and requestDto.movieList != 'my'}">
               <div class="row">
                 <div class="col-lg-8 col-md-8 col-sm-8">
                   <div class="section-title">
@@ -185,18 +146,20 @@
                 th:each="dto, iterStat : ${movies != null ? movies.dtoList : null}"
               >
                 <div class="product__item mb-2">
-                  <a th:href="@{detail(id=${dto.id})}"
-                    ><img
-                      th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
+                  <a th:href="@{detail(id=${dto.id})}">
+                    <!-- <img th:src="'https://image.tmdb.org/t/p/w500' + ${dto.posterPath}" alt="" class="product__item__pic set-bg" />
+                    <img th:src="${dto.posterPath}" alt="" class="product__item__pic set-bg" /> -->
+
+                    <img
+                      th:src="${#strings.startsWith(dto.posterPath, '/upload')  ?  dto.posterPath : 'https://image.tmdb.org/t/p/w500/' + dto.posterPath }"
                       alt=""
                       class="product__item__pic set-bg"
-                  /></a>
+                    />
+                  </a>
                 </div>
                 <div class="product__item__text mx-4">
                   <h5>
-                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}"
-                      >타이틀</a
-                    >
+                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}">타이틀</a>
                   </h5>
                   <ul>
                     <li>평점</li>
@@ -216,10 +179,7 @@
                 찜목록에 영화를 추가해주세요
               </p>
             </div> -->
-            <div
-              class="row trending__product-row mt-4"
-              th:if="${requestDto.movieList == 'my' and recommendMovies.size() != 0}"
-            >
+            <div class="row trending__product-row mt-4" th:if="${requestDto.movieList == 'my' and recommendMovies.size() != 0}">
               <div class="row">
                 <div class="col-lg-8 col-md-8 col-sm-8">
                   <div class="section-title">
@@ -234,17 +194,12 @@
               >
                 <div class="product__item mb-2">
                   <a th:href="@{detail(id=${dto.id})}"
-                    ><img
-                      th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
-                      alt=""
-                      class="product__item__pic set-bg"
+                    ><img th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}" alt="" class="product__item__pic set-bg"
                   /></a>
                 </div>
                 <div class="product__item__text mx-4">
                   <h5>
-                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}"
-                      >타이틀</a
-                    >
+                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}">타이틀</a>
                   </h5>
                   <ul>
                     <li>평점</li>
@@ -258,10 +213,7 @@
               </div>
               <div class="mt-4"></div>
             </div>
-            <div
-              class="row trending__product-row"
-              th:if="${requestDto.movieList == 'my' and recommendMoviesByDirector.size() != 0}"
-            >
+            <div class="row trending__product-row" th:if="${requestDto.movieList == 'my' and recommendMoviesByDirector.size() != 0}">
               <div class="row">
                 <div class="col-lg-8 col-md-8 col-sm-8">
                   <div class="section-title">
@@ -276,17 +228,12 @@
               >
                 <div class="product__item mb-2">
                   <a th:href="@{detail(id=${dto.id})}"
-                    ><img
-                      th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}"
-                      alt=""
-                      class="product__item__pic set-bg"
+                    ><img th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.posterPath}" alt="" class="product__item__pic set-bg"
                   /></a>
                 </div>
                 <div class="product__item__text mx-4">
                   <h5>
-                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}"
-                      >타이틀</a
-                    >
+                    <a th:href="@{detail(id=${dto.id})}" th:text="${dto.title}">타이틀</a>
                   </h5>
                   <ul>
                     <li>평점</li>
@@ -301,10 +248,7 @@
               <div class="mt-4"></div>
             </div>
             <!-- 인물 리스트 -->
-            <div
-              class="row trending__people-row mt-4"
-              th:if="${requestDto.type != 'm' and requestDto.type != ''}"
-            >
+            <div class="row trending__people-row mt-4" th:if="${requestDto.type != 'm' and requestDto.type != ''}">
               <div class="row">
                 <div class="col-lg-8 col-md-8 col-sm-8">
                   <div class="section-title">
@@ -329,18 +273,12 @@
               >
                 <div class="product__item mb-2">
                   <a th:href="@{person/detail(id=${dto.id})}"
-                    ><img
-                      th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.profilePath}"
-                      alt=""
-                      class="product__item__pic set-bg"
+                    ><img th:src="'https://image.tmdb.org/t/p/w500/' + ${dto.profilePath}" alt="" class="product__item__pic set-bg"
                   /></a>
                 </div>
                 <div class="product__item__text mx-4">
                   <h5>
-                    <a
-                      th:href="@{person/detail(id=${dto.id})}"
-                      th:text="${dto.name}"
-                    ></a>
+                    <a th:href="@{person/detail(id=${dto.id})}" th:text="${dto.name}"></a>
                   </h5>
                   <ul>
                     [[${dto.job}]]
@@ -350,15 +288,10 @@
             </div>
           </div>
           <!-- 페이지 -->
-          <nav
-            aria-label="..."
-            th:if="${requestDto.type != 'mp' and requestDto.movieList != 'my'}"
-          >
+          <nav aria-label="..." th:if="${requestDto.type != 'mp' and requestDto.movieList != 'my'}">
             <ul class="pagination justify-content-center">
               <!-- Previous button -->
-              <li
-                th:class="'page-item ' + ${(movies != null and movies.prev) or (people != null and people.prev) ? '' : 'disabled'}"
-              >
+              <li th:class="'page-item ' + ${(movies != null and movies.prev) or (people != null and people.prev) ? '' : 'disabled'}">
                 <a
                   class="page-link text-light bg-transparent"
                   th:href="@{
@@ -377,11 +310,7 @@
               </li>
 
               <!-- Page list -->
-              <li
-                th:class="page-item"
-                aria-current="page"
-                th:each="page : ${movies != null ? movies.pageList : people.pageList}"
-              >
+              <li th:class="page-item" aria-current="page" th:each="page : ${movies != null ? movies.pageList : people.pageList}">
                 <a
                   th:class="'page-link btn btn-outline-danger text-light ' + ${movies != null ? (movies.page == page ? 'border-light active' : 'bg-transparent') : (people.page == page ? 'bg-danger border-light active' : 'bg-transparent')}"
                   th:href="@{
@@ -400,9 +329,7 @@
               </li>
 
               <!-- Next button -->
-              <li
-                th:class="'page-item ' + ${(movies != null and movies.next) or (people != null and people.next) ? '' : 'disabled'}"
-              >
+              <li th:class="'page-item ' + ${(movies != null and movies.next) or (people != null and people.next) ? '' : 'disabled'}">
                 <a
                   class="page-link text-light bg-transparent"
                   th:href="@{
@@ -432,11 +359,7 @@
       <input type="hidden" name="keyword" th:value="${requestDto.keyword}" />
       <input type="hidden" name="sort" th:value="${requestDto.sort}" />
       <input type="hidden" name="genre" th:value="${requestDto.genre}" />
-      <input
-        type="hidden"
-        name="movieList"
-        th:value="${requestDto.movieList}"
-      />
+      <input type="hidden" name="movieList" th:value="${requestDto.movieList}" />
     </form>
   </div>
   <th:block layout:fragment="js">
@@ -446,8 +369,7 @@
     <script>
       if ("[[${requestDto.keyword}]]" != "") {
         // 검색값이 있을 경우
-        document.querySelector(".header-title-text").innerHTML =
-          "검색: [[${requestDto.keyword}]]";
+        document.querySelector(".header-title-text").innerHTML = "검색: [[${requestDto.keyword}]]";
       } else if ("[[${requestDto.genre}]]" != "") {
         // 장르값이 있을 경우
         genres.forEach((genre) => {
@@ -459,16 +381,13 @@
         // movieList 값에 따라
         switch ("[[${requestDto.movieList}]]") {
           case "nowPlaying":
-            document.querySelector(".header-title-text").innerHTML =
-              "현재 상영중";
+            document.querySelector(".header-title-text").innerHTML = "현재 상영중";
             break;
           case "upcoming":
-            document.querySelector(".header-title-text").innerHTML =
-              "상영 예정작";
+            document.querySelector(".header-title-text").innerHTML = "상영 예정작";
             break;
           case "popular":
-            document.querySelector(".header-title-text").innerHTML =
-              "전체 영화 목록";
+            document.querySelector(".header-title-text").innerHTML = "전체 영화 목록";
             break;
           default:
             break;

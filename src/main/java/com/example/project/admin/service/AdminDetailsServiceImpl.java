@@ -16,6 +16,10 @@ import com.example.project.admin.Entity.Admin;
 import com.example.project.admin.dto.test.AdminDto;
 import com.example.project.admin.dto.test.AuthAdminDto;
 import com.example.project.admin.repository.AdminRepository;
+import com.example.project.dto.AuthMemberDto;
+import com.example.project.dto.MemberDto;
+import com.example.project.entity.Member;
+import com.example.project.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -27,11 +31,25 @@ import lombok.extern.log4j.Log4j2;
 public class AdminDetailsServiceImpl implements UserDetailsService {
 
     private final AdminRepository adminRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Service username : {}", username);
 
+        Optional<Member> MemberResult = memberRepository.findByMemberId(username);
+        if (MemberResult.isPresent()) {
+            Member member = MemberResult.get();
+            log.info("member user authenticated: {}", member);
+
+            return new AuthAdminDto(
+                    AdminDto.builder()
+                            .userId(member.getMemberId())
+                            .password(member.getPassword())
+                            .role(member.getRole())
+                            .build());
+
+        }
         Optional<Admin> result = adminRepository.findByUserId(username);
 
         // 정보 없을 시 Exception 던지기

@@ -32,12 +32,12 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
+                      <tr th>
                         <td><select class="form-select" name="sno">
                           <option value="" selected>----------</option>
                           <option th:each="state : ${states}" th:value="${state.sno}" th:text="${state.state}"></option>
                         </select></td>
-                        <!-- <p th:if="${#fields.hasErrors('sno')}" th:errors="*{state}"></p> -->
+                        <!-- <p th:if="${#fields.hasErrors('sno')}" th:errors="*{sno}"></p> -->
                         <td><input type="text" name="theaterState" /></td>
                         <!-- <p th:if="${#fields.hasErrors('theaterState')}" th:errors="*{theaterState}"></p> -->
                         <td><input type="text" name="theaterName" /></td>
