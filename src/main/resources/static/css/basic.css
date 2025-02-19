@@ -164,6 +164,7 @@
 .nav-tabs .nav-link {
   margin-bottom: -1px;
   border: 1px solid transparent;
+  background-color: transparent;
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
 }
@@ -182,9 +183,7 @@
 
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
-  color: #1f1f1f;
-  background-color: #ffffff;
-  border-color: #dc3545 #dc3545 #ffffff;
+  background-color: transparent !important;
 }
 
 .nav-tabs .dropdown-menu {

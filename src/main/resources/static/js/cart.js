@@ -14,7 +14,7 @@ function getCartItems() {
       console.log("장바구니 데이터: ", data);
 
       cartTotal = 0;
-      let str = `<li class="list-group-item list-menu bg-danger">`;
+      let str = `<li class="list-group-item list-menu bg-transparent">`;
       str += `<div class="row"><div class="col-1 align-center">`;
       str += `</div>`;
       str += `<div class="col-7 text-center fw-bold text-white">상품정보</div>`;

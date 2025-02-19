@@ -29,13 +29,13 @@ public class StoreController {
         log.info("main 폼 요청");
         List<ProductDto> productDtos = new ArrayList<>();
         switch (category) {
-            case "combo":
+            case "COMBO":
                 productDtos = productService.getProductDtosByCategory(ProductCategory.COMBO);
                 break;
-            case "popcorn":
+            case "POPCORN":
                 productDtos = productService.getProductDtosByCategory(ProductCategory.POPCORN);
                 break;
-            case "drink":
+            case "DRINK":
                 productDtos = productService.getProductDtosByCategory(ProductCategory.DRINK);
                 break;
             default:

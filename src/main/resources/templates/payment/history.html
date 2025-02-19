@@ -2,7 +2,12 @@
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <th:block layout:fragment="css">
     <link rel="stylesheet" th:href="@{/css/basic.css}" type="text/css" />
-    <style></style>
+    <style>
+      .list-menu {
+        border-top: solid 2px #dc3545 !important;
+        border-bottom: solid 2px #dc3545 !important;
+      }
+    </style>
   </th:block>
   <div layout:fragment="content">
     <section class="product spad mt-4">
@@ -26,7 +31,7 @@
                 </div>
               </li> -->
               <ul th:each="orderDto : ${orderDtos}">
-                <li class="list-group-item bg-danger">
+                <li class="list-group-item list-menu bg-transparent">
                   <div class="row">
                     <!-- <div class="col-1 fw-bold">[[${orderDto.id}]]</div> -->
                     <div class="col-2 fw-bold text-light">
