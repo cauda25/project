@@ -1,62 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <th:block layout:fragment="css">
-    <link rel="stylesheet" th:href="@{/css/list.css}" type="text/css" />
-    <style>
-      .spad {
-        padding: 0;
-      }
-      .sub-head {
-        margin-bottom: 10px;
-        margin-left: 20px;
-      }
-      .sub-head h3 {
-        margin-right: 10px;
-      }
-      .form-select {
-        width: 100px;
-      }
-      #searchForm div {
-        width: 75%;
-        justify-self: center;
-      }
-      .nav-tabs {
-        justify-self: center;
-      }
-      .item-pic {
-        object-fit: cover;
-        width: 150px;
-        height: 100%;
-      }
-      .product-detail h3 {
-        list-style: none;
-        /* font-size: 15px; */
-        color: #ffffff;
-        line-height: 30px;
-        position: relative;
-        padding-left: 18px;
-      }
-      .product-detail ul li {
-        list-style: none;
-        /* font-size: 15px; */
-        color: #ffffff;
-        line-height: 30px;
-        position: relative;
-        padding-left: 18px;
-      }
-      .quantity {
-        max-width: 200px; /* 전체 너비를 줄임 */
-        font-size: 0.8rem; /* 글꼴 크기 축소 */
-      }
-      .quantity .btn {
-        padding: 0.2rem 0.5rem; /* 버튼 크기 축소 */
-        font-size: 0.8rem; /* 버튼 아이콘 크기 축소 */
-      }
-      .quantity .form-control {
-        padding: 0.2rem; /* 입력 필드 높이 축소 */
-        font-size: 0.8rem; /* 입력 필드 글꼴 크기 축소 */
-      }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/basic.css}" type="text/css" />
+    <style></style>
   </th:block>
   <div layout:fragment="content">
     <section class="product spad mt-4">
@@ -80,21 +26,25 @@
                 </div>
               </li> -->
               <ul th:each="orderDto : ${orderDtos}">
-                <li class="list-group-item">
+                <li class="list-group-item bg-danger">
                   <div class="row">
                     <!-- <div class="col-1 fw-bold">[[${orderDto.id}]]</div> -->
-                    <div class="col-2 fw-bold">
+                    <div class="col-2 fw-bold text-light">
                       [[${#temporals.format(orderDto.updateDate,'yyyy-MM-dd
                       HH:mm')}]]
                     </div>
                     <div class="col-1 fw-bold"></div>
-                    <div class="col-5 text-center fw-bold">상품정보</div>
-                    <div class="col-2 text-center fw-bold">수량</div>
-                    <div class="col-2 text-center fw-bold">주문금액</div>
+                    <div class="col-5 text-center fw-bold text-light">
+                      상품정보
+                    </div>
+                    <div class="col-2 text-center fw-bold text-light">수량</div>
+                    <div class="col-2 text-center fw-bold text-light">
+                      주문금액
+                    </div>
                   </div>
                 </li>
                 <li
-                  class="list-group-item"
+                  class="list-group-item bg-transparent"
                   th:each="orderItemDtos : ${orderDto.orderItemDtos}"
                 >
                   <div class="row justify-content-center">
@@ -120,18 +70,18 @@
                               <a
                                 th:href="@{/store/detail(category=${orderItemDtos.productDto.category}, id=${orderItemDtos.productDto.id})}"
                               >
-                                <span class="fs-2 fw-bold text-black"
+                                <span class="fs-2 fw-bold text-light"
                                   >[[${orderItemDtos.productDto.name}]]</span
                                 ></a
                               >
                             </div>
                             <div class="row">
-                              <span class="fw-semibold text-secondary">
+                              <span class="fw-semibold text-white-50">
                                 [[${orderItemDtos.productDto.itemDetails}]]
                               </span>
                             </div>
                             <div class="row">
-                              <span class="text-secondary">
+                              <span class="text-white-50">
                                 [[${orderItemDtos.productDto.price}]]원
                               </span>
                             </div>
@@ -142,14 +92,14 @@
                     <div
                       class="col-2 text-center d-flex align-items-center justify-content-center"
                     >
-                      <p class="fs-5 fw-bolder">
+                      <p class="fs-5 fw-bolder text-light">
                         [[${orderItemDtos.quantity}]]개
                       </p>
                     </div>
                     <div
                       class="col-2 text-center d-flex align-items-center justify-content-center"
                     >
-                      <p class="fs-5 fw-bolder">
+                      <p class="fs-5 fw-bolder text-light">
                         [[${orderItemDtos.Price * orderItemDtos.quantity}]]원
                       </p>
                     </div>

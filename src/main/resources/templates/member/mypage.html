@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
+  <th:block layout:fragment="css">
+    <style>
+      .movie-title a span {
+      }
+    </style>
+  </th:block>
   <div layout:fragment="content">
     <section class="user-info spad">
       <div
@@ -95,7 +101,6 @@
             th:each="movie : ${favorites}"
             style="
               display: inline-block;
-              width: 120px;
               margin-right: 10px;
               text-align: center;
             "
@@ -106,19 +111,26 @@
                   th:src="'https://image.tmdb.org/t/p/w500/' + ${movie.posterPath}"
                   alt="Movie Poster"
                   style="
-                    width: 100px;
-                    height: 150px;
                     object-fit: cover;
                     border-radius: 5px;
                     margin-bottom: 5px;
                   "
               /></a>
             </div>
-            <div class="">
+            <div class="movie-title">
               <a th:href="@{/movie/detail(id=${movie.id})}">
                 <span
                   th:text="${movie.title}"
-                  style="color: #fff; font-size: 14px"
+                  style="
+                    color: #fff;
+                    font-size: 14px;
+                    font-weight: 700;
+                    line-height: 26px;
+                    display: block;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                  "
                 ></span
               ></a>
             </div>
@@ -176,7 +188,7 @@
               text-align: center;
             "
           >
-            주문내역
+            구매내역
           </a>
           <form th:action="@{/member/logout}" method="post" style="margin: 0">
             <button

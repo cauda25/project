@@ -129,7 +129,7 @@
   </div>
   <th:block layout:fragment="js">
     <script>
-      var price = "[[${dto.price}]]";
+      let price = "[[${dto.price}]]";
       const productId = "[[${dto.id}]]";
     </script>
     <script th:src="@{/js/checkAuth.js}"></script>

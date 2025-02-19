@@ -202,6 +202,7 @@
 
 .form-check-input {
   border-color: #dc3545;
+  background-color: transparent;
 }
 
 .form-check-input:checked {
