@@ -6,11 +6,15 @@
         <div class="col-lg-2">
           <div class="header__logo">
             <a th:href="@{/movie/main}"
-              ><h3 class="color_white">씨네플레닛</h3></a
+              >
+              <!-- <h3 class="color_white fw-bold">CINEPLANET</h3> -->
+              <h3 class="color_white">씨네플레닛</h3>
+              </a
             >
           </div>
         </div>
         <div class="col-lg-8">
+        <!-- <div class="col-lg-8 d-flex align-items-center justify-content-center"> -->
           <div class="header__nav">
             <nav class="header__menu mobile-menu">
               <ul>
@@ -63,7 +67,7 @@
                     <li><a href="">상영스케줄</a></li>
                   </ul>
                 </li>
-                <li>
+                <li class="select_item">
                   <a th:href="@{/store/main(category=COMBO)}">스토어</a>
                   <ul class="dropdown">
                     <li>
