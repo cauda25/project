@@ -49,7 +49,7 @@ public class Inquiry {
     @Column(name = "phone")
     private String phone;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false)
     private String content;
 
     @Column(length = 500)
@@ -65,7 +65,7 @@ public class Inquiry {
     @Column(name = "CREATED_DATE", updatable = false, nullable = false)
     private LocalDateTime createdDate = LocalDateTime.now();
 
-    @Column(name = "inquiry_type", nullable = false)
+    @Column(name = "inquiry_type")
     private String inquiryType;
 
     @Column(nullable = false)
@@ -147,7 +147,7 @@ public class Inquiry {
 
     public void setUsernameFromMember() {
         if (this.member != null) {
-            this.username = this.member.getUsername();
+            this.username = this.member.getName();
         }
     }
 

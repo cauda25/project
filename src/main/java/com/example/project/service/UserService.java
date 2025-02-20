@@ -27,7 +27,8 @@ public class UserService {
         }
 
         // username을 기반으로 UserRepository에서 사용자 정보를 조회
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+        return userRepository.findByUsername(username);
+        // .orElseThrow(() -> new RuntimeException("User not found with username: " +
+        // username));
     }
 }

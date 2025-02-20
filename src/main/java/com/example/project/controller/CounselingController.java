@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.project.dto.AuthMemberDto;
 import com.example.project.entity.Inquiry;
 import com.example.project.entity.Member;
 import com.example.project.service.InquiryService;
@@ -43,7 +45,10 @@ public class CounselingController {
         String username = principal.getName(); // 로그인된 사용자의 username을 가져옴
 
         // 현재 회원을 찾기 위해 SecurityContext에서 username으로 Member 객체를 가져옴
-        Member member = memberService.findByUsername(username);
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        AuthMemberDto authMemberDto = (AuthMemberDto) authentication.getPrincipal();
+        Member member = Member.builder().mid(authMemberDto.getMemberDto().getMid()).build();
 
         // Inquiry 객체를 생성하여 상담 내용 저장
         Inquiry inquiry = new Inquiry();
@@ -51,7 +56,7 @@ public class CounselingController {
         inquiry.setContent(content); // 상담 내용 설정
 
         // Inquiry 객체를 저장
-        inquiryService.saveCounseling(inquiry); // InquiryService에서 상담 저장
+        inquiryService.saveCounseling(member, content); // InquiryService에서 상담 저장
 
         return "redirect:/center/counseling/list"; // 상담 목록 페이지로 리디렉션
     }

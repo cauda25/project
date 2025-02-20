@@ -150,6 +150,9 @@
 .quantity .form-control {
   padding: 0.2rem; /* 입력 필드 높이 축소 */
   font-size: 0.8rem; /* 입력 필드 글꼴 크기 축소 */
+  border-width: 2px;
+  border-left: none;
+  border-right: none;
 }
 
 /* nav-tabs */

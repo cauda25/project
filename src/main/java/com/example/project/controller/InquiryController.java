@@ -57,6 +57,7 @@ public class InquiryController {
         }
 
         // inquiry에 사용자 정보 설정
+        inquiry.setMember(Member.builder().mid(memberDto.getMid()).build());
         inquiry.setUsername(memberId);
         inquiry.setName(memberDto.getName());
         inquiry.setEmail(memberDto.getEmail());

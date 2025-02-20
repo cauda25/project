@@ -55,43 +55,6 @@
                     </td>
                   </tr>
 
-<<<<<<< HEAD
-        <!-- 게시판 테이블 -->
-        <table>
-          <thead>
-            <tr>
-              <th>번호</th>
-              <th>이름</th>
-              <th>이메일</th>
-              <th>문의 내용</th>
-              <th>수정</th>
-              <th>삭제</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each="inquiry : ${inquiries}">
-              <td th:text="${inquiry.id}"></td>
-              <td th:text="${inquiry.name}"></td>
-              <td th:text="${inquiry.email}"></td>
-              <td th:text="${inquiry.content}"></td>
-              <td>
-                <form th:action="@{/center/email/modify}" method="get">
-                  <input type="hidden" name="id" th:value="${inquiry.id}" />
-                  <button type="submit" class="btn btn-primary">수정</button>
-                </form>
-              </td>
-              <td>
-                <form th:action="@{/center/email/delete/{id}(id=${inquiry.id})}" method="post">
-                  <th:block th:if="${_csrf != null}">
-                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-                  </th:block>
-                  <button type="submit" class="delete-btn">삭제</button>
-                </form>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-=======
                   <!-- 전화번호 -->
                   <tr>
                     <th scope="row">
@@ -108,7 +71,6 @@
                       />
                     </td>
                   </tr>
->>>>>>> gyowoong
 
                   <!-- 이메일 -->
                   <tr>
@@ -206,15 +168,6 @@
                     </td>
                   </tr>
 
-<<<<<<< HEAD
-      <!-- 글 작성/수정 폼 -->
-      <div id="form-container" style="display: none">
-        <form action="/center/email/save" method="post" id="inquiryForm">
-          <input type="hidden" name="id" id="inquiry-id" value="some_value_here" />
-          <th:block th:if="${_csrf != null}">
-            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-          </th:block>
-=======
                   <!-- 제목 -->
                   <tr>
                     <th scope="row">
@@ -234,7 +187,6 @@
                       />
                     </td>
                   </tr>
->>>>>>> gyowoong
 
                   <!-- 내용 -->
                   <tr>
@@ -268,28 +220,6 @@
                     </td>
                   </tr>
 
-<<<<<<< HEAD
-          <!-- 문의 내용 입력 -->
-          <div>
-            <label for="content">문의 내용:</label>
-            <textarea name="content" id="content" required></textarea>
-          </div>
-
-          <!-- 상담 유형 입력 -->
-          <div>
-            <label for="counselingType">상담 유형:</label>
-            <select name="counselingType" id="counselingType" required>
-              <option value="">상담 유형 선택</option>
-              <option value="general">일반 상담</option>
-            </select>
-          </div>
-
-          <!-- 버튼들 -->
-          <div class="form-buttons">
-            <button type="submit">저장</button>
-            <button type="button" onclick="window.location.href='/center/email';">취소</button>
-          </div>
-=======
                   <tr>
                     <td colspan="2">
                       <div class="btn_wrap">
@@ -311,7 +241,6 @@
               </table>
             </div>
           </fieldset>
->>>>>>> gyowoong
         </form>
       </div>
     </div>
