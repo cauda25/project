@@ -204,7 +204,7 @@ document.querySelector("#btnradio4").addEventListener("click", (e) => {
         str = "";
         document.querySelector(".movie_director_row").innerHTML = str;
         str = `<div class="row trending__product-row actor_row">`;
-        str = `<div class="section-title"><h5>${directorName} 감독의 영화</h5></div>`;
+        str = `<div class="section-title"><h5>${directorList[0].name} 감독의 영화</h5></div>`;
         data.forEach((movie) => {
           str += `<div class="col-lg-3 col-md-4 col-sm-6 mb-3 pt-0 product">`;
           str += `<div class="product__item mb-2">`;

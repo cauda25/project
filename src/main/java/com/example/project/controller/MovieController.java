@@ -53,7 +53,7 @@ public class MovieController {
     }
 
     @GetMapping("/list")
-    public void getMovieList(@ModelAttribute("requestDto") PageRequestDTO requestDto,
+    public String getMovieList(@ModelAttribute("requestDto") PageRequestDTO requestDto,
             Model model) {
         log.info("영화 전체 목록 요청 {}", requestDto);
         if ((requestDto.getKeyword() != null && !requestDto.getKeyword().isEmpty())
@@ -77,49 +77,56 @@ public class MovieController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // 로그인한 사용자인지 확인
-        if (authentication != null && authentication.isAuthenticated()
-                && !(authentication.getPrincipal() instanceof String)) {
-            // 로그인된 사용자일 때
-            AuthMemberDto authMemberDto = (AuthMemberDto) authentication.getPrincipal();
+        // 추천 페이지일 때
+        if (requestDto.getMovieList().equals("my")) {
+            // 로그인한 사용자인지 확인
+            if (authentication != null && authentication.isAuthenticated()
+                    && !(authentication.getPrincipal() instanceof String)) {
+                // 로그인된 사용자일 때
+                AuthMemberDto authMemberDto = (AuthMemberDto) authentication.getPrincipal();
 
-            // 찜한 영화 목록 가져오기
-            List<MovieDto> favoriteMovies = movieService
-                    .getFavoriteMoviesByMemberId(authMemberDto.getMemberDto().getMid());
+                // 찜한 영화 목록 가져오기
+                List<MovieDto> favoriteMovies = movieService
+                        .getFavoriteMoviesByMemberId(authMemberDto.getMemberDto().getMid());
 
-            // 찜한 영화 목록이 null일 경우 빈 리스트로 설정
-            if (favoriteMovies == null) {
-                favoriteMovies = new ArrayList<>();
-            }
-            model.addAttribute("favoriteMovies", favoriteMovies);
+                // 찜한 영화 목록이 null일 경우 빈 리스트로 설정
+                if (favoriteMovies == null) {
+                    favoriteMovies = new ArrayList<>();
+                }
+                model.addAttribute("favoriteMovies", favoriteMovies);
 
-            // 추천 영화 목록 가져오기
-            List<MovieDto> recommendMovies = movieService.recommendMovies(authMemberDto.getMemberDto().getMid());
-            model.addAttribute("recommendMovies", recommendMovies);
+                // 추천 영화 목록 가져오기
+                List<MovieDto> recommendMovies = movieService.recommendMovies(authMemberDto.getMemberDto().getMid());
+                model.addAttribute("recommendMovies", recommendMovies);
 
-            // 가장 많이 찜한 감독과 그 감독의 영화 리스트 가져오기
-            Long mostFrequentDirector = movieService
-                    .findMostFrequentDirector(authMemberDto.getMemberDto().getMid());
+                // 가장 많이 찜한 감독과 그 감독의 영화 리스트 가져오기
+                Long mostFrequentDirector = movieService
+                        .findMostFrequentDirector(authMemberDto.getMemberDto().getMid());
 
-            if (mostFrequentDirector != null) {
-                // 감독이 있을 경우만 처리
-                PersonDto directorDto = personService.read(mostFrequentDirector);
-                List<MovieDto> recommendMoviesByDirector = movieService.getMovieListByDirectorId(mostFrequentDirector);
+                if (mostFrequentDirector != null) {
+                    // 감독이 있을 경우만 처리
+                    PersonDto directorDto = personService.read(mostFrequentDirector);
+                    List<MovieDto> recommendMoviesByDirector = movieService
+                            .getMovieListByDirectorId(mostFrequentDirector);
 
-                model.addAttribute("directorDto", directorDto);
-                model.addAttribute("recommendMoviesByDirector", recommendMoviesByDirector);
+                    model.addAttribute("directorDto", directorDto);
+                    model.addAttribute("recommendMoviesByDirector", recommendMoviesByDirector);
+                } else {
+                    // 감독이 없는 경우, 빈 데이터 추가
+                    model.addAttribute("directorDto", null);
+                    model.addAttribute("recommendMoviesByDirector", new ArrayList<>());
+                }
             } else {
-                // 감독이 없는 경우, 빈 데이터 추가
+                // 로그인하지 않은 사용자일 때 (익명 사용자)
+                model.addAttribute("favoriteMovies", new ArrayList<>());
+                model.addAttribute("recommendMovies", new ArrayList<>());
                 model.addAttribute("directorDto", null);
                 model.addAttribute("recommendMoviesByDirector", new ArrayList<>());
+                return "redirect:/member/login";
             }
-        } else {
-            // 로그인하지 않은 사용자일 때 (익명 사용자)
-            model.addAttribute("favoriteMovies", new ArrayList<>());
-            model.addAttribute("recommendMovies", new ArrayList<>());
-            model.addAttribute("directorDto", null);
-            model.addAttribute("recommendMoviesByDirector", new ArrayList<>());
+
         }
+        return null;
 
     }
 

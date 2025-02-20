@@ -22,6 +22,10 @@ function getCartItems() {
       str += `<div class="col-2 text-center fw-bold text-white">주문금액</div>`;
       str += `</div>`;
       str += `</li>`;
+      if (data.length <= 0) {
+        str += `<li class="list-group-item list-item bg-transparent mt-5 mb-5">`;
+        str += `<h class="d-flex justify-content-center text-light fw-bold fs-5 m-0">장바구니에 상품이 없습니다.</h></li>`;
+      }
       data.forEach((cartItem) => {
         str += `<li class="list-group-item list-item bg-transparent">`;
         str += `<div class="row justify-content-center">`;
