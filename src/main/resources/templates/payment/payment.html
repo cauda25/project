@@ -7,7 +7,10 @@
   </th:block>
   <div layout:fragment="content">
     <main>
-      <div class="row g-5 mb-5 mt-5">
+      <div
+        class="row g-5 mb-5 mt-5"
+        th:if="${orderItemDtos.size() > 0 and orderDto != null}"
+      >
         <div class="col-md-5 col-lg-4 mt-1 order-md-last">
           <h4
             class="list-menu d-flex justify-content-between align-items-center p-2"
@@ -340,6 +343,11 @@
       const productName = "[[${orderItemDtos[0].productDto.name}]]";
       const totalPrice = "[[${orderDto.totalPrice}]]";
       let isValidated = false;
+      const orderItemDtos = "[[${orderItemDtos}]]";
+      console.log(orderItemDtos);
+      if (orderItemDtos == null) {
+        window.location.href = "/movie/main";
+      }
     </script>
     <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
     <script th:src="@{/js/checkAuth.js}"></script>

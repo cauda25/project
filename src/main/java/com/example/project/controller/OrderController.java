@@ -38,7 +38,7 @@ public class OrderController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/payment")
-    public void getCart(@RequestParam(name = "orderId") long orderId, Model model) {
+    public String getCart(@RequestParam(name = "orderId") long orderId, Model model) {
         log.info("cart 폼 요청");
 
         SecurityContext context = SecurityContextHolder.getContext();
@@ -48,9 +48,14 @@ public class OrderController {
         OrderDto orderDto = orderService.getOrderDto(authMemberDto.getMemberDto().getMid(), OrderStatus.PENDING);
         List<OrderItemDto> orderItemDtos = orderItemService.findByOrderId(orderDto.getId());
 
+        if (orderDto == null || orderItemDtos.size() <= 0) {
+            return "redirect:/movie/main";
+        }
+
         model.addAttribute("memberDto", memberDto);
         model.addAttribute("orderDto", orderDto);
         model.addAttribute("orderItemDtos", orderItemDtos);
+        return null;
 
     }
 
