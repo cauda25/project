@@ -56,7 +56,7 @@ public class CenterController {
     @GetMapping("/detail")
     public String getDetail(Model model) {
         Inquiry inquiry = new Inquiry("문의 내용", "답변 내용");
-        String userId = "user123"; // 또는 "비회원" 등 상황에 따라 적절히 설정
+        String userId = "user123"; // 또는 "비회원" 등 상황에 따라 적절하게 설정
 
         model.addAttribute("inquiry", inquiry);
         model.addAttribute("userId", userId);
