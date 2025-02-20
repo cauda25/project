@@ -2,6 +2,8 @@ package com.example.project.entity;
 
 import java.time.LocalDateTime;
 
+import com.example.project.dto.MemberDto;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,59 +32,77 @@ import lombok.ToString;
 @Table(name = "inquiry")
 public class Inquiry {
 
-    private String counselingType;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
     @Column(nullable = false)
     private String name;
-
-    private String username;
 
     @Column(nullable = false)
     private String email;
 
-    @Column(name = "TEXT")
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Column(length = 500)
     private String answer;
 
-    private Boolean answered;
+    @Builder.Default
+    private Boolean answered = false;
 
     @Enumerated(EnumType.STRING)
     private InquiryStatus status;
 
-    @Column(updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Builder.Default
+    @Column(name = "CREATED_DATE", updatable = false, nullable = false)
+    private LocalDateTime createdDate = LocalDateTime.now();
 
-    @Column(name = "inquiry_type")
+    @Column(name = "inquiry_type", nullable = false)
     private String inquiryType;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(nullable = false)
+    private String type;
 
-    public String getCounselingType() {
-        return counselingType;
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
+    private String username;
+
+    public Inquiry(Member member, String email, String content, String phone) {
+        this.member = member;
+        this.name = member.getName(); // Member의 name 사용
+        this.email = email;
+        this.phone = phone;
+        this.content = content;
+        setUsernameFromMember();
     }
 
-    public Boolean getAnswered() {
-        return answered;
+    public Member convertToMemberEntity(MemberDto memberDto) {
+        Member member = new Member();
+        member.setMid(memberDto.getMid());
+        return member;
     }
 
-    public void setAnswered(Boolean answered) {
-        this.answered = answered;
+    // Getter와 Setter
+    public String getEmail() {
+        return email;
     }
 
-    public String getUsername() {
-        return username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getMemberEmail() {
+        return member != null ? member.getEmail() : "알 수 없음";
     }
 
     public String getContent() {
@@ -93,17 +113,49 @@ public class Inquiry {
         this.content = content;
     }
 
+    public InquiryStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(InquiryStatus status) {
+        this.status = status;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setUsernameFromMember() {
+        if (this.member != null) {
+            this.username = this.member.getUsername();
+        }
+    }
+
     public String getAnswer() {
         return answer;
     }
 
     public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    // 매개변수가 있는 생성자 (편의용)
-    public Inquiry(String content, String answer) {
-        this.content = content;
         this.answer = answer;
     }
 }

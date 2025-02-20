@@ -9,50 +9,130 @@
     <body>
       <h2>상담 페이지</h2>
 
-      <!-- 상담 내역 테이블 -->
-      <div class="board-container">
-        <table>
-          <thead>
-            <tr>
-              <th>번호</th>
-              <th>상담 유형</th>
-              <th>내용</th>
-              <th>상담 상태</th>
-              <th>상담 내용 보기</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- 상담 내역이 없을 경우 메시지 표시 -->
-            <tr th:if="${#lists.isEmpty(inquiries)}">
-              <td colspan="5">상담 내역이 없습니다.</td>
-            </tr>
-            <!-- 상담 내역 표시 -->
-            <tr th:each="inquiry : ${inquiries}">
-              <td th:text="${inquiry.id}"></td>
-              <td>일반상담</td>
-              <td>
-                <p th:text="${inquiry.content}"></p>
-                <!-- 상담 상태 렌더링 -->
-              <td
-              th:text="${inquiry.answer != null && !#strings.isEmpty(inquiry.answer) ? '답변' : '미답변'}"
-            ></td>
-                <div id="content-[[${inquiry.id}]]" style="display: none">
-                  <p th:text="${inquiry.content}"></p>
-                  <p th:text="${inquiry.answer}"></p>
-                </div>
-              </td>
-              <td>
-                <a
-                  th:href="@{/center/counseling/detail/{id}(id=${inquiry.id})}"
-                  class="btn btn-primary"
-                >
-                  상담 내용 보기
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- 새로 등록된 글 출력 -->
+      <div th:if="${newInquiry != null}">
+        <h3>새로 등록된 글</h3>
+        <p>제목: <span th:text="${newInquiry.title}"></span></p>
+        <p>내용: <span th:text="${newInquiry.content}"></span></p>
+        <p>
+          등록일:
+          <span
+            th:text="${#temporals.format(newInquiry.createdDate, 'yyyy-MM-dd HH:mm:ss')}"
+          ></span>
+        </p>
       </div>
+
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="문의조회" />
+        <button id="searchButton">검색하기</button>
+        <div class="total-delete">
+          <span>총 <span th:text="${#lists.size(inquiries)}">0</span>건</span>
+          <button class="delete-button" id="delete-selected">선택삭제</button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <form
+          id="deleteForm"
+          method="post"
+          th:action="@{/center/inquiry/delete-selected}"
+        >
+          <input type="hidden" name="inquiryIds" id="inquiryIds" />
+          <table class="table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="select-all" /></th>
+                <th>번호</th>
+                <th>이메일</th>
+                <th>제목</th>
+                <th>내용</th>
+                <th>이름</th>
+                <th>문의유형</th>
+                <th>등록일</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody id="inquiryTable">
+              <!-- 문의 내역이 있을 때 -->
+              <tr th:each="inquiry, iterStat : ${inquiries}">
+                <td>
+                  <input
+                    type="checkbox"
+                    name="inquiryIds"
+                    th:value="${inquiry.id}"
+                    class="select-checkbox"
+                  />
+                </td>
+                <td th:text="${iterStat.index + 1}"></td>
+                <td>
+                  <span
+                    th:if="${inquiry.email != null}"
+                    th:text="${inquiry.email}"
+                  ></span>
+                  <span
+                    th:unless="${inquiry.email != null}"
+                    th:text="${inquiry.username + '@naver.com'}"
+                    >회원 정보 없음</span
+                  >
+                </td>
+                <td th:text="${inquiry.title}"></td>
+                <td th:text="${inquiry.content}"></td>
+                <td th:text="${inquiry.username}"></td>
+                <td th:text="${inquiry.type}"></td>
+                <td
+                  th:text="${#temporals.format(inquiry.createdDate, 'yyyy-MM-dd HH:mm:ss')}"
+                ></td>
+                <td>
+                  <div class="status-container">
+                    <span th:text="${inquiry.status}"></span>
+
+                    <!-- 문의 상세보기 링크 -->
+                    <span class="status">
+                      <a
+                        th:href="@{/center/inquiry/detail/{id}(id=${inquiry.id})}"
+                      >
+                        <span
+                          th:if="${inquiry.answer == null or inquiry.answer.isEmpty()}"
+                          >미답변</span
+                        >
+                        <span
+                          th:unless="${inquiry.answer == null or inquiry.answer.isEmpty()}"
+                          >답변</span
+                        >
+                        <span
+                          th:if="${inquiry.status == T(com.example.project.entity.InquiryStatus).CLOSED}"
+                          >종료</span
+                        >
+                      </a>
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              <!-- 문의 내역이 없을 때 -->
+              <tr th:if="${inquiries == null or #lists.isEmpty(inquiries)}">
+                <td colspan="9">고객님의 상담 내역이 존재하지 않습니다.</td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </div>
+
+      <div class="faq-inquiry">
+        <div class="faq">
+          <h3>자주하시는 질문</h3>
+          <a href="http://www.cgv.co.kr/support/faq/default.aspx">바로가기</a>
+          <p>
+            고객님들께서 주로 하시는 질문에 대한 답변을 한곳에 모아두었습니다.
+          </p>
+        </div>
+        <div class="inquiry">
+          <h3>고객의 말씀</h3>
+          <a href="/center/email">문의하기</a>
+          <p>불편사항과 문의사항을 남겨주시면 친절히 답변드리겠습니다.</p>
+        </div>
+      </div>
+    </div>
+    <button class="fixed-button">예매하기</button>
     <th:block layout:fragment="js">
       <script th:src="@{/js/counseling.js}"></script>
     </th:block>

@@ -78,3 +78,18 @@ function fetchInquiries(page) {
     })
     .catch((error) => console.error("Error:", error));
 }
+
+// 예시로 로그인된 사용자 정보 가져오기 (로그인된 사용자의 정보는 서버에서 받아옴)
+const userInfo = {
+  name: "홍길동", // 로그인한 사용자의 이름
+  mobile: "010-1234-5678", // 로그인한 사용자의 전화번호
+  email: "honggildong@example.com", // 로그인한 사용자의 이메일
+};
+
+// 해당 정보들 동적으로 채우기
+document.getElementById("user_name").innerText = userInfo.name;
+document.getElementById("user_mobile").innerText = userInfo.mobile;
+document.getElementById("user_email").innerText = userInfo.email;
+document.getElementById("HiddenUserName").value = userInfo.name;
+document.getElementById("HiddenMobile1").value = userInfo.mobile;
+document.getElementById("HiddenEmail1").value = userInfo.email;
