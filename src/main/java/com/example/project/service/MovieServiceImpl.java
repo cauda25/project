@@ -141,7 +141,7 @@ public class MovieServiceImpl implements MovieService {
             List<MoviePerson> moviePeople = moviePersonRepository.findByMovieId(movie.getId());
             for (MoviePerson moviePerson : moviePeople) {
                 Person person = moviePerson.getPerson();
-                if (person.getJob().equals("Directing")) {
+                if (moviePerson.getRole().equals("Director")) {
                     Long directorId = person.getId();
                     directorMovieCount.put(directorId, directorMovieCount.getOrDefault(directorId, 0) + 1);
                 }
@@ -336,6 +336,15 @@ public class MovieServiceImpl implements MovieService {
                 e.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public List<MovieDto> getMovieListByDirectorId(Long id) {
+        List<MovieDto> movieDtos = new ArrayList<>();
+        movieRepository.findMoviesByDirectorId(id).stream().forEach(movie -> {
+            movieDtos.add(entityToDto(movie, null, null, null));
+        });
+        return movieDtos;
     }
 
 }

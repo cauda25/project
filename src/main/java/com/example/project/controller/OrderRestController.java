@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.project.dto.AuthMemberDto;
 import com.example.project.dto.MemberDto;
 import com.example.project.dto.store.OrderItemDto;
+import com.example.project.service.ImageService;
 import com.example.project.service.MailService;
 import com.example.project.service.store.OrderItemService;
 import com.example.project.service.store.OrderService;
@@ -34,6 +35,7 @@ public class OrderRestController {
     private final OrderService orderService;
     private final OrderItemService orderItemService;
     private final MailService mailService;
+    private final ImageService imageService;
 
     @PostMapping("/payment")
     public ResponseEntity<List<OrderItemDto>> postCartItem(
@@ -64,6 +66,14 @@ public class OrderRestController {
             @RequestBody MemberDto memberDto, @PathVariable Long orderId) {
         log.info("이메일: {}", memberDto.getEmail());
         log.info("주문Id: {}", orderId);
+
+        // 구매한 상품 기프티콘 생성
+        List<OrderItemDto> orderItemDtos = orderItemService.findByOrderId(orderId);
+        orderItemDtos.forEach(dto -> {
+            for (int i = 0; i < dto.getQuantity(); i++) {
+                imageService.createGifticon(dto);
+            }
+        });
 
         // 기프티콘 메일 전송
         String m = mailService.mailSend(orderId, memberDto.getEmail());

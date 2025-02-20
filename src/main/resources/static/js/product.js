@@ -43,6 +43,8 @@ document.querySelector(".btn-cart").addEventListener("click", async () => {
       if (confirm("이미 장바구니에 존재합니다. 장바구니에 추가하시겠습니까?")) {
         addToCart();
       }
+    } else{
+      addToCart();
     }
   } else {
     if (confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?")) {

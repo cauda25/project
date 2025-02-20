@@ -104,7 +104,7 @@ public class MovieController {
             if (mostFrequentDirector != null) {
                 // 감독이 있을 경우만 처리
                 PersonDto directorDto = personService.read(mostFrequentDirector);
-                List<MovieDto> recommendMoviesByDirector = movieService.getMovieListByPersonId(mostFrequentDirector);
+                List<MovieDto> recommendMoviesByDirector = movieService.getMovieListByDirectorId(mostFrequentDirector);
 
                 model.addAttribute("directorDto", directorDto);
                 model.addAttribute("recommendMoviesByDirector", recommendMoviesByDirector);

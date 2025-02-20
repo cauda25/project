@@ -2,7 +2,8 @@
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <!-- CSS 영역 -->
   <th:block layout:fragment="css">
-    <link rel="stylesheet" th:href="@{/css/list.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/basic.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/star-rating.css}" type="text/css" />
     <style>
       .anime__details__widget ul li span {
         width: auto;
@@ -19,39 +20,14 @@
         line-height: 30px;
         position: relative;
       }
-
-      .overview {
-        color: #ffffff;
-      }
-
       .anime__details__content {
         margin: 0;
       }
-
-      .star-rating {
-        display: flex;
-        flex-direction: row-reverse;
-        justify-content: left;
+      .anime__details__title {
+        margin-bottom: 0;
       }
-
-      .star-rating input {
-        display: none;
-      }
-
-      .star-rating label {
-        font-size: 2rem;
-        color: #ccc;
-        cursor: pointer;
-        transition: color 0.3s;
-      }
-
-      .star-rating input:checked ~ label {
-        color: #ffc700;
-      }
-
-      .star-rating label:hover,
-      .star-rating label:hover ~ label {
-        color: #ffda00;
+      .anime__details__title h3 {
+        margin-bottom: 5px;
       }
     </style>
   </th:block>
@@ -78,17 +54,32 @@
               <div class="anime__details__text">
                 <div class="anime__details__title">
                   <h3 th:text="${movieDto.title}"></h3>
+                  <p th:text="${movieDto.tagline}">영화에 대한 상세 정보</p>
                 </div>
                 <div class="anime__details__rating">
                   <div class="rating">
+<<<<<<< HEAD
                     <div th:if="movieDto.voteAverage != 0" th:each="i : ${#numbers.sequence(0, 4)}" style="display: inline-block">
                       <span href="#" th:if="${i < (movieDto.voteAverage / 2)}"><i class="fa-solid fa-star"></i></span>
                       <span href="#" th:if="${i >= (movieDto.voteAverage / 2)}"><i class="fa-regular fa-star"></i></span>
+=======
+                    <div
+                      th:if="movieDto.voteAverage != 0"
+                      th:each="i : ${#numbers.sequence(0, 4)}"
+                      style="display: inline-block"
+                    >
+                      <span th:if="${i < (movieDto.voteAverage / 2)}"
+                        ><i class="fa-solid fa-star"></i
+                      ></span>
+                      <span th:if="${i >= (movieDto.voteAverage / 2)}"
+                        ><i class="fa-regular fa-star"></i
+                      ></span>
+>>>>>>> leejoonwoo
                     </div>
                   </div>
                   <span th:text="${movieDto.voteCount} + ' Votes'">1.029 Votes</span>
                 </div>
-                <p th:text="${movieDto.tagline}">영화에 대한 상세 정보</p>
+
                 <div class="anime__details__widget">
                   <div class="row">
                     <div>
@@ -123,8 +114,17 @@
                   </div>
                 </div>
                 <div class="anime__details__btn">
+<<<<<<< HEAD
                   <button type="button" class="btn btn-danger follow-btn"><i class="fa fa-heart-o"></i><span></span></button>
                   <a href="#" class="watch-btn"> <span>빠른 예매</span> <i class="fa fa-angle-right"></i> </a>
+=======
+                  <button type="button" class="btn btn-danger follow-btn">
+                    <i class="fa fa-heart-o"></i><span></span>
+                  </button>
+                  <a th:href="@{/reservation}" class="watch-btn"
+                    ><span>빠른 예매</span> <i class="fa fa-angle-right"></i
+                  ></a>
+>>>>>>> leejoonwoo
                 </div>
               </div>
             </div>
@@ -133,6 +133,7 @@
 
         <!-- 탭 메뉴 (주요 정보, 감독/출연, 평점/리뷰, 추천) -->
         <div class="d-flex justify-content-center">
+<<<<<<< HEAD
           <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
             <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked />
             <label class="btn btn-outline-primary" for="btnradio1">주요 정보</label>
@@ -145,6 +146,61 @@
 
             <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off" />
             <label class="btn btn-outline-primary" for="btnradio4">추천</label>
+=======
+          <div
+            class="btn-group"
+            role="group"
+            aria-label="Basic radio toggle button group"
+          >
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio1"
+              autocomplete="off"
+              checked
+            />
+            <label
+              class="btn btn-outline-danger text-light rounded-start"
+              for="btnradio1"
+              >주요 정보</label
+            >
+
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio2"
+              autocomplete="off"
+            />
+            <label class="btn btn-outline-danger text-light" for="btnradio2"
+              >감독/출연</label
+            >
+
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio3"
+              autocomplete="off"
+            />
+            <label class="btn btn-outline-danger text-light" for="btnradio3"
+              >평점/리뷰</label
+            >
+
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio4"
+              autocomplete="off"
+            />
+            <label
+              class="btn btn-outline-danger text-light rounded-end"
+              for="btnradio4"
+              >추천</label
+            >
+>>>>>>> leejoonwoo
           </div>
         </div>
 

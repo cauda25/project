@@ -1,0 +1,225 @@
+/* 리스트 */
+.product {
+  padding: 0;
+}
+.product__item__text {
+  padding-top: 0;
+  padding-left: 10px;
+}
+.product__item__text ul {
+  margin: 0;
+  color: #ffffff;
+  font-weight: 500;
+}
+.product__item__text h5 a {
+  color: #ffffff;
+  font-weight: 700;
+  line-height: 26px;
+  display: block;
+  width: 222px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.product__item__text div {
+  color: #fff;
+}
+.product__item__text span {
+  width: 50px;
+  display: inline-block;
+  font-weight: bolder;
+}
+
+/* Dropdown */
+.dropdown-menu {
+  background-color: #0b0c2a;
+  border-color: #dc3545;
+  border-width: 2px;
+}
+
+.dropdown-menu .dropdown-item {
+  color: white;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  text-decoration: none;
+  background-color: #dc3545;
+  cursor: pointer;
+}
+
+/* Pagination */
+.page-link {
+  color: #fff;
+  background-color: transparent;
+  border-color: #dc3545;
+}
+
+.page-link:hover {
+  color: #dc3545;
+  background-color: transparent;
+  border-color: #dc3545;
+}
+
+.page-link:focus,
+.page-link.focus {
+  color: #dc3545;
+  background-color: transparent;
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0rem transparent;
+}
+
+.page-item.disabled .page-link,
+.page-item:disabled .page-link {
+  border-color: #dc3545;
+  background-color: transparent;
+}
+
+.page-link:not(:disabled):not(.disabled):active,
+.page-link:not(:disabled):not(.disabled).active,
+.show > .page-link.dropdown-toggle {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+/* 일반 버튼 */
+.btn-outline-danger {
+  color: #fff;
+  border-color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-outline-danger:focus,
+.btn-outline-danger.focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 71, 71, 0.5);
+}
+
+.btn-outline-danger.disabled,
+.btn-outline-danger:disabled {
+  color: #fff;
+  background-color: transparent;
+}
+
+.btn-outline-danger:not(:disabled):not(.disabled):active,
+.btn-outline-danger:not(:disabled):not(.disabled).active,
+.show > .btn-outline-danger.dropdown-toggle {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-outline-danger:not(:disabled):not(.disabled):active:focus,
+.btn-outline-danger:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-danger.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 71, 71, 0.5);
+}
+
+/* 수량 버튼 */
+#quantity-minus-btn,
+#quantity-plus-btn {
+  color: #dc3545;
+}
+
+#quantity-minus-btn:hover,
+#quantity-plus-btn:hover {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+#quantity-minus-btn:focus,
+#quantity-plus-btn:focus {
+  box-shadow: 0 0 0 0rem transparent;
+}
+
+.quantity {
+  max-width: 200px; /* 전체 너비를 줄임 */
+  font-size: 0.8rem; /* 글꼴 크기 축소 */
+}
+.quantity .btn {
+  padding: 0.2rem 0.5rem; /* 버튼 크기 축소 */
+  font-size: 0.8rem; /* 버튼 아이콘 크기 축소 */
+}
+.quantity .form-control {
+  padding: 0.2rem; /* 입력 필드 높이 축소 */
+  font-size: 0.8rem; /* 입력 필드 글꼴 크기 축소 */
+}
+
+/* nav-tabs */
+.nav-tabs {
+  border-bottom: 2px solid #dc3545;
+  gap: 5%;
+}
+
+.nav-tabs .nav-item {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.nav-tabs :first-child {
+  margin-left: 4%;
+}
+
+.nav-tabs :last-child {
+  margin-right: 4%;
+}
+
+.nav-tabs .nav-link {
+  margin-bottom: -1px;
+  border: 1px solid transparent;
+  background-color: transparent;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link:focus {
+  color: #fff;
+  border-color: #dc3545 #dc3545 #dc3545;
+}
+
+.nav-tabs .nav-link.disabled {
+  color: #6c757d;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+  background-color: transparent !important;
+}
+
+.nav-tabs .dropdown-menu {
+  margin-top: -1px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.nav-tabs .btn-outline-danger {
+  color: #b7b7b7;
+  font-weight: 700;
+}
+
+/* Checkbox */
+
+.form-check-input {
+  border-color: #dc3545;
+  background-color: transparent;
+}
+
+.form-check-input:checked {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.form-check-input:focus,
+.form-check-input.focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0rem transparent;
+}

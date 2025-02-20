@@ -35,7 +35,6 @@ public class OrderController {
     private final CartItemService cartItemService;
     private final OrderService orderService;
     private final OrderItemService orderItemService;
-    private final ImageService imageService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/payment")
@@ -69,14 +68,6 @@ public class OrderController {
 
         // 장바구니에 구매완료된 상품 제거
         cartItemService.deleteByOrderId(orderId, memberDto.getMid());
-
-        // 구매한 상품 기프티콘 생성
-        List<OrderItemDto> orderItemDtos = orderItemService.findByOrderId(orderId);
-        orderItemDtos.forEach(dto -> {
-            for (int i = 0; i < dto.getQuantity(); i++) {
-                imageService.createGifticon(dto);
-            }
-        });
 
         model.addAttribute("orderId", orderId);
     }

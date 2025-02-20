@@ -114,9 +114,9 @@ public class OrderServiceImpl implements OrderService {
     // @Transactional
     // @Scheduled(fixedRate = 60000) // 1분마다 실행
     // public void deleteUnCompletedOrder() {
-    // LocalDateTime tenMinutesAgo = LocalDateTime.now().minusMinutes(30);
+    // LocalDateTime tenMinutesAgo = LocalDateTime.now().minusMinutes(10);
 
-    // // 30분 이상 경과한 데이터를 찾기
+    // // 10분 이상 경과한 데이터를 찾기
     // List<Order> orders = orderRepository.findByUpdateDateBefore(tenMinutesAgo);
 
     // for (Order order : orders) {

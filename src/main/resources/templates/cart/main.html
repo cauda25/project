@@ -1,64 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <th:block layout:fragment="css">
-    <link rel="stylesheet" th:href="@{/css/list.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/basic.css}" type="text/css" />
     <style>
-      .spad {
-        padding: 0;
-      }
-      .sub-head {
-        margin-bottom: 10px;
-        margin-left: 20px;
-      }
-      .sub-head h3 {
-        margin-right: 10px;
-      }
-      .form-select {
-        width: 100px;
-      }
-      #searchForm div {
-        width: 75%;
-        justify-self: center;
-      }
-      .nav-tabs {
-        justify-self: center;
-      }
-      .item-pic {
-        object-fit: cover;
-        width: 150px;
-        height: 100%;
-      }
-      .product-detail h3 {
-        list-style: none;
-        /* font-size: 15px; */
-        color: #ffffff;
-        line-height: 30px;
-        position: relative;
-        padding-left: 18px;
-      }
-      .product-detail ul li {
-        list-style: none;
-        /* font-size: 15px; */
-        color: #ffffff;
-        line-height: 30px;
-        position: relative;
-        padding-left: 18px;
-      }
-      .quantity {
-        max-width: 200px; /* 전체 너비를 줄임 */
-        font-size: 0.8rem; /* 글꼴 크기 축소 */
-      }
-      .quantity .btn {
+      .btn-outline-light {
         padding: 0.2rem 0.5rem; /* 버튼 크기 축소 */
         font-size: 0.8rem; /* 버튼 아이콘 크기 축소 */
       }
-      .quantity .form-control {
-        padding: 0.2rem; /* 입력 필드 높이 축소 */
-        font-size: 0.8rem; /* 입력 필드 글꼴 크기 축소 */
-      }
-      .btn-outline-dark {
-        padding: 0.2rem 0.5rem; /* 버튼 크기 축소 */
-        font-size: 0.8rem; /* 버튼 아이콘 크기 축소 */
+      .list-total,
+      .list-menu {
+        border-top: solid 2px #dc3545 !important;
+        border-bottom: solid 2px #dc3545 !important;
       }
     </style>
   </th:block>
@@ -76,6 +28,7 @@
           </div>
           <div class="row mb-5">
             <ul class="list-group cart-item-list">
+              <div class="col-1 align-center"></div>
               <!-- <li class="list-group-item">
                 <div class="row">
                   <div class="col-1 align-center">

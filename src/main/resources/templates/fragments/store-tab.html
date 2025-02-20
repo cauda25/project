@@ -5,22 +5,22 @@
     <ul class="nav nav-tabs nav-justified">
       <li class="nav-item">
         <a
-          th:class="'nav-link btn btn-outline-danger ' + ${category == 'combo' ? 'active':''}"
-          th:href="@{/store/main(category=combo)}"
+          th:class="'nav-link btn btn-outline-danger border-2 ' + ${category == 'COMBO' ? 'active':''}"
+          th:href="@{/store/main(category=COMBO)}"
           >콤보</a
         >
       </li>
       <li class="nav-item">
         <a
-          th:class="'nav-link btn btn-outline-danger ' + ${category == 'popcorn' ? 'active':''}"
-          th:href="@{/store/main(category=popcorn)}"
+          th:class="'nav-link btn btn-outline-danger border-2 ' + ${category == 'POPCORN' ? 'active':''}"
+          th:href="@{/store/main(category=POPCORN)}"
           >팝콘</a
         >
       </li>
       <li class="nav-item">
         <a
-          th:class="'nav-link btn btn-outline-danger ' + ${category == 'drink' ? 'active':''}"
-          th:href="@{/store/main(category=drink)}"
+          th:class="'nav-link btn btn-outline-danger border-2 ' + ${category == 'DRINK' ? 'active':''}"
+          th:href="@{/store/main(category=DRINK)}"
           >음료</a
         >
       </li>

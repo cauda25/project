@@ -50,66 +50,39 @@ document.querySelector(".checkout-btn").addEventListener("click", async () => {
   console.log("로그인 여부: ", isAuth);
   if (isAuth) {
     // 인증된 사용자일 경우 수행할 동작
-    // rsp = await payment(paymentInfo);
-    // if (rsp.success == true) {
+    // sessionStorage.setItem("name", name);
+    // sessionStorage.setItem("email", email);
+    // sessionStorage.setItem("phone", phoneNumber);
+    // window.location.href = `/payment/success?orderId=${orderId}`;
+
+    rsp = await payment(paymentInfo);
+    if (rsp.success == true) {
       sessionStorage.setItem("name", name);
       sessionStorage.setItem("email", email);
       sessionStorage.setItem("phone", phoneNumber);
       window.location.href = `/payment/success?orderId=${orderId}`;
-    // } else {
-      // alert(rsp.error_msg);
-    // }
-    // window.location.href = `/payment/success?orderId=${orderId}`;
-    // fetch(`/rest/payment?orderId=${orderId}`, { method: "GET" })
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       throw new Error("error");
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //     if (data == true) {
-    //       window.location.href = `/payment/success?orderId=${orderId}`;
-    //     } else if (data == false) {
-    //       alert("결제 오류가 발생하였습니다. 다시 시도해주세요.");
-    //       window.location.href = `/movie/main`;
-    //     }
-    //   });
+    } else {
+      alert(rsp.error_msg);
+      return;
+    }
   } else {
     window.location.href = "/member/login"; // 로그인 페이지로 이동
   }
 });
 
-// // 카드 정보 추출
-// const cardNumber = document.getElementById("cc-number").value;
-// const expiryDate = document.getElementById("cc-expiration").value;
-// const cvv = document.getElementById("cc-cvv").value;
-// const cardHolder = document.getElementById("cc-name").value;
-
-// // 유효성 검사
-// if (!cardNumber || !expiryDate || !cvv || !cardHolder) {
-//   alert("모든 정보를 입력해주세요.");
-//   return;
-// }
-
-// // 카드 번호 유효성 검사
-// const cardNumberPattern = /^[0-9]{16}$/;
-// if (!cardNumberPattern.test(cardNumber)) {
-//   alert("카드 번호가 유효하지 않습니다.");
-//   return;
-// }
-
-// // 유효 기간 검사 (MM/YY 형식으로 입력되었는지)
-// const expiryDatePattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
-// if (!expiryDatePattern.test(expiryDate)) {
-//   alert("유효 기간이 유효하지 않습니다. MM/YY 형식으로 입력해주세요.");
-//   return;
-// }
-
-// // CVV 번호 유효성 검사 (3자리 숫자)
-// const cvvPattern = /^[0-9]{3}$/;
-// if (!cvvPattern.test(cvv)) {
-//   alert("CVV 번호가 유효하지 않습니다.");
-//   return;
-// }
+async function timeCheck() {
+  try {
+    const response = await fetch(`/rest/payment?orderId=${orderId}`, {
+      method: "GET",
+    });
+    if (!response.ok) {
+      throw new Error("error");
+    }
+    const data = await response.json();
+    console.log(data);
+    return data; // true 또는 false 반환
+  } catch (error) {
+    console.error(error);
+    return false; // 실패 시 false 반환
+  }
+}

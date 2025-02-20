@@ -36,6 +36,8 @@ public interface MovieService {
     // 해당 영화와 같은 장르의 영화 리스트
     List<MovieDto> similarMovies(Long id);
 
+    List<MovieDto> getMovieListByDirectorId(Long id);
+
     void insertAndUpdateMovies();
 
     public default MovieDto entityToDto(Movie movie, List<MoviePerson> moviepeople, List<Person> people,

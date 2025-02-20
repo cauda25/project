@@ -198,7 +198,7 @@ public class MovieRepositoryImpl extends QuerydslRepositorySupport implements Mo
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(movie.id.gt(0L));
 
-        builder.and(person.id.eq(directorId));
+        builder.and(person.id.eq(directorId)).and(moviePerson.role.eq("Director"));
 
         query.where(builder);
 
