@@ -2,19 +2,17 @@
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <th:block layout:fragment="css">
     <link rel="stylesheet" th:href="@{/css/basic.css}" type="text/css" />
-    <style>
-      main {
-        color: white;
-        margin-top: 50px;
-      }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/payment.css}" type="text/css" />
+    <style></style>
   </th:block>
   <div layout:fragment="content">
     <main>
-      <div class="row g-5 mb-5">
-        <div class="col-md-5 col-lg-4 order-md-last">
-          <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-white">주문 상품</span>
+      <div class="row g-5 mb-5 mt-5">
+        <div class="col-md-5 col-lg-4 mt-1 order-md-last">
+          <h4
+            class="list-menu d-flex justify-content-between align-items-center p-2"
+          >
+            <span class="text-white fw-bold">주문 상품</span>
             <span
               class="badge bg-danger rounded-pill"
               th:text="${orderItemDtos.size()}"
@@ -27,25 +25,26 @@
               th:each="dto : ${orderItemDtos}"
             >
               <div>
-                <h6 class="my-0" th:text="${dto.productDto.name}">
+                <h6
+                  class="my-0 text-white fw-bold"
+                  th:text="${dto.productDto.name}"
+                >
                   Product name
                 </h6>
                 <small
-                  class="text-body-secondary"
+                  class="text-white-50"
                   th:text="${dto.productDto.itemDetails}"
                   >Brief description</small
                 >
               </div>
               <div>
                 <small
-                  class="text-body-secondary"
+                  class="text-white d-flex justify-content-end"
                   th:text="'수량 ' + ${dto.quantity} + '개'"
                 >
                   $12
                 </small>
-                <div class="text-body-secondary" th:text="${dto.price} + '원'">
-                  $12
-                </div>
+                <div class="text-white" th:text="${dto.price} + '원'">$12</div>
               </div>
             </li>
             <!-- <li
@@ -57,9 +56,13 @@
               </div>
               <span class="text-success">−$5</span>
             </li> -->
-            <li class="list-group-item d-flex justify-content-between">
-              <span>결제금액</span>
-              <strong th:text="${orderDto.totalPrice} + '원'">$20</strong>
+            <li
+              class="list-total list-group-item d-flex justify-content-between"
+            >
+              <span class="fw-bold">결제금액</span>
+              <span class="fw-bold" th:text="${orderDto.totalPrice} + '원'"
+                >$20</span
+              >
             </li>
           </ul>
 
@@ -74,15 +77,17 @@
             </div>
           </form> -->
         </div>
-        <div class="col-md-7 col-lg-8">
-          <h4 class="mb-3 text-white">받는 사람</h4>
+        <div class="col-md-7 col-lg-8 mt-0">
+          <div class="section-title">
+            <h4 class="mb-3 text-white fw-bold">결제 정보</h4>
+          </div>
           <form class="needs-validation" id="shippingInfoForm" novalidate>
             <div class="row g-3">
               <div class="col-12">
-                <label for="name" class="form-label">이름</label>
+                <label for="name" class="form-label fw-semibold">이름</label>
                 <input
                   type="text"
-                  class="form-control"
+                  class="form-control border-danger border-2 bg-transparent text-white search-form-control"
                   id="name"
                   placeholder="Name"
                   th:value="${memberDto.name}"
@@ -107,10 +112,10 @@
               </div> -->
 
               <div class="col-12">
-                <label for="email" class="form-label">이메일</label>
+                <label for="email" class="form-label fw-semibold">이메일</label>
                 <input
                   type="email"
-                  class="form-control"
+                  class="form-control border-danger border-2 bg-transparent text-white"
                   id="email"
                   placeholder="you@example.com"
                   th:value="${memberDto.email}"
@@ -122,10 +127,12 @@
               </div>
 
               <div class="col-12">
-                <label for="phoneNumber" class="form-label">전화번호</label>
+                <label for="phoneNumber" class="form-label fw-semibold"
+                  >전화번호</label
+                >
                 <input
                   type="text"
-                  class="form-control"
+                  class="form-control border-danger border-2 bg-transparent text-white"
                   id="phoneNumber"
                   placeholder="010-0000-0000"
                   th:value="${memberDto.phone}"

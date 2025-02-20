@@ -14,7 +14,7 @@ function getCartItems() {
       console.log("장바구니 데이터: ", data);
 
       cartTotal = 0;
-      let str = `<li class="list-group-item list-menu bg-transparent">`;
+      let str = `<li class="list-group-item list-menu bg-transparent rounded-0">`;
       str += `<div class="row"><div class="col-1 align-center">`;
       str += `</div>`;
       str += `<div class="col-7 text-center fw-bold text-white">상품정보</div>`;
@@ -63,7 +63,7 @@ function getCartItems() {
         str += `<input type="hidden" name="price" value="${cartItem.price}">`;
         str += `</li>`;
       });
-      str += `<li class="list-group-item list-total bg-transparent">`;
+      str += `<li class="list-group-item list-total bg-transparent rounded-0">`;
       str += `<div class="row">`;
       str += `<div class="cartTotal d-flex justify-content-end fs-4 fw-semibold text-light">총 결제금액 ${cartTotal}원</div>`;
       str += `</div></li>`;

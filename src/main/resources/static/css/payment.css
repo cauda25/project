@@ -1,0 +1,24 @@
+main {
+  color: #fff;
+  margin-top: 50px;
+}
+.list-group-item {
+  background-color: transparent;
+  color: #fff;
+}
+
+.list-menu {
+  border: solid 2px #dc3545 !important;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+.list-group-item {
+  border-left: solid 2px #dc3545 !important;
+  border-right: solid 2px #dc3545 !important;
+  border-radius: 0% !important;
+}
+.list-total {
+  border: solid 2px #dc3545 !important;
+  border-bottom-left-radius: 0.25rem !important;
+  border-bottom-right-radius: 0.25rem !important;
+}

@@ -87,6 +87,7 @@
 .btn-outline-danger {
   color: #fff;
   border-color: #dc3545;
+  border-width: 2px;
 }
 
 .btn-outline-danger:hover {
