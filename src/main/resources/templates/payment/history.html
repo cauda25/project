@@ -34,24 +34,14 @@
                 <li class="list-group-item list-menu bg-transparent">
                   <div class="row">
                     <!-- <div class="col-1 fw-bold">[[${orderDto.id}]]</div> -->
-                    <div class="col-2 fw-bold text-light">
-                      [[${#temporals.format(orderDto.updateDate,'yyyy-MM-dd
-                      HH:mm')}]]
-                    </div>
+                    <div class="col-2 fw-bold text-light">[[${#temporals.format(orderDto.updateDate,'yyyy-MM-dd HH:mm')}]]</div>
                     <div class="col-1 fw-bold"></div>
-                    <div class="col-5 text-center fw-bold text-light">
-                      상품정보
-                    </div>
+                    <div class="col-5 text-center fw-bold text-light">상품정보</div>
                     <div class="col-2 text-center fw-bold text-light">수량</div>
-                    <div class="col-2 text-center fw-bold text-light">
-                      주문금액
-                    </div>
+                    <div class="col-2 text-center fw-bold text-light">주문금액</div>
                   </div>
                 </li>
-                <li
-                  class="list-group-item bg-transparent"
-                  th:each="orderItemDtos : ${orderDto.orderItemDtos}"
-                >
+                <li class="list-group-item bg-transparent" th:each="orderItemDtos : ${orderDto.orderItemDtos}">
                   <div class="row justify-content-center">
                     <!-- <div class="col-1">
                       <p></p>
@@ -59,54 +49,32 @@
                     <div class="col-8">
                       <div class="row">
                         <div class="col-3">
-                          <a
-                            th:href="@{/store/detail(category=${orderItemDtos.productDto.category}, id=${orderItemDtos.productDto.id})}"
-                          >
-                            <img
-                              th:src="'/img/product' + ${orderItemDtos.productDto.image}"
-                              class="img-thumbnail item-pic"
+                          <a th:href="@{/store/detail(category=${orderItemDtos.productDto.category}, id=${orderItemDtos.productDto.id})}">
+                            <img th:src="'/img/product' + ${orderItemDtos.productDto.image}" class="img-thumbnail item-pic"
                           /></a>
                         </div>
                         <div class="col-7">
-                          <div
-                            class="row d-flex align-items-center justify-content-center"
-                          >
+                          <div class="row d-flex align-items-center justify-content-center">
                             <div class="row">
-                              <a
-                                th:href="@{/store/detail(category=${orderItemDtos.productDto.category}, id=${orderItemDtos.productDto.id})}"
-                              >
-                                <span class="fs-2 fw-bold text-light"
-                                  >[[${orderItemDtos.productDto.name}]]</span
-                                ></a
+                              <a th:href="@{/store/detail(category=${orderItemDtos.productDto.category}, id=${orderItemDtos.productDto.id})}">
+                                <span class="fs-2 fw-bold text-light">[[${orderItemDtos.productDto.name}]]</span></a
                               >
                             </div>
                             <div class="row">
-                              <span class="fw-semibold text-white-50">
-                                [[${orderItemDtos.productDto.itemDetails}]]
-                              </span>
+                              <span class="fw-semibold text-white-50"> [[${orderItemDtos.productDto.itemDetails}]] </span>
                             </div>
                             <div class="row">
-                              <span class="text-white-50">
-                                [[${orderItemDtos.productDto.price}]]원
-                              </span>
+                              <span class="text-white-50"> [[${orderItemDtos.productDto.price}]]원 </span>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div
-                      class="col-2 text-center d-flex align-items-center justify-content-center"
-                    >
-                      <p class="fs-5 fw-bolder text-light">
-                        [[${orderItemDtos.quantity}]]개
-                      </p>
+                    <div class="col-2 text-center d-flex align-items-center justify-content-center">
+                      <p class="fs-5 fw-bolder text-light">[[${orderItemDtos.quantity}]]개</p>
                     </div>
-                    <div
-                      class="col-2 text-center d-flex align-items-center justify-content-center"
-                    >
-                      <p class="fs-5 fw-bolder text-light">
-                        [[${orderItemDtos.Price * orderItemDtos.quantity}]]원
-                      </p>
+                    <div class="col-2 text-center d-flex align-items-center justify-content-center">
+                      <p class="fs-5 fw-bolder text-light">[[${orderItemDtos.Price * orderItemDtos.quantity}]]원</p>
                     </div>
                   </div>
                 </li>
