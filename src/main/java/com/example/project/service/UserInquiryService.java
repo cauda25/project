@@ -16,6 +16,7 @@ public class UserInquiryService {
 
     private UserInquiryRepository userInquiryRepository;
 
+    // 생성자 주입
     public UserInquiryService(UserInquiryRepository userInquiryRepository) {
         this.userInquiryRepository = userInquiryRepository;
     }

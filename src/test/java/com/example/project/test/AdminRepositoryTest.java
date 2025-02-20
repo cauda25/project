@@ -1,5 +1,6 @@
 package com.example.project.test;
 
+import java.lang.reflect.Member;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +26,7 @@ import com.example.project.entity.MovieGenre;
 import com.example.project.entity.MovieGenreId;
 import com.example.project.entity.MoviePerson;
 import com.example.project.entity.Person;
+import com.example.project.entity.User;
 import com.example.project.entity.constant.MemberRole;
 import com.example.project.entity.reserve.Theater;
 import com.example.project.repository.InquiryRepository;
@@ -75,6 +77,7 @@ public class AdminRepositoryTest {
     private InquiryRepository inquiryRepository;
     @Autowired
     private TheaterRepository theaterRepository;
+
 
     @Test
     public void insertAdmin() {

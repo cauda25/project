@@ -1,54 +1,168 @@
+/* Global styles */
 body {
-  font-family: "Arial", sans-serif;
-  background-color: #1a1a2e;
-  color: #ffffff;
+  font-family: "Noto Sans KR", sans-serif;
+  color: #333;
   margin: 0;
   padding: 0;
+  background-color: #f9f9f9;
 }
 
-h2 {
-  text-align: center;
-  margin-top: 20px;
-  color: #ff6f61;
-  font-size: 2rem;
-}
-
-.content-container {
-  width: 80%;
-  margin: 20px auto;
-  background-color: #0f3460;
-  border-radius: 10px;
+/* Container */
+.container {
+  max-width: 1024px;
+  margin: 0 auto;
   padding: 20px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.content-box {
-  background-color: #16213e;
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 15px;
+/* Heading styles */
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
-.content-box h3 {
-  margin: 0;
-  font-size: 1.2rem;
-  color: #f5f5f5;
-}
-
-.content-box p {
-  margin: 5px 0 0 0;
-  font-size: 1rem;
-  color: #dcdcdc;
-}
-
-.user-info {
-  text-align: right;
-  font-size: 1rem;
-  color: #b3b3b3;
-}
-
-.footer {
-  text-align: center;
+/* Table styles */
+.table {
+  width: 100%;
+  border-collapse: collapse;
   margin-top: 20px;
-  color: #d3d3d3;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 12px 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+/* Button styles */
+button {
+  background-color: #ff4c4c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ff6a6a;
+}
+
+/* FAQ and Inquiry buttons */
+.faq-inquiry {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.faq-inquiry .faq,
+.faq-inquiry .inquiry {
+  flex: 1;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  text-align: center;
+  margin-right: 10px;
+}
+
+.faq-inquiry .inquiry {
+  margin-right: 0;
+}
+
+.faq-inquiry a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #555;
+}
+
+.faq-inquiry a:hover {
+  color: #000;
+}
+
+/* Fixed button at bottom */
+.fixed-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #ff4c4c;
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 50px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.fixed-button:hover {
+  background-color: #ff6a6a;
+}
+
+/* Search bar styles */
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Input and Search button */
+.search-bar input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+}
+
+.search-bar button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #ff4c4c;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.search-bar button:hover {
+  background-color: #ff6a6a;
+}
+
+/* Total count and Delete button container */
+.total-delete {
+  margin-top: 70px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px; /* 간격 */
+}
+
+.total-delete span {
+  font-size: 14px;
+  color: #333;
+}
+
+.delete-button {
+  padding: 8px 15px;
+  background-color: #ddd;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #bbb;
 }

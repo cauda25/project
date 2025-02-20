@@ -2,102 +2,120 @@ document.addEventListener("DOMContentLoaded", () => {
   // 상담 내용 보기 버튼 클릭 이벤트
   const viewButtons = document.querySelectorAll(".view-btn");
   viewButtons.forEach((button) => {
-    button.addEventListener("click", (e) => {
+    button.addEventListener("click", () => {
       const content = button.getAttribute("data-content"); // 상담 내용
       const answer = button.getAttribute("data-answer"); // 상담 답변
 
-      // 모달에 내용 채우기
-      document.getElementById("inquiryContent").innerText = content;
-      document.getElementById("inquiryAnswer").innerText = answer
-        ? answer
-        : "답변이 없습니다.";
-
-      // 모달 표시
+      const contentElement = document.getElementById("inquiryContent");
+      const answerElement = document.getElementById("inquiryAnswer");
       const modal = document.getElementById("inquiryDetailModal");
-      modal.style.display = "block";
+
+      if (contentElement && answerElement && modal) {
+        contentElement.innerText = content;
+        answerElement.innerText = answer || "답변이 없습니다.";
+        modal.style.display = "block";
+      }
     });
   });
 
   // 모달 닫기 이벤트
   const closeModal = document.querySelector(".close");
-  closeModal.addEventListener("click", () => {
-    const modal = document.getElementById("inquiryDetailModal");
-    modal.style.display = "none";
-  });
+  if (closeModal) {
+    closeModal.addEventListener("click", () => {
+      const modal = document.getElementById("inquiryDetailModal");
+      if (modal) modal.style.display = "none";
+    });
+  }
 
   // 모달 외부 클릭 시 닫기
   window.addEventListener("click", (event) => {
     const modal = document.getElementById("inquiryDetailModal");
-    if (event.target === modal) {
+    if (modal && event.target === modal) {
       modal.style.display = "none";
     }
   });
-});
 
-// 상담 목록 페이지 이동 버튼 (예시)
-const inquiryBtn = document.getElementById("counselingInquiryBtn");
-if (inquiryBtn) {
-  inquiryBtn.addEventListener("click", (e) => {
-    e.preventDefault(); // 기본 동작 방지 (폼 제출 등)
-    window.location.href = "/center/counseling"; // 페이지 이동
-  });
-}
+  // 체크박스 및 삭제 버튼 기능
+  const selectAllCheckbox = document.getElementById("select-all");
+  const deleteButton = document.getElementById("delete-selected");
+  const deleteForm = document.getElementById("deleteForm");
+  const inquiryIdsField = document.getElementById("inquiryIds");
 
-// 취소 버튼 클릭 시 폼 숨기기
-const resetButton = document.querySelector('button[type="reset"]');
-resetButton.addEventListener("click", function () {
-  document.getElementById("form-container").style.display = "none"; // 폼 숨기기
-});
+  if (selectAllCheckbox) {
+    selectAllCheckbox.addEventListener("change", function () {
+      document.querySelectorAll(".select-checkbox").forEach((checkbox) => {
+        checkbox.checked = selectAllCheckbox.checked;
+      });
+    });
+  }
 
-// 수정 버튼 클릭 시 폼을 업데이트 하기 위한 설정
-const editButtons = document.querySelectorAll(".edit-btn");
-editButtons.forEach((button) => {
-  button.addEventListener("click", (e) => {
-    e.preventDefault();
-    const counselingId = button.getAttribute("data-id");
-    document.getElementById("counseling-id").value = counselingId;
-    document.getElementById("form-container").style.display = "block"; // 폼 표시
-  });
-});
+  // 선택된 항목 체크박스 상태 변경 시 전체 선택 체크박스 상태 갱신
+  document.addEventListener("change", function (e) {
+    if (e.target.classList.contains("select-checkbox")) {
+      const allCheckboxes = document.querySelectorAll(".select-checkbox");
+      const checkedCheckboxes = document.querySelectorAll(
+        ".select-checkbox:checked"
+      );
 
-// 삭제 버튼 클릭 시 삭제 요청
-const deleteButtons = document.querySelectorAll(".delete-btn");
-deleteButtons.forEach((button) => {
-  button.addEventListener("click", (e) => {
-    const counselingId = button.getAttribute("data-id");
-    if (confirm("정말로 삭제하시겠습니까?")) {
-      // 서버로 삭제 요청 (예시)
-      window.location.href = `/center/counseling/delete/${counselingId}`;
+      if (selectAllCheckbox) {
+        selectAllCheckbox.checked =
+          allCheckboxes.length === checkedCheckboxes.length;
+      }
     }
   });
-});
 
-// 답변 미답변
-function fetchInquiryDetails(id) {
-  fetch(`/inquiries/${id}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // 상담 상세 정보 표시
-      document.getElementById("detail-content").innerText =
-        data.content || "내용 없음";
-      document.getElementById("detail-answer").innerText =
-        data.answer || "답변 없음";
-
-      // 상태 업데이트
-      if (data.status === "답변") {
-        document.getElementById(`status-${id}`).innerText = "답변";
+  // 선택삭제 버튼 클릭 시
+  if (deleteButton) {
+    deleteButton.addEventListener("click", function () {
+      const selectedCheckboxes = document.querySelectorAll(
+        ".select-checkbox:checked"
+      );
+      if (selectedCheckboxes.length === 0) {
+        alert("삭제할 항목을 선택해주세요.");
+        return;
       }
 
-      // 상담 상세 정보 패널 표시
-      document.getElementById("inquiry-details").style.display = "block";
-    })
-    .catch((error) => {
-      console.error("Error fetching inquiry details:", error);
-      alert("상담 내용을 가져오는 중 오류가 발생했습니다.");
-    });
-}
+      if (confirm("선택한 항목을 삭제하시겠습니까?")) {
+        // 선택된 항목의 ID를 모아서 폼의 hidden 필드에 담기
+        const selectedIds = Array.from(selectedCheckboxes)
+          .map((checkbox) => checkbox.value)
+          .join(",");
 
-function closeDetails() {
-  // 상담 상세 정보 패널 숨기기
-  document.getElementById("inquiry-details").style.display = "none";
-}
+        inquiryIdsField.value = selectedIds; // inquiryIds 필드에 ID 값 설정
+
+        // 폼 제출
+        deleteForm.submit();
+      }
+    });
+  }
+  document
+    .getElementById("searchButton")
+    .addEventListener("click", function () {
+      var searchTerm = document
+        .getElementById("searchInput")
+        .value.toLowerCase();
+      var rows = document.querySelectorAll("#inquiryTable tr");
+
+      rows.forEach(function (row) {
+        var title = row
+          .querySelector("td:nth-child(3)")
+          .textContent.toLowerCase();
+        var content = row
+          .querySelector("td:nth-child(4)")
+          .textContent.toLowerCase();
+        var email = row
+          .querySelector("td:nth-child(2)")
+          .textContent.toLowerCase();
+
+        if (
+          title.includes(searchTerm) ||
+          content.includes(searchTerm) ||
+          email.includes(searchTerm)
+        ) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+    });
+});
